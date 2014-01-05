@@ -1,3 +1,33 @@
+html, body{
+    height: 100%;
+}
+.page-name{
+    background: #f2f2f2;
+    font-size: 18px;
+    line-height: 40px;
+    margin: 0 -15px 15px -15px;
+    padding: 0 15px;
+}
+h3{ font-size: 14px; }
+.left_menu{
+    padding-top: 15px;
+    text-shadow: 1px 1px 0 #fff;
+    background: #f2f2f2;
+    border-right: 1px solid #ccc;
+}
+.dubl_box{ margin-top: -15px; }
+.dubl_box .box-cell { padding-top: 15px; }
+.box-table{
+    display: table;
+    height: 100%;
+}
+.dubl_box.box-table{ height: calc(100% - 35px); }
+.box-table .box-cell{
+    float: none;
+    display: table-cell;
+    height: 100%;
+}
+
 /* ================================ Header start */
 .header{
     margin: 0;
