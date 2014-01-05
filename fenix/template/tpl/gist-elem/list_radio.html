@@ -1,0 +1,12 @@
+<span class="inp_name"><?= @$paramObjectItem['row']['name']?></span>
+<?
+    $param = json_decode($paramObjectItem['row']['param'], true);
+    
+    if($param['list']){
+        foreach($param['list'] as $k => $v){
+            echo '<label class="inp_name"><input type="radio" name=form["'.@$paramObjectItem['row']['code'].']" value="'.$k.'"/>'.$v.'</label>';
+        }
+    }else{
+        echo 'Небыло задано ни одно значение';
+    }
+?>

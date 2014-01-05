@@ -1,0 +1,170 @@
+<h1 class="page-name">Редактор объекта</h1>
+
+<form action="" method="post">
+    <h3>Параметры таблици</h3>
+    <div class="ctrl_group">
+        <label class="inp_name">Имя</label>
+        <input type="text" name="name" value="<?= @$objectParam[0]['name']?>" class="inp" data-validate="empty"/>
+    </div>
+    <div class="ctrl_group">
+        <label class="inp_name">Код</label>
+        <input type="text" name="code" value="<?= @$objectParam[0]['code']?>" class="inp" data-validate="empty,latin" />
+    </div>
+    <div class="ctrl_group icon-control">
+        <span class="inp_name">Иконка</span>
+        <div class="dropdown">
+            <span class="dropdown_name">
+                <? $icon =  isset($objectParam[0]['icon']) ? $objectParam[0]['icon'] : 'icon-doc';?>
+                <i class="<?= $icon; ?>"></i>
+            </span>
+            <div class="dropdown_block w_big">
+                <span class="dropdown_block_tail"></span>
+                <?
+                    $icon = getIcon();
+                    foreach($icon['glyphs'] as $v){
+                        echo '<i class="icon-'.$v['css'].'"></i>';
+                    }
+                ?>
+            </div>
+        </div>
+        <input type="hidden" name="icon" value="<?= isset($objectParam[0]['icon']) ? $objectParam[0]['icon'] : 'icon-doc'; ?>"/>
+    </div>
+    <div class="ctrl_group ml_micro">
+        <span class="inp_name">Системные настройки</span>
+        <label class="inp_name">
+            <input type="checkbox" name="show_wood" value="1" <?= isset($objectParam) && $objectParam[0]['show_wood'] > 0 ? 'checked="true"' : '' ?>/> Показывать в дереве
+        </label>
+        <label class="inp_name">
+            <input type="checkbox" name="show_sistem" value="1" <?= isset($objectParam) && $objectParam[0]['show_sistem'] > 0 ? 'checked="true"' : '' ?>/> Показывать в Системные настройки
+        </label>
+    </div>
+    
+    
+    
+    <h3 class="mt_normal">Параметры ячеек</h3>
+    <ul class="object-list"><?= $paramObject; ?></ul>
+    
+    <div class="mt_big">
+        <button class="btn btn__positive" type="submit">
+            <span class="btn-in">Сохранить</span>
+        </button>
+        <a href="?mode=struct" class="btn">
+            <span class="btn-in">Отмена</span>
+        </a>
+        
+        <span class="btn js-add">
+            <span class="btn-in">Добавить сущность</span>
+        </span>
+    </div>
+    
+    
+    <input type="hidden" name="action" value="object"/>
+    <? if(isset($objectParam)): ?>
+        <input type="hidden" name="id" value="<?= $objectParam[0]['id']?>"/>
+    <? endif; ?>
+</form>
+
+<script>
+    (function(){
+        
+        $(document).on('mouseup', '.js-removeItem', function(){
+            $(this).parents('li').remove();
+        });
+        
+        function paramReplace(el){
+            var list = $('.object-list'),
+                type = el.find('.js-type option:selected').val(),
+                $block = el.find('.js-setting'),
+                key = list.children().index(el);
+                
+            
+            $.post('', {action : 'getGist', type : type, key : key}, function(respons){
+                $block.empty().append(respons);
+                $().createSelect();
+            });
+        };
+        $(function(){
+            var list = $('.object-list');
+                add = function(){
+                    var len = list.children().length
+                    $.post('', {action : 'getItemObject', index : len}, function(respons){
+                        list.append(respons);
+                        $().createSelect();
+                        Validate().init();
+                    });
+                };
+            if(list.children().length < 1) add();
+            $('.js-add').on('click', add);
+        });
+        
+        $(document).on('click', '.btn_select li', function(){
+            if(!$(this).parents('.btn_select').children('.js-type').length) return;
+            paramReplace($(this).parents('li'));
+        });
+        
+        $(document).on('click', '.js-showSetting', function(){
+            var $this = $(this),
+                $li = $this.parents('li'),
+                $setting = $li.find('.js-setting');
+            if($this.hasClass('active')){
+                $setting.slideUp(300);
+                $this.removeClass('active');
+            }else{
+                $setting.slideDown(300);
+                $this.addClass('active');
+            }
+            
+        }).on('click', '.icon-control .dropdown_block i', function(){
+            var $this = $(this),
+                $parent = $this.parents('.icon-control'),
+                $ico = $parent.find('.dropdown_name i'),
+                $inp = $parent.find('input'),
+                clas = this.className;
+            
+            
+            $inp.val(clas)
+            $ico[0].className = clas;
+            CallStack.go();
+            
+        });
+        
+    })();
+    
+    
+    (function(){
+        $(document).on('keydown', '.js-param-list div.inp', function(event){
+            
+            if(event.keyCode == 13){
+                var value = this.innerText,
+                    $parent = $(this).parents('.js-param-list'),
+                    list = $('ul', $parent),
+                    inp = $('input', $parent),
+                    res = inp.val(),
+                    item = $('<li/>').text(value);
+                    
+
+                if(!!res) res = JSON.parse(res);
+                else res = [];
+                
+                res.push(value);
+                inp.val(JSON.stringify(res));
+                this.innerText = '';
+                list.append(item);
+                return false;
+            }
+        }).on('click', '.js-param-list li', function(){
+            var $list = $('.js-param-list li'),
+                $this = $(this),
+                $parent = $this.parents('.js-param-list'),
+                $inp = $parent.find('input'),
+                val = $inp.val(),
+                index = $list.index($this);
+                
+            val = JSON.parse(val);
+            
+            val.splice(index, 1);
+            $this.remove();
+            $inp.val(JSON.stringify(val))
+        });
+    })();
+</script>

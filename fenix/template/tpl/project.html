@@ -1,0 +1,72 @@
+<h1 class="page-name">Проект: <?= @$GLOB['project_name']?></h1>
+<div class="m-box">
+    <ul class="hList projectEvent pull-right">
+        <li>
+            <span class="dropdown">
+                <span class="dropdown_name false-link">Создать</span>
+                <span class="dropdown_block">
+                    <i class="dropdown_block_tail"></i>
+                    <ul class="dropdown_list">
+                        <?= @$createList; ?>
+                    </ul>
+                </span>
+            </span>
+        </li>
+        <? if($GLOB['self_id']): ?>
+            <li>
+                <a href="?mode=elem&id=<?= @$GLOB['self_id']?>">Редактировать</a>
+            </li>
+        <? else: ?>
+            <li>
+                <span class="disable">Редактировать</span>
+            </li>
+            
+        <? endif; ?>
+        
+        <li>
+            <span class="false-link disable js-duble">Дублировать</span>
+        </li>
+        <li>
+            <span class="false-link disable js-copy">Копировать</span>
+        </li>
+        <li>
+            <span class="false-link disable js-move">Вырезать</span>
+        </li>
+        
+        
+        <? if(isset($_SESSION['copyItem']) && count($_SESSION['copyItem']) || isset($_SESSION['moveItem']) && count($_SESSION['moveItem'])): ?>
+            <li>
+                <a href="?action=pasteItem&id=<?= @$GLOB['self_id']?>">Вставить</a>
+            </li>
+            <li>
+                <a href="?action=pasteItemLink&id=<?= @$GLOB['self_id']?>">Вставить ссылку</a>
+            </li>
+        <? else: ?>
+            <li>
+                <span class="disable">Вставить</span>
+            </li>
+            <li>
+                <span class="disable">Вставить ссылку</span>
+            </li>
+        <? endif; ?>
+        
+        <li>
+            <span class="disable false-link js-removeItem">Удалить</span>
+        </li>
+    </ul>
+</div>
+
+
+
+<div class="projectList">
+    <?= implode('', $selfList);?>
+</div>
+
+<? if(!count($selfList)): ?>
+<div>
+    <h3>Создать елемент</h3>
+    <?= $previewList; ?>
+</div>
+<? endif; ?>
+
+<script src="template/js/project.js" type="text/javascript"></script>

@@ -1,0 +1,15 @@
+<?
+    $top = isset($paramObjectItem['top']) ? $paramObjectItem['top'] : '';
+    $left = isset($paramObjectItem['left']) ? $paramObjectItem['left'] : '';
+?>
+
+<div class="split_box dib mr_micro js-param-position">
+    <div class="ctrl_group">
+        <label class="inp_name">Left</label>
+        <input type="text" name="form[param][<?= @$key?>][left]" value="<?= $left; ?>" class="inp w_mini first"/>
+    </div>
+    <div class="ctrl_group">
+        <label class="inp_name">Top</label>
+        <input type="text" name="form[param][<?= @$key?>][top]" value="<?= $top; ?>" class="inp w_mini last"/>
+    </div>
+</div>

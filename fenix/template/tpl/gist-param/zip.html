@@ -1,0 +1,10 @@
+<?
+    $check = isset($paramObjectItem['zip']) && $paramObjectItem['zip'] == 1 ? ' checked="true"' : '';
+?>
+
+<div class="ctrl_group mr_micro js-param-zip">
+    <label class="inp_name mt_normal">
+        <input type="checkbox"<?= $check; ?> name="form[param][<?= @$key?>][zip]" value="1"/>
+        Архивировать
+    </label>
+</div>

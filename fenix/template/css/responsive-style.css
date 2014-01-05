@@ -1,0 +1,22 @@
+@media screen and (max-width:800px) { 
+    
+.box .col1, .box .col2,
+.box .col3, .box .col4,
+.box .col5 {
+    float: none;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.btn-in{
+    height: 40px;
+    line-height: 40px;
+    padding: 0 15px;
+}
+.popup{
+    width: auto;
+    margin: 0;
+    
+}
+
+}

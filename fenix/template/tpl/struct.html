@@ -1,0 +1,173 @@
+<h1 class="page-name">Структура проекта</h1>
+
+<div class="ibox">
+    <div class="box">
+        <h3>Обьекты</h3>
+        <ul class="setting-tebles">
+            <?
+                $tables = $db->find($GLOB['namespace']['struct_db']);
+                $list = array();
+                foreach($tables as $v){
+                    $list[] = '<li class="m-box">';
+                    $list[] = '<a class="pull-left" href="?mode=object&id='.$v['id'].'">'.$v['name'].'</a>';
+                    $list[] = '<span class="pull-right">';
+                        $list[] = '<a href="?action=removeObject&id='.$v['id'].'&name='.$v['code'].'"><i class="icon-cancel"></i></a>';
+                    $list[] = '</span>';
+                    $list[] = '</li>';
+                }
+                echo implode('', $list);
+            ?>
+        </ul>
+        <span class="dropdown">
+            <span class="dropdown_name ibox-add-link">Добавить</span>
+            <span class="dropdown_block">
+                <i class="dropdown_block_tail"></i>
+                <form action="" method="post">
+                    <input type="text" name="name" value="" class="inp" data-validate="empty" placeholder="Имя"/>
+                    <input type="text" name="code" value="" data-validate="empty,latin" class="inp" placeholder="Код"/>
+                    <input type="hidden" name="action" value="addObject"/>
+                    <div class="m-box m_mini">
+                        <a href="?mode=object" class="pull-right">Расширенный редактор</a>
+                    </div>
+                    <div>
+                        <button class="btn btn__positive disable" type="submit" disabled="true">
+                            <span class="btn-in">Добавить</span>
+                        </button>
+                        <span class="btn" onclick="CallStack.go()">
+                            <span class="btn-in">Отмена</span>
+                        </span>
+                    </div>
+                </form>
+            </span>
+        </span>
+        <a href="?mode=object" class="ibox-add-link">Расширенный редактор</a>
+    </div>
+</div>
+
+<div class="ibox">
+    <div class="box">
+        <h3>Маркеры</h3>
+        
+        <ul class="setting-tebles">
+        <? foreach($markerList as $v): ?>
+        <? $templateID = explode(',', $v['template_id']); ?>
+        <li class="m-box" data-id="<?=$v['id'];?>">
+            <span class="dropdown">
+                <span class="name dropdown_name"><?= $v['name'];?></span>
+                <span class="dropdown_block w_normal">
+                    <i class="dropdown_block_tail"></i>
+                    <form action="" method="post">
+
+                        <? foreach($templateList as $j): ?>
+                        <? $cheked = in_array($j['id'], $templateID) ? ' checked="true"' : ''?>
+                        <label data-id="<?= $j['id']?>" class="inp_name">
+                            <input <?=$cheked;?> type="checkbox" name="id[]" value="<?= $j['id']?>"/><?=$j['name']?>
+                        </label>                    
+                        <? endforeach; ?>
+                        <input type="hidden" name="marker" value="<?=$v['id']?>"/>
+                        <input type="hidden" name="action" value="markerAddTemplate"/>
+                        <button type="submit" class="btn btn__positive m_none mt_mini">
+                            <span class="btn-in">Сохранить</span>
+                        </button>
+                    </form>
+                </span>
+            </span>
+            <span class="pull-right">
+                <i class="icon-pencil js-edit"></i>
+                <a href="?action=removeMarker&id=<?=$v['id'];?>"><i class="icon-cancel"></i></a>
+            </span>
+        </li>
+        <? endforeach; ?>
+        
+        </ul>
+        
+        <span class="dropdown">
+            <span class="dropdown_name ibox-add-link">Добавить</span>
+            <span class="dropdown_block js-MarkerBox js-add">
+                <i class="dropdown_block_tail"></i>
+                <form action="" method="post">
+                    <p class="inp_name">Имя маркера может содержать любые символы, но рекомендуется использовать осмысленные названия.</p>
+                    <input type="text" name="name" value="" class="inp" data-validate="empty"/>
+                    <input type="hidden" name="action" value="addMarker"/>
+                    <div>
+                        <button class="btn btn__positive disable" type="submit" disabled="true">
+                            <span class="btn-in">Добавить</span>
+                        </button>
+                        <span class="btn" onclick="CallStack.go()">
+                            <span class="btn-in">Отмена</span>
+                        </span>
+                    </div>
+                </form>
+            </span>
+        </span>
+    </div>
+</div>
+
+<div class="ibox">
+    <div class="box">
+        <h3>Шаблоны</h3>
+        <ul class="setting-tebles">
+        <?
+            $list = array();
+            foreach($templateList as $v){
+                $list[] = '<li class="m-box" data-id="'.$v['id'].'">';
+                $list[] = '<span class="name">'.$v['name'].'</span>';
+                $list[] = '<span class="pull-right">';
+                    $list[] = '<i class="icon-pencil js-edit"></i>';
+                    $list[] = '<a href="?action=removeTemplate&id='.$v['id'].'"><i class="icon-cancel"></i></a>';
+                $list[] = '</span>';
+                $list[] = '</li>';
+            }
+            echo implode('', $list);
+        ?>
+        </ul>
+        <span class="dropdown">
+            <span class="dropdown_name ibox-add-link">Добавить</span>
+            <span class="dropdown_block js-TemplateBox js-add">
+                <i class="dropdown_block_tail"></i>
+                <form action="" method="post">
+                    <p class="inp_name">Имя шаблона должно содержать только латинские символы</p>
+                    <input type="text" name="name" value="" class="inp" data-validate="empty,latin"/>
+                    <input type="hidden" name="action" value="addTemplate"/>
+                    <div>
+                        <button class="btn btn__positive disable" type="submit" disabled="true">
+                            <span class="btn-in">Добавить</span>
+                        </button>
+                        <span class="btn" onclick="CallStack.go()">
+                            <span class="btn-in">Отмена</span>
+                        </span>
+                    </div>
+                </form>
+            </span>
+        </span>
+    </div>
+</div>
+
+
+<script>
+    (function(){
+        $(function(){
+            $('.js-edit').on('click', function(){
+                var $this = $(this),
+                    $li = $this.parents('li'),
+                    $name = $li.find('.name');
+                    
+                if(!$this.hasClass('dropdown_name')){
+                    var $parent = $this.parents('.ibox'),
+                        $form = $parent.find('.js-add').clone();
+                    $this.addClass('dropdown_name');
+                    $this.wrap('<span class="dropdown"/>');
+                    $this.parent().append($form);
+                    $form.removeClass('js-add').find('form').append('<input type="hidden" name="id" value="'+$li.data('id')+'"/>');
+                }
+                    
+                $li.find('.btn__positive .btn-in').text('Изменить');
+                $li.find('.inp').val($name.text());
+                
+            });
+            
+        });
+        
+    })();
+</script>
+

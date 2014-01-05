@@ -1,0 +1,67 @@
+<h1 class="page-name">Настройки системы</h1>
+
+<div class="ibox">
+    <div class="box">
+        <h3>Пользователи</h3>
+        <ul class="setting-tebles">
+            <?
+                $list = array();
+                foreach($GLOB['users'] as $item){
+                    $list[] = '<li class="m-box">';
+                    $list[] = '<span class="name">'.$item['login'].'</span>';
+                    $list[] = '<span class="pull-right">';
+                        $list[] = $manifest['access'][$item['access']] . "&#160;";
+                        $list[] = '<i class="icon-pencil"></i>';
+                        $list[] = '<a href="?action=removeUser&id='.$item['id'].'"><i class="icon-cancel"></i></a>';
+                    $list[] = '</span>';
+                    $list[] = '</li>';
+                }
+                echo implode('', $list);
+            ?>
+        </ul>
+        <div class="ibox-add">
+            <span class="dropdown">
+                <span class="dropdown_name">Добавить</span>
+                <span class="dropdown_block">
+                    <i class="dropdown_block_tail"></i>
+                    
+                    <form action="" method="post" class="FormUser">
+                        <input type="text" name="name" value="" placeholder="Логин" class="inp"/>
+                        <input type="text" name="pass" value="" placeholder="Пароль" class="inp"/>
+                        <div>
+                            <span class="inp_name">Права доступа</span>
+                            <select name="access">
+                                <option value="2">Пользователь</option>
+                                <option value="1">Администратор</option>
+                                <option value="0">ROOT</option>
+                            </select>
+                        </div>
+                        <div class="mt_mini">
+                            <button class="btn btn__positive disable" type="submit" disabled="true">
+                                <span class="btn-in">Добавить</span>
+                            </button>
+                            <span class="btn" onclick="CallStack.go()">
+                                <span class="btn-in">Отмена</span>
+                            </span>
+                        </div>
+                        <input type="hidden" name="action" value="addUser"/>
+                    </form>
+                    
+                </span>
+            </span>
+        </div>
+    </div>
+</div>
+
+<script>
+    var inpFormUser = $('.FormUser .inp').on({
+        input : function(event){
+            if(this.value.length > 3) $(this).addClass('valid');
+            
+            if($('.FormUser .inp.valid').length == inpFormUser.length){
+                $('.FormUser .btn[type=submit]').removeClass('disable').attr('disabled', false);
+            }
+        }
+    });
+</script>
+

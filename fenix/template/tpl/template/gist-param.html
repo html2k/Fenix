@@ -1,0 +1,109 @@
+<!-- Size -->
+<div class="ctrl_group mr_micro js-param-size">
+    <label class="inp_name">Размер</label>
+    <input type="text" name="size" value="" class="inp w_mini"/>
+</div>
+
+<!-- ZIP -->
+<div class="ctrl_group mr_micro js-param-zip">
+    <label class="inp_name mt_normal">
+        <input type="checkbox" name="size" value="1"/>
+        Архивировать
+    </label>
+</div>
+
+<!-- Scale -->
+<div class="split_box dib mr_micro js-param-scale">
+    <div class="ctrl_group">
+        <label class="inp_name">Ширина</label>
+        <input type="text" name="width" value="" class="inp w_mini first"/>
+    </div>
+    <div class="ctrl_group">
+        <label class="inp_name">Высота</label>
+        <input type="text" name="height" value="" class="inp w_mini last"/>
+    </div>
+</div>
+
+<!-- Position -->
+<div class="split_box dib mr_micro js-param-position">
+    <div class="ctrl_group">
+        <label class="inp_name">Left</label>
+        <input type="text" name="left" value="" class="inp w_mini first"/>
+    </div>
+    <div class="ctrl_group">
+        <label class="inp_name">Top</label>
+        <input type="text" name="top" value="" class="inp w_mini last"/>
+    </div>
+</div>
+
+
+<!-- Method -->
+<div class="ctrl_group mr_micro js-param-method">
+    <label class="inp_name">Метод</label>
+    <select name="method">
+        <option>none</option>
+        <option>auto</option>
+        <option>scale</option>
+        <option>crop</option>
+        <option>width</option>
+        <option>height</option>
+    </select>
+</div>
+<!-- 
+none - не изменять исходное изображение
+auto - Изображение изменяет размер согласно пропорций
+scale - Изображение изменяется точно в заданные размеры(игнарируя пропорции)
+crop - Изображение изменяет размер согласно пропорций и точно по заданной ширине и высоте
+width - Ширина изображения изменяется в точно заданный размер, а высота согласно пропорции
+height - Высота изображения изменяется в точно заданный размер, а ширина согласно пропорции
+-->
+
+
+<!-- List -->
+<div class="ctrl_group mr_micro js-param-list">
+    <label class="inp_name">Параметры списка</label>
+    <div class="inp w_normal" contenteditable="true"></div>
+    <ul class="param-list-item w_normal"></ul>
+    <input type="hidden" name="list" value="" class="inp w_normal"/>
+</div>
+
+<script>
+    (function(){
+        $(document).on('keydown', '.js-param-list div.inp', function(event){
+            
+            if(event.keyCode == 13){
+                
+                var value = this.innerText,
+                    $parent = $(this).parents('.js-param-list'),
+                    list = $('ul', $parent),
+                    inp = $('input', $parent),
+                    res = inp.val(),
+                    item = $('<li/>').text(value);
+                    
+
+                if(!!res) res = JSON.parse(res);
+                else res = [];
+                
+                res.push(value);
+                inp.val(JSON.stringify(res));
+                this.innerText = '';
+                list.append(item);
+                return false;
+            }
+        }).on('click', '.js-param-list li', function(){
+            var $list = $('.js-param-list li'),
+                $this = $(this),
+                $parent = $this.parents('.js-param-list'),
+                $inp = $parent.find('input'),
+                val = $inp.val(),
+                index = $list.index($this);
+                
+            val = JSON.parse(val);
+            
+            val.splice(index, 1);
+            $this.remove();
+            console.log(val, $inp);
+            $inp.val(JSON.stringify(val))
+        });
+    })();
+</script>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FenixCMS</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        <link rel="stylesheet" type="text/css" href="template/css/reset.css"/>
+        <link rel="stylesheet" type="text/css" href="template/css/main.css"/>
+        
+        <style>
+            body{
+                background: #f7f7f7;
+            }
+            .connect-form{
+                position: absolute;
+                margin: -150px 0 0 -150px;
+                top: 50%;
+                left: 50%;
+                width: 220px;
+                padding: 10px 15px;
+                height: 150px;
+                background: #fff;
+                
+                box-shadow: 0 0 5px 0 rgba(0,0,0,0.2);
+                
+                -webkit-border-radius: 5px;
+                -moz-border-radius: 5px;
+                border-radius: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="connect-form">
+            <form action="" method="post">
+                <label for="login" class="inp_name">Логин</label>
+                <input type="text" name="login" id="login" value="" class="inp w_normal" />
+                <label for="password" class="inp_name">Пароль</label>
+                <input type="password" name="password" id="password" value="" class="inp w_normal" />
+                
+                <p class="w_midle pull-left">Для регистрации обратитесь к администратору</p>
+                
+                <button class="btn pull-right btn__positive m_none" type="submit">
+                    <span class="btn-in">Войти</span>
+                </button>
+                
+                
+                <input type="hidden" name="action" value="connect"/>
+            </form>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,15 @@
+<?
+    $width = isset($paramObjectItem['width']) ? (int) $paramObjectItem['width'] : '';
+    $height = isset($paramObjectItem['height']) ? (int) $paramObjectItem['height'] : '';
+?>
+
+<div class="split_box dib mr_micro js-param-scale">
+    <div class="ctrl_group">
+        <label class="inp_name">Ширина</label>
+        <input type="text" name="form[param][<?= @$key?>][width]" value="<?= $width; ?>" class="inp w_mini first"/>
+    </div>
+    <div class="ctrl_group">
+        <label class="inp_name">Высота</label>
+        <input type="text" name="form[param][<?= @$key?>][height]" value="<?= $height; ?>" class="inp w_mini last"/>
+    </div>
+</div>

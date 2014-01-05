@@ -1,0 +1,24 @@
+<?
+    $option = array('none', 'scale', 'crop', 'width', 'height');
+    $res = array();
+    foreach($option as $v){
+        $selected = isset($paramObjectItem['method']) && $v === $paramObjectItem['method'] ? ' selected="true"' : '';
+        $res[] = '<option'.$selected.'>'.$v.'</option>';
+    }
+    $res = implode('', $res);
+?>
+
+
+<div class="ctrl_group mr_micro js-param-method">
+    <label class="inp_name">Метод</label>
+    <select name="form[param][<?= @$key?>][method]">
+        <?= $res; ?>
+    </select>
+</div>
+<!-- 
+none - не изменять исходное изображение
+crop - Изображение изменяется точно в заданные размеры(игнарируя пропорции)
+scale - Изображение изменяет размер согласно пропорций и точно по заданной ширине и высоте
+width - Ширина изображения изменяется в точно заданный размер, а высота согласно пропорции
+height - Высота изображения изменяется в точно заданный размер, а ширина согласно пропорции
+-->

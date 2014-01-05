@@ -1,0 +1,8 @@
+<h3>Иконки</h3>
+
+<? 
+    $icon = getIcon();
+    foreach($icon['glyphs'] as $v){
+        echo '<div><i class="icon-'.$v['css'].'"></i> icon-'.$v['css'].'</div>';
+    }
+?>

@@ -1,0 +1,60 @@
+<li class="m_midle">
+    <div class="split_box">
+        <div class="ctrl_group">
+            <label class="inp_name">Имя</label>
+            <input type="text" name="form[name][<?= @$key?>]" value="<?= @$paramObjectItem['name']; ?>" class="inp first" data-validate="empty"/>
+        </div>
+        <div class="ctrl_group">
+            <label class="inp_name">Код</label>
+            <input type="text" name="form[code][<?= @$key?>]" value="<?= @$paramObjectItem['code']; ?>" class="inp" data-validate="empty,latin"/>
+        </div>
+        <div class="ctrl_group">
+            <label class="inp_name">Тип</label>
+            <select name="form[type][<?= @$key?>]" class="js-type">
+                <?
+                    foreach($manifest['gist'] as $k => $v){
+                        $selected = (isset($paramObjectItem) && $paramObjectItem['type'] == $k) ? ' selected="true"' : '';
+                        echo '<option'.$selected.' value="'.$k.'">'.$v['name'].'</option>';
+                    }
+                ?>
+            </select>
+        </div>
+        <div class="ctrl_group">
+            <label class="inp_name">&#160;</label>
+            <div class="btn js-showSetting">
+                <span class="btn-in">
+                    <i class="icon-cog"></i>
+                </span>
+            </div>
+        </div>
+        <div class="ctrl_group">
+            <label class="inp_name">&#160;</label>
+            <span class="btn last js-removeItem">
+                <span class="btn-in">
+                    <i class="icon-cancel f_gigant"></i>
+                </span>
+            </span>
+        </div>
+    </div>
+    
+    <div class="js-setting dn">
+        
+        <?
+            if(isset($paramObjectItem)){
+                $gist = (isset($paramObjectItem['type'])) ? $manifest['gist'][$paramObjectItem['type']] : $manifest['gist']['string'];
+
+                foreach($gist['param'] as $v){
+                    $paramGIST = array();
+                    if(isset($paramObjectItem) && isset($paramObjectItem['param'])){
+                        $paramGIST = json_decode($paramObjectItem['param'], true);
+                    }
+                    echo loadParam($key, $paramGIST, $manifest, sys . '/template/tpl/gist-param/' . $v . '.html');
+                }
+            }
+        ?>
+        
+    </div>
+    <? if(isset($paramObjectItem)): ?>
+        <input type="hidden" name="form[id][]" value="<?= @$paramObjectItem['id']; ?>"/>
+    <? endif; ?>
+</li>

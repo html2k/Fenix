@@ -1,0 +1,30 @@
+<?
+    if($paramObjectItem['value'] !== ''){
+        $size = byteConvert(filesize (root . $paramObjectItem['value']));
+        $fileName = explode('/', $paramObjectItem['value']);
+        $fileName = explode('.',array_pop($fileName));
+        $fileName = array_shift($fileName);
+    }
+?>
+
+
+<span class="inp_name"><?= @$paramObjectItem['row']['name']?></span>
+
+<? if($paramObjectItem['value'] !== ''): ?>
+<div>
+    <a href="<?= $paramObjectItem['value']; ?>" target="_blank"><?= $paramObjectItem['value']; ?></a> - <?= $size ?>
+    <label class="inp_name dib">
+        <input type="checkbox" name="form[<?= @$paramObjectItem['row']['code']?>][remove]" value="1" class="js-image-remove"/>
+        Удалить
+    </label>
+</div>
+<input type="hidden" name="form[<?= @$paramObjectItem['row']['code']?>][src]" value="<?= $paramObjectItem['value']; ?>"/>
+<? endif; ?>
+
+<div class="split_box">
+    <input type="text" name="form[<?= @$paramObjectItem['row']['code']?>][name]" value="<?= @$fileName; ?>" class="inp first" />
+    <input type="text" name="form[<?= @$paramObjectItem['row']['code']?>][url]" value="" class="inp last w_normal"/>
+</div>
+<input type="file" name="form[<?= @$paramObjectItem['row']['code']?>][file]" value="" class="file-input"/>
+
+<input type="hidden" name="form[<?= @$paramObjectItem['row']['code']?>][type]" value="file" />
