@@ -6,7 +6,9 @@ body{
 
 
 /* =============================================== Grid === */
+.clear{ zoom: 1; }
 .box{ zoom: 1; margin: 15px 0; }
+.clear:after,
 .box:after{
     display: block;
     content: '';
