@@ -35,44 +35,44 @@
     <body>
         
         <div class="header box">
-            <div class="col1">
-                <div class="m-box">
-                    <a class="logo" href="<?=$GLOB['url']['home'];?>">FenixCMS</a>
-                </div>
-            </div>
             <div class="col3">
                 <div class="m-box">
-                    <ul class="hList">
+                    <a class="header-logo" href="<?=$GLOB['url']['home'];?>">FenixCMS</a>
+                </div>
+            </div>
+            <div class="col7">
+                <div class="m-box">
+                    <ul class="header-menu">
                         <?= $GLOB['topMenu']; ?>
                     </ul>
                 </div>
             </div>
-            <div class="col1">
-                <div class="box">
-                    <div class="pull-right">
-                        <span class="user-login"><?= @$_SESSION['user']['login']; ?></span>
-                        <a class="disconnect" href="?action=disconnect"><?=$lang['output'];?></a>
+            <div class="col2">
+                <div class="m-box">
+                    <div class="pull-right header-panel">
+                        <span class="header-panel-login"><?= @$_SESSION['user']['login']; ?></span>
+                        <a class="header-panel-disconnect" href="?action=disconnect"><?=$lang['output'];?></a>
                     </div>
                 </div>
             </div>
         </div>
         
         <? if($GLOB['leftMenu'] != ''): ?>
-        <div class="content m-box">
-            <div class="col1">
-                <div class="box leftMenu">
+        <div class="content box">
+            <div class="col3">
+                <div class="m-box leftMenu">
                     <?= $GLOB['leftMenu']; ?>
                 </div>
             </div>
-            <div class="col4">
-                <div class="box">
+            <div class="col9">
+                <div class="m-box">
                     <?= $GLOB['content']; ?>
                 </div>
             </div>
         </div>
         <? else: ?>
-        <div class="m-box">
-            <div class="box">
+        <div class="box">
+            <div class="m-box">
                 <?= $GLOB['content']; ?>
             </div>
         </div>
@@ -81,13 +81,15 @@
         
         <div class="error-box">
         <?
-            $list = array();
-            foreach($_SESSION['error'] as $v){
-                $list[] = '<div class="'.$v['name'].'" data-id="'.$v['id'].'">';
-                $list[] = '<p>'.$v['error'].'</p>';
-                $list[] = '</div>';
+            if(isset($_SESSION['error'])){
+                $list = array();
+                foreach($_SESSION['error'] as $v){
+                    $list[] = '<div class="'.$v['name'].'" data-id="'.$v['id'].'">';
+                    $list[] = '<p>'.$v['error'].'</p>';
+                    $list[] = '</div>';
+                }
+                echo implode('', $list);
             }
-            echo implode('', $list);
         ?>
         </div>
     </body>

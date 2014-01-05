@@ -1,10 +1,12 @@
 <h1 class="page-name">Настройки системы</h1>
 
-<div class="ibox">
+<div>
+    <h3>Пользователи</h3>
     <div class="box">
-        <h3>Пользователи</h3>
-        <ul class="setting-tebles">
-            <?
+        <div class="col5">
+            <div class="m-box">
+                <ul class="setting-tebles">
+                    <?
                 $list = array();
                 foreach($GLOB['users'] as $item){
                     $list[] = '<li class="m-box">';
@@ -15,53 +17,45 @@
                         $list[] = '<a href="?action=removeUser&id='.$item['id'].'"><i class="icon-cancel"></i></a>';
                     $list[] = '</span>';
                     $list[] = '</li>';
-                }
-                echo implode('', $list);
-            ?>
-        </ul>
-        <div class="ibox-add">
-            <span class="dropdown">
-                <span class="dropdown_name">Добавить</span>
-                <span class="dropdown_block">
-                    <i class="dropdown_block_tail"></i>
-                    
-                    <form action="" method="post" class="FormUser">
-                        <input type="text" name="name" value="" placeholder="Логин" class="inp"/>
-                        <input type="text" name="pass" value="" placeholder="Пароль" class="inp"/>
-                        <div>
-                            <span class="inp_name">Права доступа</span>
-                            <select name="access">
-                                <option value="2">Пользователь</option>
-                                <option value="1">Администратор</option>
-                                <option value="0">ROOT</option>
-                            </select>
-                        </div>
-                        <div class="mt_mini">
-                            <button class="btn btn__positive disable" type="submit" disabled="true">
-                                <span class="btn-in">Добавить</span>
-                            </button>
-                            <span class="btn" onclick="CallStack.go()">
-                                <span class="btn-in">Отмена</span>
-                            </span>
-                        </div>
-                        <input type="hidden" name="action" value="addUser"/>
-                    </form>
-                    
+                    }
+                    echo implode('', $list);
+                    ?>
+                </ul>
+                <span class="dropdown">
+                    <span class="dropdown-name false-link">Добавить</span>
+                    <span class="dropdown-block">
+                        <i class="dropdown-tail"></i>
+
+                        <form action="" method="post" class="FormUser">
+                            <input type="text" name="name" value="" placeholder="Логин" class="inp" autofocus=""/>
+                            <input type="text" name="pass" value="" placeholder="Пароль" class="inp" onlyEn/>
+                            <div class="mb-middle">
+                                <span class="inp-name">Права доступа</span>
+                                <select name="access">
+                                    <option value="2">Пользователь</option>
+                                    <option value="1">Администратор</option>
+                                    <option value="0">ROOT</option>
+                                </select>
+                            </div>
+                            <div class="mt_mini">
+                                <button class="btn" type="submit">
+                                    <span class="btn-in">Добавить</span>
+                                </button>
+                                    <span class="btn" onclick="$(document).trigger('dropdown-close')">
+                                        <span class="btn-in">Отмена</span>
+                                    </span>
+                            </div>
+                            <input type="hidden" name="action" value="addUser"/>
+                        </form>
+                    </span>
                 </span>
-            </span>
+            </div>
+        </div>
+        <div class="col7">
+            <div class="m-box">
+                <p>Будьте аккуратней с настройками пользователей, пользователи с правами <b>root</b> могут могут редактировать любую информацию в системе</p>
+            </div>
         </div>
     </div>
 </div>
-
-<script>
-    var inpFormUser = $('.FormUser .inp').on({
-        input : function(event){
-            if(this.value.length > 3) $(this).addClass('valid');
-            
-            if($('.FormUser .inp.valid').length == inpFormUser.length){
-                $('.FormUser .btn[type=submit]').removeClass('disable').attr('disabled', false);
-            }
-        }
-    });
-</script>
 

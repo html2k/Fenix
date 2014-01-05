@@ -1,0 +1,41 @@
+/* ================================ Header start */
+.header{
+    margin: 0;
+    background: #2d2d2d;
+}
+.header-logo:hover,
+.header-logo{
+    line-height: 35px;
+    font-size: 14px;
+    color: #fff;
+}
+.header-menu{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    zoom: 1;
+}
+.header-menu:after{
+    content: '';
+    display: block;
+    clear: both;
+    width: 100%;
+}
+.header-menu li{
+    float: left;
+    margin-right: 10px;
+    line-height: 35px;
+}
+.header a:hover{ color: #8693a0; }
+.header .current a{ color: #f2f2f2; }
+
+.header-panel{
+    line-height: 35px;
+    color: #fff;
+}
+.header-panel-login{
+    margin-right: 5px;
+    padding-right: 7px;
+    border-right: 1px solid #777;
+}
+/* ================================ Header end */

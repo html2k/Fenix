@@ -39,13 +39,6 @@ body{
 .col11{ width: 91.66666666666666%; }
 .col12{ width: 100%; }
 
-
-/*.col1{ width: 20%; }*/
-/*.col2{ width: 40%; }*/
-/*.col3{ width: 60%; }*/
-/*.col4{ width: 80%; }*/
-/*.col5{ width: 100%; }*/
-
 .pull-left{ float: left; }
 .pull-right{ float: right; }
 .db{ display: block; }
