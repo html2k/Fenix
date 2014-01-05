@@ -1,0 +1,19 @@
+#php_flag display_errors on
+#php_value error_reporting 2047
+#php_value upload_max_filesize 4M
+#ErrorDocument 404 /index.php
+
+
+AddDefaultCharset UTF-8
+
+RewriteEngine on
+RewriteBase /
+Options +FollowSymlinks
+Options -Indexes
+
+RewriteRule ^fenix/?$ http://%{HTTP_HOST}/fenix/index.php?%{QUERY_STRING}
+#RewriteRule ^admin/?$ http://%{HTTP_HOST}/fenix/index.php?%{QUERY_STRING}
+
+RewriteRule ^([0-9A-Za-z_-]+)/?$ /?id=$1 [QSA]
+RewriteRule ^([0-9A-Za-z_-]+)/([0-9A-Za-z_-]+)/?$ /?mode=$1&id=$2 [QSA]
+#RewriteRule ^(.*)$ index.php
