@@ -2,10 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="78fcae39-b398-442d-9a19-1466bfc70793" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ext/extentions.php" afterPath="$PROJECT_DIR$/ext/extentions.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fenix/template/main.html" afterPath="$PROJECT_DIR$/fenix/template/main.html" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/ext/extentions.php" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/atlassian-ide-plugin.xml" afterPath="$PROJECT_DIR$/atlassian-ide-plugin.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fenix/class/class_extension.php" afterPath="$PROJECT_DIR$/fenix/class/class_extension.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fenix/class/class_io.php" afterPath="$PROJECT_DIR$/fenix/class/class_io.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fenix/template/js/datepicker.js" afterPath="$PROJECT_DIR$/fenix/template/js/datepicker.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fenix/template/js/lib.js" afterPath="$PROJECT_DIR$/fenix/template/js/lib.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fenix/template/php/project-menu.php" afterPath="$PROJECT_DIR$/fenix/template/php/project-menu.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fenix/template/tpl/project.html" afterPath="$PROJECT_DIR$/fenix/template/tpl/project.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fenix/template/css/sys.css" afterPath="$PROJECT_DIR$/fenix/template/css/sys.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fenix/template/css/style.css" afterPath="$PROJECT_DIR$/fenix/template/css/style.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Fenix.iws" />
@@ -29,10 +34,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="sys.css" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="sys.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fenix/template/css/sys.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="48" selection-start="495" selection-end="495" vertical-scroll-proportion="0.5299539" vertical-offset="0" max-vertical-offset="1140">
+            <state line="23" column="48" selection-start="495" selection-end="495" vertical-scroll-proportion="0.0" vertical-offset="512" max-vertical-offset="1140">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class_extension.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fenix/class/class_extension.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="39" column="115" selection-start="1553" selection-end="1553" vertical-scroll-proportion="-9.708333" vertical-offset="352" max-vertical-offset="1620">
               <folding />
             </state>
           </provider>
@@ -41,16 +55,34 @@
       <file leaf-file-name="main.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fenix/template/main.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="61" column="29" selection-start="2492" selection-end="2500" vertical-scroll-proportion="-7.75" vertical-offset="729" max-vertical-offset="1530">
+            <state line="61" column="29" selection-start="2492" selection-end="2500" vertical-scroll-proportion="0.0" vertical-offset="915" max-vertical-offset="1530">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="project.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="project.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fenix/template/tpl/project.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="61" column="23" selection-start="1910" selection-end="1921" vertical-scroll-proportion="-14.958333" vertical-offset="556" max-vertical-offset="1170">
+            <state line="1" column="0" selection-start="64" selection-end="64" vertical-scroll-proportion="0.025466893" vertical-offset="0" max-vertical-offset="1140">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="project.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fenix/template/php/project.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="41" column="57" selection-start="1913" selection-end="2027" vertical-scroll-proportion="-17.041666" vertical-offset="206" max-vertical-offset="795">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="project-menu.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fenix/template/php/project-menu.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="84" column="39" selection-start="3347" selection-end="3347" vertical-scroll-proportion="-8.916667" vertical-offset="1046" max-vertical-offset="1635">
               <folding />
             </state>
           </provider>
@@ -78,9 +110,12 @@
         <option value="$PROJECT_DIR$/fenix/template/tpl/setting.html" />
         <option value="$PROJECT_DIR$/fenix/template/css/style.css" />
         <option value="$PROJECT_DIR$/fenix/template/tpl/struct.html" />
-        <option value="$PROJECT_DIR$/fenix/template/tpl/project.html" />
         <option value="$PROJECT_DIR$/fenix/template/main.html" />
         <option value="$PROJECT_DIR$/fenix/template/css/sys.css" />
+        <option value="$PROJECT_DIR$/fenix/class/class_io.php" />
+        <option value="$PROJECT_DIR$/fenix/class/class_extension.php" />
+        <option value="$PROJECT_DIR$/fenix/template/php/project-menu.php" />
+        <option value="$PROJECT_DIR$/fenix/template/tpl/project.html" />
       </list>
     </option>
   </component>
@@ -135,6 +170,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -225,13 +261,12 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
+              <option name="myItemId" value="php" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -239,10 +274,45 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RunManager">
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
+      <method />
+    </configuration>
+    <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="name" value="Dart" />
+      <option name="saveOutputToFile" value="false" />
+      <option name="showConsoleOnStdErr" value="false" />
+      <option name="showConsoleOnStdOut" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
+      <method />
+    </configuration>
+    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" working-dir="">
+      <browser start="false" url="" with-js-debugger="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
+      <method />
+    </configuration>
     <list size="0" />
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
@@ -289,7 +359,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Mongo Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.60088366" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24959481" sideWeight="0.60088366" order="0" side_tool="false" content_ui="combo" />
       <window_info id="DB Browser" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="DB Execution Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -333,6 +403,20 @@
     </option>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/fenix/template/main.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="61" column="29" selection-start="2492" selection-end="2500" vertical-scroll-proportion="0.0" vertical-offset="915" max-vertical-offset="1530">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fenix/template/tpl/project.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="61" column="23" selection-start="1910" selection-end="1921" vertical-scroll-proportion="0.0" vertical-offset="556" max-vertical-offset="1170">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/fenix/template/css/sys.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="28" column="33" selection-start="496" selection-end="496" vertical-scroll-proportion="0.0" vertical-offset="9" max-vertical-offset="690">
@@ -342,9 +426,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fenix/template/tpl/setting.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="57" selection-start="638" selection-end="638" vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="1005">
-          <folding />
-        </state>
+        <state line="15" column="57" selection-start="638" selection-end="638" vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="1005" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/install/main.html">
@@ -359,9 +441,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fenix/template/tpl/setting.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="101" selection-start="2239" selection-end="2286" vertical-scroll-proportion="0.63517916" vertical-offset="255" max-vertical-offset="1005">
-          <folding />
-        </state>
+        <state line="43" column="101" selection-start="2239" selection-end="2286" vertical-scroll-proportion="0.63517916" vertical-offset="255" max-vertical-offset="1005" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fenix/template/css/style.css">
@@ -373,28 +453,54 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fenix/template/tpl/struct.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="20" selection-start="11" selection-end="20" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="2670">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fenix/template/tpl/project.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="23" selection-start="1910" selection-end="1921" vertical-scroll-proportion="-14.958333" vertical-offset="556" max-vertical-offset="1170">
-          <folding />
-        </state>
+        <state line="0" column="20" selection-start="11" selection-end="20" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="2670" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fenix/template/main.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="29" selection-start="2492" selection-end="2500" vertical-scroll-proportion="-7.75" vertical-offset="729" max-vertical-offset="1530">
+        <state line="61" column="29" selection-start="2492" selection-end="2500" vertical-scroll-proportion="0.0" vertical-offset="915" max-vertical-offset="1530">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fenix/template/css/sys.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="48" selection-start="495" selection-end="495" vertical-scroll-proportion="0.5299539" vertical-offset="0" max-vertical-offset="1140">
+        <state line="23" column="48" selection-start="495" selection-end="495" vertical-scroll-proportion="0.0" vertical-offset="512" max-vertical-offset="1140">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fenix/class/class_io.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="76" column="31" selection-start="2117" selection-end="2117" vertical-scroll-proportion="0.40697673" vertical-offset="895" max-vertical-offset="3600">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fenix/class/class_extension.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="115" selection-start="1553" selection-end="1553" vertical-scroll-proportion="-9.708333" vertical-offset="352" max-vertical-offset="1620">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fenix/template/php/project-menu.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="84" column="39" selection-start="3347" selection-end="3347" vertical-scroll-proportion="-8.916667" vertical-offset="1046" max-vertical-offset="1635">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fenix/template/php/project.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="57" selection-start="1913" selection-end="2027" vertical-scroll-proportion="-17.041666" vertical-offset="206" max-vertical-offset="795">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fenix/template/tpl/project.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="0" selection-start="64" selection-end="64" vertical-scroll-proportion="0.025466893" vertical-offset="0" max-vertical-offset="1140">
           <folding />
         </state>
       </provider>

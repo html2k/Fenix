@@ -16,7 +16,7 @@
                 $this->config = $config;
             }
 
-            $this->buffer(root . '/' . $this->config['folder']['extension'] . '/extentions.php', function($res){
+            $this->buffer(root . '/' . $this->config['folder']['extension'] . '/extensions.php', function($res){
                 $this->extensions = $res;
             });
 
@@ -37,7 +37,7 @@
 
             if($this->isCompile){
                 $put = '<? return $extensionManifest = ' . $this->arrayToString($this->extensions) . '; ?>';
-                $this->in_file(root . '/' . $this->config['folder']['extension'] . '/extentions.php', $put, false);
+                $this->in_file(root . '/' . $this->config['folder']['extension'] . '/extensions.php', $put, false);
             }
         }
 

@@ -34,7 +34,7 @@ var GLOBAL = function(){
             }else{
                 this.changeCallstack[name] = [callstack];
             }
-            issetCallstack(name, this);
+            //issetCallstack(name, this);
             return this.changeCallstack[name].length -1;
         },
         unwatch : function(name, id){
@@ -99,16 +99,48 @@ function getChar (event) {
     return null;
 };
 
+function dump(list){
+    var result = [],
+        dampRec = function(list, delim){
+            var i, pr = delim, probel = '&#160;&#160;&#160;';
+
+            if(is(list, 'Object')){
+                result.push('Object { ');
+                pr = delim + probel;
+            }else if(is(list, 'Array')){
+                result.push('Array { ');
+                pr = delim + probel;
+            }
+
+            for(i in list){
+                if(is(list[i], 'Object' || is(list[i], 'Array'))){
+                    result.push('\n' + pr);
+                    result.push(pr + i + ' : ')
+                    dampRec(list[i], pr + probel);
+                }else{
+                    result.push('\n' + pr + i + ': ' + list[i])
+                }
+            }
+            if(is(list, 'Object') || is(list, 'Array')){
+                result.push('\n' + delim + ' }');
+            }
+        }
+
+    dampRec(list, '');
+    return result.join('');
+}
+
 
 /* ================================================================== Validate === */
 (function () {
     'use strict';
-    var element = '[isNumber], [isEn], [isRu]';
+    var element = '[isNumber], [isEn], [isRu], [isEmpty]';
     $(document).on('input', element, function () {
         var value = this.value,
             isNumber = this.hasAttribute('isNumber'),
             isEn = this.hasAttribute('isEn'),
             isRu = this.hasAttribute('isRu'),
+            isEmpty = this.hasAttribute('isEmpty'),
             is = true;
         
         
@@ -123,6 +155,10 @@ function getChar (event) {
         if (isRu && /[a-zA-Z]/.test(value)) {
             is = false;
         }
+
+        if (isEmpty && value.length < 1){
+            is = false;
+        }
         
         if (is) {
             $(this).removeClass('invalid');
@@ -131,8 +167,11 @@ function getChar (event) {
         }
         
     }).on('blur', element, function () {
-        var value = this.value;
-        if (value === '') {
+        var value = this.value,
+            isEmpty = this.hasAttribute('isEmpty');
+        if(isEmpty && value === '') {
+            $(this).addClass('invalid');
+        }else if (value === '') {
             $(this).removeClass('invalid');
         }
     });
@@ -404,15 +443,7 @@ function getChar (event) {
                 leftPosition = 'dropdown__right';
 
 
-            var isTop = false;
-            if(dropdownPosition.top - blockHeight < windowSctollTop){
-                isTop = true;
-
-                if(dropdownPosition.top + blockHeight > documentHeight){
-                    isTop = false;
-                }
-
-            }
+            var isTop = (dropdownPosition.top + blockHeight > documentHeight) || (dropdownPosition.top - blockHeight - 10 < 0);
 
             var isLeft = false;
             if(dropdownPosition.left + blockWidth > windowWidth){
@@ -434,7 +465,7 @@ function getChar (event) {
             }else{
                 $dropdown.removeClass(leftPosition);
             }
-
+            $dropdown.find('[autofocus]').focus();
 
         };
     $(document).on('mouseup', '.dropdown-name', function () {
@@ -485,7 +516,7 @@ function getChar (event) {
         },
         close = function () {
             $('.popup-alpha').remove();
-            $('.popup').each(function () {
+            $('.popup:visible').each(function () {
                 if ($(this).parent('.box-popup')) {
                     $(this).hide().unwrap();
                     eventCallStack('close', $(this), this.getAttribute('role'));
@@ -525,6 +556,7 @@ function getChar (event) {
             $popup.show();
             $popup.find('[popup-close]').on('mouseup.popup-close', close);
             event.stopPropagation();
+            $wrap.find('[autofocus]').focus();
         }
     }).on('mouseup.popup-close', function (event) {
         var el = $(event.target);
@@ -560,7 +592,7 @@ var Spin = (function () {
         }
         template.push('<span class="spinner-line"></span></span>');
         $spin.append(template.join(''));
-        
+
         $element.children().hide();
         $element.append($spin);
     };
@@ -677,70 +709,171 @@ var Notification = (function () {
 }());
 
 
-/* ================================================================== Tags === */
-(function (){
-    'use strict';
+/* ================================================================== Tab === */
+(function(){
+    $(document).on('mouseup', '.tab-btn', function(){
+        var $this = $(this),
+            $parent = $this.parents('.tab-box'),
+            $btn = $parent.find('.tab-btn'),
+            $blocks = $parent.find('.tab-block'),
+            index = $btn.index($this);
 
-    var tags = ['x-code'],
-        findTag = function (node){
-            var i, len = tags.length;
-            for(i = 0; i < len; i++){
-                if(node.tagName.toLocaleLowerCase() === tags[i]){
-                    xCollection(node, tags[i]);
-                }
-            }
-        };
-
-    setTimeout(function(){
-        /* Ищем наши теги */
-        var allTags = document.getElementsByTagName('*'),
-            i, len = allTags.length;
-        for(i = 0; i < len; i++){
-            findTag(allTags[i]);
+        if(!$this.hasClass('active')){
+            $blocks.slideUp(200, function(){
+            }).eq(index).slideDown(200, function(){
+                $blocks.removeClass('active').eq(index).addClass('active');
+                $btn.removeClass('active').eq(index).addClass('active');
+            });
         }
+    });
+}());
 
-    }, 0);
 
+/* ================================================================== Form === */
+(function(){
+    $(document).on('submit', 'form', function(event){
+        var $this = $(this),
+            invalid = false,
+            data = {},
+            elements = [];
 
-    function xCollection(node, tagName){
-        var lib = {
-            'x-code' : function(node){ /* ==================== X-CODE */
-                var pre = document.createElement('PRE'),
-                    code = document.createElement('CODE'),
-                    toogle = node.getAttribute('toogle'),
-                    data = document.createTextNode(node.getAttribute('data'));
-                pre.className = 'x-code';
-                pre.appendChild(code);
-                code.appendChild(data);
+        $this.find('input, select, textarea').each(function(){
+            $(this).trigger('input').trigger('blur');
+            if($(this).hasClass('invalid')) invalid = true;
+            elements.push(this);
+            data[this.name] = this.value;
+        });
 
-                if(toogle && toogle != 'false'){
-                    var span = document.createElement('SPAN');
-                    span.innerHTML = 'Расскрыть';
-                    span.className = 'x-code_btn';
-                    pre.style.display = 'none';
-                    span.onclick = function(){
-                        if(pre.style.display === 'none'){
-                            pre.style.display = 'block';
-                            span.innerHTML = 'Закрыть';
-                        }else{
-                            pre.style.display = 'none';
-                            span.innerHTML = 'Расскрыть';
-                        }
-                    };
-                    pre.style.display = 'none';
-                    node.parentNode.insertBefore(span, 0);
-                }
-
-                node.parentNode.insertBefore(pre, 0);
-                node.parentNode.removeChild(node);
-            },
-            'x-text' : function(node){ /* ==================== X-TEXT */
-
+        if (invalid) {
+            var error = this.hasAttribute('error') && this.getAttribute('error') !== '' ? this.getAttribute('error') : false;
+            if(error !== false){
+                GLOBAL.set(error, {
+                    data: data,
+                    elements: elements,
+                    form: $this
+                });
             }
-        };
+            event.preventDefault();
+        } else {
+            var action = this.hasAttribute('action') && this.getAttribute('action') !== '' ? this.getAttribute('action') : '',
+                method = (this.hasAttribute('method') && this.getAttribute('method') !== '') ? this.getAttribute('method') : 'POST',
+                ajaxSuccess = this.hasAttribute('ajax-success') && this.getAttribute('ajax-success') !== '' ? this.getAttribute('ajax-success') : false,
+                submit = this.hasAttribute('submit') && this.getAttribute('submit') !== '' ? this.getAttribute('submit') : 'POST',
+                beforeSend = this.hasAttribute('before-send') && this.getAttribute('before-send') !== '' ? this.getAttribute('before-send') : false,
+                send = this.hasAttribute('send') && this.getAttribute('send') !== '' ? this.getAttribute('send') : false;
 
-        if(lib[tagName])
-            lib[tagName](node);
-    }
+            if(beforeSend !== false){
+                GLOBAL.set(beforeSend, {
+                    data: data,
+                    elements: elements,
+                    form: $this
+                });
+            }
+            if (this.hasAttribute('ajax')) {
+                $.ajax({
+                    url: action,
+                    type: method,
+                    data: data,
+                    success: function (response) {
+                        if (ajaxSuccess) GLOBAL.set(ajaxSuccess, {
+                            data: data,
+                            response: response,
+                            elements: elements,
+                            form: $this
+                        });
+                    }
+                });
+                event.preventDefault();
+            }
 
+            if (send) GLOBAL.set(send, 1);
+        }
+    })
+}());
+
+
+/* ================================================================== Select === */
+(function(){
+
+    $.fn.ctrlSelect = function(){
+        this.each(function(){
+            var $this = $(this),
+                $option = $this.children('option'),
+                $list = $('<ul class="btn-select"/>'),
+                checkName = false;
+
+            $option.each(function(){
+                var li = $('<li/>');
+                li.text(this.innerHTML);
+                $list.append(li);
+                if($(this).is(':checked')){
+                    checkName = this.innerHTML;
+                }
+            });
+
+            if(checkName === false){
+                checkName = $option.eq(0).text()
+            }
+
+            $this.wrap('<span class="btn js-btn-select"/>');
+
+            var parent = $this.parent();
+
+
+            var $cloneUl = $list.clone();
+            $('body').append($cloneUl);
+            $cloneUl.css('float', 'left');
+
+            $list.width($cloneUl.width());
+            $cloneUl.remove();
+
+
+            parent.append($('<span class="btn-in btn-in__first">'+ checkName +'</span>'));
+            parent.append($('<i class="btn-in btn-tail btn-in__last" />'));
+            parent.append($list);
+            $this.hide();
+        });
+    };
+
+    var hideSelect = function(){
+        $('.js-btn-select').removeClass('btn__active').children('ul').hide();
+    };
+
+    $(document).on('mouseup', '.js-btn-select', function(event){
+        var $this = $(this),
+            $select = $this.find('select'),
+            $option = $select.find('option'),
+            $ul = $this.children('ul'),
+            $li = $ul.children('li');
+
+        $ul.show();
+
+        $li.off('click').on('click', function(){
+            var index = $li.index($(this));
+            $option.attr('checked', false).eq(index).attr('checked', true);
+
+            $select.val($option.eq(index).val());
+            $this.children('.btn-in.btn-in__first').text($(this).text());
+            hideSelect();
+        });
+
+        $this.addClass('btn__active');
+    }).on('mouseup', function(event){
+        if(!$(event.target).closest('.js-btn-select').length){
+            hideSelect();
+        }
+    });
+
+    $(function(){
+        $('.ctrl-select').ctrlSelect();
+    });
+}());
+
+
+/* ================================================================== Others === */
+(function(){
+    $(document).on('mouseup', '.ctrl-box', function(event){
+        event.stopPropagation();
+        $(this).find('input:visible').eq(0).focus();
+    });
 }());

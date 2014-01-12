@@ -1,4 +1,4 @@
-var Datepiker = function(){
+var Datepicker = function(){
 
     var NAMESPACE = 'datepicker',
         CLASS_DATEPICKER = 'datepicker',
@@ -99,6 +99,7 @@ var Datepiker = function(){
                 }
             }
         }
+
         return new Date(result.year, result.month -1, result.day);
     };
 
@@ -356,6 +357,6 @@ var Datepiker = function(){
 }();
 
 $(function(){
-   Datepiker.init();
+    Datepicker.init();
 });
 

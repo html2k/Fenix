@@ -1,3 +1,6 @@
+:focus{
+    outline: none;
+}
 body{
     font-size: 13px;
     font-family: Tahoma, Arial sans-serif;
@@ -6,9 +9,7 @@ body{
 
 
 /* =============================================== Grid === */
-.clear{ zoom: 1; }
 .box{ zoom: 1; margin: 15px 0; }
-.clear:after,
 .box:after{
     display: block;
     content: '';
@@ -84,7 +85,10 @@ a:hover{ color: #333; }
     color: #00a2c4;
     border-bottom: 1px dashed
 }
-.false-link:hover{ border-bottom-color: transparent; }
+.false-link:hover{
+    color: #333;
+    border-bottom-color: transparent;
+}
 hr{
     border: none;
     height: 1px;
@@ -124,6 +128,7 @@ table td{
 
 /* =============================================== Button === */
 .btn{
+    zoom: 1;
     position: relative;
     display: inline-block;
     padding: 1px;
@@ -154,8 +159,13 @@ table td{
     -ms-user-select: none;
     user-select: none;
 }
+.btn:after{
+    content: '';
+    clear: both;
+}
 .btn-in{
     display: block;
+    float: left;
     height: 26px;
     padding: 0 10px;
     margin: 0;
@@ -185,6 +195,25 @@ table td{
     -ms-user-select: none;
     user-select: none;
 }
+    .btn-in__first{
+        border-radius: 2px 0 0 2px;
+    }
+    .btn-in__last{
+        border-radius: 0 2px 2px 0;
+    }
+    .btn-tail{
+        position: relative;
+        margin-left: 1px;
+    }
+    .btn-tail:after{
+        position: absolute;
+        content: '';
+        top: 50%;
+        left: 50%;
+        margin: -2px 0 0 -4px;
+        border: 4px solid transparent;
+        border-top-color: #777;
+    }
     .btn__hover .btn-in,
     .btn:hover .btn-in{
         background: rgb(255,255,255); /* Old browsers */
@@ -239,6 +268,26 @@ table td{
         background: #ddd;
         box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.5);
         filter: none;
+    }
+.btn-select{
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    border: 1px solid #ddd;
+    background: #fff;
+}
+    .btn-select li{
+        height: 26px;
+        line-height: 26px;
+        padding: 0 10px;
+    }
+    .btn-select li:hover{
+        background: #B8EFFF;
     }
 
 .btn__checkbox input[type=checkbox],
@@ -350,11 +399,14 @@ table td{
     margin-bottom: 10px;
 }
 .ctrl-box .inp{ margin-bottom: 0; }
+.split-box .ctrl-box{
+    float: left;
+}
 /* end Form */
 
 
 /* =============================================== Size === */
-.w-min{ width: 45px; }
+.w-micro{ width: 45px; }
 .w-middle{ width: 80px; }
 .w-small{ width: 120px; }
 .w-normal{ width: 190px; }
@@ -362,7 +414,7 @@ table td{
 .w-gigant{ width: 500px; }
 .w-full{ width: 100%; }
 
-.h-min{ height: 28px; }
+.h-micro{ height: 28px; }
 .h-middle{ height: 48px; }
 .h-small{ height: 68px; }
 .h-normal{ height: 108px; }
@@ -370,7 +422,7 @@ table td{
 .h-gigant{ height: 258px; }
 .h-full{ height: 100%; }
 
-.mt-min{ margin-top: 5px; }
+.mt-micro{ margin-top: 5px; }
 .mt-middle{ margin-top: 10px; }
 .mt-small{ margin-top: 15px; }
 .mt-normal{ margin-top: 20px; }
@@ -378,7 +430,7 @@ table td{
 .mt-gigant{ margin-top: 50px; }
 .mt-full{ margin-top: 100%; }
 
-.mb-min{ margin-bottom: 5px; }
+.mb-micro{ margin-bottom: 5px; }
 .mb-middle{ margin-bottom: 10px; }
 .mb-small{ margin-bottom: 15px; }
 .mb-normal{ margin-bottom: 20px; }
@@ -386,7 +438,7 @@ table td{
 .mb-gigant{ margin-bottom: 50px; }
 .mb-full{ margin-bottom: 100%; }
 
-.ml-min{ margin-left: 5px; }
+.ml-micro{ margin-left: 5px; }
 .ml-middle{ margin-left: 10px; }
 .ml-small{ margin-left: 15px; }
 .ml-normal{ margin-left: 20px; }
@@ -394,7 +446,7 @@ table td{
 .ml-gigant{ margin-left: 50px; }
 .ml-full{ margin-left: 100%; }
 
-.mr-min{ margin-right: 5px; }
+.mr-micro{ margin-right: 5px; }
 .mr-middle{ margin-right: 10px; }
 .mr-small{ margin-right: 15px; }
 .mr-normal{ margin-right: 20px; }
@@ -417,7 +469,8 @@ table td{
 /* =============================================== Help === */
 .help-block{
     position: absolute;
-    padding: 3px 10px;
+    max-width: 300px;
+    padding: 3px 10px 5px 10px;
     line-height: 16px;
     font-size: 12px;
     color: #fff;
@@ -727,6 +780,86 @@ table td{
 	background: #DF5954;
 }
 /* end Notification */
+
+
+/* =============================================== Tab */
+.tab-box{
+    margin-bottom: 15px;
+}
+.tab-btn{
+    display: inline-block;
+    height: 30px;
+    padding: 0 10px;
+    margin-bottom: 10px;
+    line-height: 30px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+.tab-btn.active{
+    text-shadow: 1px 1px 0 #fff;
+    border-color: #00a2c4;
+    background: #E2FAFF;
+}
+.tab-btn:hover{
+    text-shadow: 1px 1px 0 #fff;
+    background: #f2f2f2;
+}
+.tab-box__vertical .tab-btn{
+    display: block;
+    padding: 0;
+    text-decoration: underline;
+    border: none;
+    border-radius: 0;
+}
+.tab-box__vertical .tab-btn.active{
+    color: #00a2c4;
+    text-decoration: none;
+    text-shadow: none;
+    background: none;
+}
+.tab-box__vertical .tab-btn:hover{
+    text-decoration: none;
+    text-shadow: none;
+    background: none;
+}
+.tab-box__vertical .tab-block{ margin-bottom: 10px; }
+.tab-panel{
+    padding-left: 5px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+.tab-panel .tab-btn{
+    margin-bottom: 0;
+    border-bottom: none;
+    border-radius: 3px 3px 0 0;
+}
+.tab-block{
+    display: none;
+}
+.tab-block.active{ display: block; }
+/* end Tab */
+
+
+/* =============================================== Note */
+.note{
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    text-shadow: 1px 1px 0 #F3FDFF;
+    border-left: 2px solid #00a2c4;
+    background: #E2FAFF;
+}
+.note.note__good{
+    text-shadow: 1px 1px 0 #F6F7F0;
+    border-left-color: #95C641;
+    background-color: #F2F7E2;
+}
+.note.note__warning{
+    text-shadow: 1px 1px 0 #F6F7F0;
+    border-left-color: #F7D03E;
+    background-color: #FFF8DF;
+}
+/* end Note */
 
 
 /* =============================================== X-CODE */

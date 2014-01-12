@@ -71,8 +71,11 @@ class IO {
 
 	
 	//-> Запись в файл
-	public function in_file($name, $string, $to = true){
-		if(!file_exists($name)) $this->create_file($name);
+	public function in_file($name, $string, $to = true, $chmod = 0777){
+		if(!file_exists($name)){
+            $this->create_file($name);
+            chmod($name, $chmod);
+        }
 		if($to){
 			$string = $string . $this->to_string($name);
 		}else{

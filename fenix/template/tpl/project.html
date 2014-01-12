@@ -1,13 +1,13 @@
 <h1 class="page-name">Проект: <?= @$GLOB['project_name']?></h1>
 
 <div class="box">
-    <ul class="hList projectEvent pull-right">
+    <ul class="projectEvent pull-right">
         <li>
             <span class="dropdown">
-                <span class="dropdown_name false-link">Создать</span>
-                <span class="dropdown_block">
-                    <i class="dropdown_block_tail"></i>
-                    <ul class="dropdown_list">
+                <span class="dropdown-name false-link">Создать</span>
+                <span class="dropdown-block">
+                    <i class="dropdown-tail"></i>
+                    <ul class="dropdown-list">
                         <?= @$createList; ?>
                     </ul>
                 </span>
@@ -69,5 +69,3 @@
     <?= $previewList; ?>
 </div>
 <? endif; ?>
-
-<script src="template/js/project.js" type="text/javascript"></script>

@@ -78,11 +78,11 @@
     // Добавление елемента
     $objectList = $db->find($GLOB['namespace']['struct_db']);
     $leftMenu = array();
-    $leftMenu[] = '<div class="dropdown mt_micro">';
-    $leftMenu[] = '<span class="dropdown_name btn m_none"><span class="btn-in">Создать</span></span>';
-    $leftMenu[] = '<span class="dropdown_block">';
-    $leftMenu[] = '<i class="dropdown_block_tail"></i>';
-    $leftMenu[] = '<ul class="dropdown_list">';
+    $leftMenu[] = '<div class="dropdown">';
+    $leftMenu[] = '<span class="dropdown-name btn"><span class="btn-in">Создать</span></span>';
+    $leftMenu[] = '<span class="dropdown-block">';
+    $leftMenu[] = '<i class="dropdown-tail"></i>';
+    $leftMenu[] = '<ul class="dropdown-list">';
     
     $elemId = isset($_GET['id']) ? '&parent='.$_GET['id'] : '';
     //$elemId = isset($_GET['parent']) ? '&parent='.$_GET['parent'] : '';
