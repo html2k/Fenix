@@ -69,3 +69,126 @@ h3{ font-size: 14px; }
     border-right: 1px solid #777;
 }
 /* ================================ Header end */
+
+
+/* ================================ Project */
+.project-crumbs{
+    margin: 0 -15px;
+    padding: 0 15px;
+    list-style-type: none;
+    background: #f2f2f2;
+}
+.project-crumbs li{
+    display: inline-block;
+    margin-right: 3px;
+    font-size: 14px;
+}
+.project-crumbs a{
+    display: inline-block;
+    text-shadow: 1px 1px 0 #fff;
+    height: 30px;
+    line-height: 30px;
+}
+.project-crumbs-tail{
+    position: relative;
+    display: inline-block;
+    margin-top: 10px;
+    border: 5px solid transparent;
+    border-left-color: #777;
+}
+.project-crumbs-tail:after{
+    position: absolute;
+    left: -6.5px;
+    top: -5px;
+    content: '';
+    border: 5px solid transparent;
+    border-left-color: #f2f2f2;
+}
+.project-name{ margin: 15px 0; }
+
+.project-event{
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+.project-event > li{
+    display: inline-block;
+    line-height: 27px;
+    margin-left: 5px;
+}
+.project-list-created{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+.project-list-created a{
+    display: block;
+    white-space:nowrap;
+}
+.project-list-created i{
+    color: #777;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.project-menu-list{
+    margin: 0 0 15px 0;
+    padding: 0;
+    list-style-type: none;
+}
+.project-menu-list ul{
+    list-style-type: none;
+}
+.project-menu-list a.active{
+    color: #d1000a;
+}
+.project-list{
+    margin: 25px 0;
+}
+.project-list ul{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+.project-list li{
+    height: 30px;
+    line-height: 30px;
+    margin: 0 -15px;
+    padding: 0 15px;
+    border-top: 1px solid #ddd;
+    background: #fff;
+}
+.project-list li:nth-child(2n){ background: #f9f9f9; }
+.project-list li:first-child{ border-top: none; }
+.project-list li:hover{
+    background: #f5f5f5;
+}
+.project-list i{
+    margin-right: 5px;
+    font-size: 16px;
+    color: #777;
+}
+.project-list-num{
+    margin-right: 10px;
+    font-size: 10px;
+    font-weight: normal;
+    color: #777;
+}
+.project-filter-objects{
+    height: 20px;
+    line-height: 20px;
+}
+.project-filter-objects span{
+    display: inline-block;
+    height: 20px;
+    padding: 0 5px;
+    line-height: 20px;
+    cursor: pointer;
+}
+.project-filter-objects .current{
+    cursor: default;
+    text-shadow: -1px -1px 0 #555D66;
+    color: #fff;
+    background: #8693a0;
+}
+/* ================================ Project end */

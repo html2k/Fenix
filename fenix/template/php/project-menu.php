@@ -12,7 +12,7 @@
 
             function __construct($config, $path, $namespace){
                     parent::init($config);
-                
+
                     $this->path = $path;
                     $this->ns = $namespace;
 
@@ -72,8 +72,7 @@
             }
     }
     $leftMenu = new Path($config['db'], $path, $GLOB['namespace']);
-    $GLOB['leftMenu'] .= '<ul class="leftMenuList">' . $leftMenu->result . '</ul>';
-	
+    $GLOB['leftMenu'] .= '<ul class="project-menu-list">' . $leftMenu->result . '</ul>';
     
     // Добавление елемента
     $objectList = $db->find($GLOB['namespace']['struct_db']);
@@ -82,7 +81,7 @@
     $leftMenu[] = '<span class="dropdown-name btn"><span class="btn-in">Создать</span></span>';
     $leftMenu[] = '<span class="dropdown-block">';
     $leftMenu[] = '<i class="dropdown-tail"></i>';
-    $leftMenu[] = '<ul class="dropdown-list">';
+    $leftMenu[] = '<ul class="project-list-created">';
     
     $elemId = isset($_GET['id']) ? '&parent='.$_GET['id'] : '';
     //$elemId = isset($_GET['parent']) ? '&parent='.$_GET['parent'] : '';
@@ -93,7 +92,7 @@
             $previewList[] = '<i class="'.$v['icon'].'"></i>';
             $previewList[] = $v['name'];
         $previewList[] = '</a>';
-        $createList[] = '<li><a href="?mode=elem&name='.$v['code'].$elemId.'">'.$v['name'].'</a></li>';
+        $createList[] = '<li><a href="?mode=elem&name='.$v['code'].$elemId.'"><i class="'.$v['icon'].'"></i>'  .$v['name'].'</a></li>';
     }
     $createList = implode('', $createList);
     $previewList = implode('', $previewList);

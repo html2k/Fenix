@@ -1,13 +1,13 @@
 <h1 class="page-name">Редактор объекта</h1>
 <form action="" method="post" enctype="multipart/form-data">
-<div class="split_box">
-    <div class="ctrl_group first">
-        <span class="inp_name">ЧПУ</span>
+<div class="split-box">
+    <div class="ctrl-box first">
+        <span class="inp-name">ЧПУ</span>
         <input type="text" name="chpu" value="<?= @$selfObject[0]['chpu']; ?>" class="inp w_normal first"/>
     </div>
-    <div class="ctrl_group last">
-        <span class="inp_name">Шаблон</span>
-        <select name="marker">
+    <div class="ctrl-box last">
+        <span class="inp-name">Шаблон</span>
+        <select name="marker" class="ctrl-select">
             <option value="0">без шаблона</option>
             <?
                 foreach($template as $v){
@@ -17,8 +17,8 @@
             ?>
         </select>
     </div>
-    <div class="ctrl_group last" style="margin-left: 15px;">
-        <span class="inp_name">&#160;</span>
+    <div class="ctrl-box last" style="margin-left: 15px;">
+        <span class="inp-name">&#160;</span>
         <label style="line-height: 30px;">
             <input type="checkbox" name="active_path" value="1" <? if(!isset($selfObject[0]['active_path']) || $selfObject[0]['active_path'] == 1) echo 'checked="true"'; ?> style="margin-top: 8px;"/>
             Учитывать в пути
@@ -38,8 +38,8 @@
 <input type="hidden" name="object" value="<?= @$tableName; ?>"/>
 
 
-<div class="mt_normal">
-    <button class="btn btn__positive" type="submit">
+<div class="mt-normal">
+    <button class="btn btn__success" type="submit">
         <span class="btn-in">Сохранить</span>
     </button>
 </div>

@@ -1,13 +1,21 @@
-<h1 class="page-name">Проект: <?= @$GLOB['project_name']?></h1>
+<ul class="project-crumbs">
+    <li><a href="?mode=project"><i class="icon-home"></i></a></li>
+    <? foreach($crumbs as $k => $v): ?>
+        <li>
+            <i class="project-crumbs-tail"></i>
+            <a href="?mode=project&id=<?= $k; ?>"><?= $v; ?></a>
+        </li>
+    <? endforeach; ?>
+</ul>
 
 <div class="box">
-    <ul class="projectEvent pull-right">
+    <ul class="project-event pull-right">
         <li>
             <span class="dropdown">
                 <span class="dropdown-name false-link">Создать</span>
                 <span class="dropdown-block">
                     <i class="dropdown-tail"></i>
-                    <ul class="dropdown-list">
+                    <ul class="project-list-created">
                         <?= @$createList; ?>
                     </ul>
                 </span>
@@ -55,11 +63,26 @@
             <span class="disable false-link js-removeItem">Удалить</span>
         </li>
     </ul>
+
+    <div class="project-name">
+        <h1><?= @$GLOB['project_name']?></h1>
+    </div>
+</div>
+
+
+<div class="project-filter-objects">
+    Фильтр по объектам:
+    <span data-code="0" class="current">Все</span>
+    <? foreach($tables as $v): ?>
+        <span data-code="<?= $v['code']?>">
+            <?= $v['name']?>
+        </span>
+    <? endforeach ?>
 </div>
 
 
 
-<div class="projectList">
+<div class="project-list">
     <?= implode('', $selfList);?>
 </div>
 

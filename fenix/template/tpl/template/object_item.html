@@ -1,16 +1,16 @@
-<li class="m_midle">
-    <div class="split_box">
-        <div class="ctrl_group">
-            <label class="inp_name">Имя</label>
+<li class="mb-middle">
+    <div class="split-box">
+        <div class="ctrl-box">
+            <label class="inp-name">Имя</label>
             <input type="text" name="form[name][<?= @$key?>]" value="<?= @$paramObjectItem['name']; ?>" class="inp first" data-validate="empty"/>
         </div>
-        <div class="ctrl_group">
-            <label class="inp_name">Код</label>
+        <div class="ctrl-box">
+            <label class="inp-name">Код</label>
             <input type="text" name="form[code][<?= @$key?>]" value="<?= @$paramObjectItem['code']; ?>" class="inp" data-validate="empty,latin"/>
         </div>
-        <div class="ctrl_group">
-            <label class="inp_name">Тип</label>
-            <select name="form[type][<?= @$key?>]" class="js-type">
+        <div class="ctrl-box">
+            <label class="inp-name">Тип</label>
+            <select name="form[type][<?= @$key?>]" class="js-type ctrl-select">
                 <?
                     foreach($manifest['gist'] as $k => $v){
                         $selected = (isset($paramObjectItem) && $paramObjectItem['type'] == $k) ? ' selected="true"' : '';
@@ -19,16 +19,16 @@
                 ?>
             </select>
         </div>
-        <div class="ctrl_group">
-            <label class="inp_name">&#160;</label>
+        <div class="ctrl-box">
+            <label class="inp-name">&#160;</label>
             <div class="btn js-showSetting">
                 <span class="btn-in">
                     <i class="icon-cog"></i>
                 </span>
             </div>
         </div>
-        <div class="ctrl_group">
-            <label class="inp_name">&#160;</label>
+        <div class="ctrl-box">
+            <label class="inp-name">&#160;</label>
             <span class="btn last js-removeItem">
                 <span class="btn-in">
                     <i class="icon-cancel f_gigant"></i>

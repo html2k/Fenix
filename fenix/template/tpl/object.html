@@ -2,39 +2,39 @@
 
 <form action="" method="post">
     <h3>Параметры таблици</h3>
-    <div class="ctrl_group">
-        <label class="inp_name">Имя</label>
+    <div class="ctrl-box">
+        <label class="inp-name">Имя</label>
         <input type="text" name="name" value="<?= @$objectParam[0]['name']?>" class="inp" data-validate="empty"/>
     </div>
-    <div class="ctrl_group">
-        <label class="inp_name">Код</label>
+    <div class="ctrl-box">
+        <label class="inp-name">Код</label>
         <input type="text" name="code" value="<?= @$objectParam[0]['code']?>" class="inp" data-validate="empty,latin" />
     </div>
-    <div class="ctrl_group icon-control">
-        <span class="inp_name">Иконка</span>
-        <div class="dropdown">
-            <span class="dropdown_name">
+    <div class="ctrl-box">
+        <span class="inp-name">Иконка</span>
+        <span class="dropdown">
+            <span class="dropdown-name">
                 <? $icon =  isset($objectParam[0]['icon']) ? $objectParam[0]['icon'] : 'icon-doc';?>
                 <i class="<?= $icon; ?>"></i>
             </span>
-            <div class="dropdown_block w_big">
-                <span class="dropdown_block_tail"></span>
+            <span class="dropdown-block w_big">
+                <span class="dropdown-tail"></span>
                 <?
                     $icon = getIcon();
                     foreach($icon['glyphs'] as $v){
                         echo '<i class="icon-'.$v['css'].'"></i>';
                     }
                 ?>
-            </div>
-        </div>
+            </span>
+        </span>
         <input type="hidden" name="icon" value="<?= isset($objectParam[0]['icon']) ? $objectParam[0]['icon'] : 'icon-doc'; ?>"/>
     </div>
-    <div class="ctrl_group ml_micro">
-        <span class="inp_name">Системные настройки</span>
-        <label class="inp_name">
+    <div class="ctrl-box ml-small">
+        <span class="inp-name">Системные настройки</span>
+        <label class="inp-name">
             <input type="checkbox" name="show_wood" value="1" <?= isset($objectParam) && $objectParam[0]['show_wood'] > 0 ? 'checked="true"' : '' ?>/> Показывать в дереве
         </label>
-        <label class="inp_name">
+        <label class="inp-name">
             <input type="checkbox" name="show_sistem" value="1" <?= isset($objectParam) && $objectParam[0]['show_sistem'] > 0 ? 'checked="true"' : '' ?>/> Показывать в Системные настройки
         </label>
     </div>
@@ -80,7 +80,6 @@
             
             $.post('', {action : 'getGist', type : type, key : key}, function(respons){
                 $block.empty().append(respons);
-                $().createSelect();
             });
         };
         $(function(){
@@ -89,8 +88,7 @@
                     var len = list.children().length
                     $.post('', {action : 'getItemObject', index : len}, function(respons){
                         list.append(respons);
-                        $().createSelect();
-                        Validate().init();
+                        $('.ctrl-select').ctrlSelect();
                     });
                 };
             if(list.children().length < 1) add();

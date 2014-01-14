@@ -1,4 +1,4 @@
-<span class="inp_name"><?= @$paramObjectItem['row']['name']?></span>
+<span class="inp-name"><?= @$paramObjectItem['row']['name']?></span>
 
 <?
     if($paramObjectItem['value'] !== ''){
@@ -12,7 +12,7 @@
 ?>
 <? if($paramObjectItem['value'] !== ''): ?>
 
-<table class="gist-image-table">
+<table class="table table__float">
     <tr>
         <td rowspan="5" class="gist-image-table__image">
             <a href="<?= $paramObjectItem['value'];?>" target="_blank">
@@ -21,11 +21,11 @@
         </td>
     </tr>
     <tr>
-        <td class="gist-image-table__text">Имя</td>
+        <td>Имя</td>
         <td><?= $imgName; ?></td>
     </tr>
     <tr>
-        <td class="gist-image-table__text">Путь</td>
+        <td>Путь</td>
         <td>
             <a href="<?= $paramObjectItem['value'];?>" target="_blank">
                 <?= $paramObjectItem['value'];?>
@@ -33,12 +33,12 @@
         </td>
     </tr>
     <tr>
-        <td class="gist-image-table__text">Размер</td>
+        <td>Размер</td>
         <td><?= $scale[2];?> x <?= $scale[3]; ?> (<?= $size; ?>)</td>
     </tr>
 
     <tr>
-        <td class="gist-image-table__text"></td>
+        <td></td>
         <td>
             <label class="inp_name mt_micro">
                 <input type="checkbox" name="form[<?= @$paramObjectItem['row']['code']?>][remove]" value="1" class="js-image-remove"/>
@@ -52,7 +52,7 @@
 <? endif; ?>
 
 
-<div class="split_box">
+<div class="split-box">
     <input type="text" name="form[<?= @$paramObjectItem['row']['code']?>][name]" value="<?= @$imgName; ?>" class="inp first" placeholder="Имя изображения"/>
     <input type="text" name="form[<?= @$paramObjectItem['row']['code']?>][url]" value="" class="inp last w_normal" placeholder="Путь к изображению"/>
 </div>
