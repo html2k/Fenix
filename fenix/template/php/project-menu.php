@@ -37,7 +37,7 @@
                         'event' => 'find',
                         'from' => $a,
                         'where' => $b,
-                        'order' => 'object, num'
+                        'order' => 'num'
                         )
                     )
                 );
@@ -100,4 +100,12 @@
     $leftMenu[] = '</ul>';
     $leftMenu[] = '</div>';
     $GLOB['leftMenu'] .= implode('', $leftMenu);
-                
+
+
+
+    // Формируем хлебные крошки
+    $crumbs = [];
+    foreach($path as $v){
+        $find = $db->find($v['object'], array('id' => $v['id']));
+        $crumbs[$v['id']] = isset($find[0]['name']) &&  $find[0]['name'] != '' ? $find[0]['name'] : 'undefiend-'.$v['id'];
+    }

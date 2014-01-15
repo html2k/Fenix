@@ -1,12 +1,14 @@
-<ul class="project-crumbs">
-    <li><a href="?mode=project"><i class="icon-home"></i></a></li>
-    <? foreach($crumbs as $k => $v): ?>
-        <li>
-            <i class="project-crumbs-tail"></i>
-            <a href="?mode=project&id=<?= $k; ?>"><?= $v; ?></a>
-        </li>
-    <? endforeach; ?>
-</ul>
+<? if(count($crumbs)): ?>
+    <ul class="project-crumbs">
+        <li><a href="?mode=project"><i class="icon-home"></i></a></li>
+        <? foreach($crumbs as $k => $v): ?>
+            <li>
+                <i class="project-crumbs-tail"></i>
+                <a href="?mode=project&id=<?= $k; ?>"><?= $v; ?></a>
+            </li>
+        <? endforeach; ?>
+    </ul>
+<? endif; ?>
 
 <div class="box">
     <ul class="project-event pull-right">
@@ -69,16 +71,17 @@
     </div>
 </div>
 
-
-<div class="project-filter-objects">
-    Фильтр по объектам:
-    <span data-code="0" class="current">Все</span>
-    <? foreach($tables as $v): ?>
-        <span data-code="<?= $v['code']?>">
-            <?= $v['name']?>
-        </span>
-    <? endforeach ?>
-</div>
+<? if(count($tables) && count($selfItem)): ?>
+    <div class="project-filter-objects">
+        Фильтр по объектам:
+        <span data-code="0" class="current">Все</span>
+        <? foreach($tables as $v): ?>
+            <span data-code="<?= $v['code']?>">
+                <?= $v['name']?>
+            </span>
+        <? endforeach ?>
+    </div>
+<? endif; ?>
 
 
 
@@ -86,8 +89,8 @@
     <?= implode('', $selfList);?>
 </div>
 
-<? if(!count($selfList)): ?>
-<div>
+<? if(!count($selfItem)): ?>
+<div class="create-element-big-icon">
     <h3>Создать елемент</h3>
     <?= $previewList; ?>
 </div>

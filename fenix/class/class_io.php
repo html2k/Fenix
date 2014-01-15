@@ -218,14 +218,14 @@ class IO {
 		return $bytes;
     }
 
-    public function buffer($file, $callback){
+    public function buffer($file, $param){
         $result = '';
         if(file_exists($file)){
             ob_start();
                 $f = require $file;
                 $result = ob_get_contents();
-                if(is_callable($callback)){
-                    $callback($f);
+                if(is_callable($param)){
+                    $param($f);
                 }
 
             ob_end_clean();

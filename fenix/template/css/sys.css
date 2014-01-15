@@ -1,6 +1,10 @@
 html, body{
     height: 100%;
 }
+sup{
+    vertical-align: super;
+    font-size: smaller;
+}
 .page-name{
     background: #f2f2f2;
     font-size: 18px;
@@ -15,6 +19,7 @@ h3{ font-size: 14px; }
     background: #f2f2f2;
     border-right: 1px solid #ccc;
 }
+
 .dubl_box{ margin-top: -15px; }
 .dubl_box .box-cell { padding-top: 15px; }
 .box-table{
@@ -73,7 +78,8 @@ h3{ font-size: 14px; }
 
 /* ================================ Project */
 .project-crumbs{
-    margin: 0 -15px;
+    margin-left: -15px;
+    margin-right: -15px;
     padding: 0 15px;
     list-style-type: none;
     background: #f2f2f2;
@@ -151,7 +157,7 @@ h3{ font-size: 14px; }
     list-style-type: none;
 }
 .project-list li{
-    height: 30px;
+    position: relative;
     line-height: 30px;
     margin: 0 -15px;
     padding: 0 15px;
@@ -184,11 +190,57 @@ h3{ font-size: 14px; }
     padding: 0 5px;
     line-height: 20px;
     cursor: pointer;
+
+    -webkit-transition: all .1s ease;
+    -moz-transition: all .1s ease;
+    -o-transition: all .1s ease;
 }
+.project-filter-objects sup{
+    display: inline-block;
+    vertical-align: top;
+    font-size: 10px;
+    margin-top: -2px;
+    color: #999;
+}
+.project-filter-objects .current sup{ color: #fff; }
 .project-filter-objects .current{
     cursor: default;
     text-shadow: -1px -1px 0 #555D66;
     color: #fff;
     background: #8693a0;
+    border-radius: 2px;
+}
+.create-element-big-icon{}
+.create-element-big-icon a{
+    display: inline-block;
+    vertical-align: top;
+    width: 120px;
+    min-height: 190px;
+    margin: 0 10px 10px 0;
+    padding: 0 0 10px 0;
+    text-align: center;
+    color: #777;
+    background: #f2f2f2;
+    border-radius: 4px;
+}
+.create-element-big-icon i{
+    display: block;
+    font-size: 120px;
+    text-shadow: 1px 1px 0 #fff;
+}
+.create-element-big-icon i:before{ margin: 0; }
+.project-detail{
+    display: none;
+    position: absolute;
+    right: 25px;
+    min-width: 200px;
+    max-width: 500px;
+    margin-bottom: 10px;
+    bottom: 100%;
+    background: #fff;
+}
+.project-detail td{
+    line-height: 13px;
+    font-size: 11px;
 }
 /* ================================ Project end */

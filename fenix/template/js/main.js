@@ -1,12 +1,32 @@
 $(function(){
     'use strict';
 
-        $('.project-filter-objects span').on('mouseup', function(){
+
+        var $list = $('.project-list li');
+        $('.project-filter-objects span').each(function(){
+            var code = this.getAttribute('data-code'),
+                count = 0;
+
+            if(code == 0){
+                count = $list.length;
+            }else{
+                $list.each(function(){
+                    if(this.getAttribute('data-code') === code){
+                        count++;
+                    }
+                });
+            }
+
+            if(count){
+                this.innerHTML += ' <sup>' +count+ '</sup>';
+            }else{
+                this.style.display = 'none';
+            }
+        }).on('mouseup', function(){
             var $this = $(this),
                 $butten = $this.parent().children('span');
 
             if(!$this.hasClass('current')){
-                var $list = $('.project-list li');
 
                 $butten.removeClass('current');
                 $this.addClass('current');
@@ -26,6 +46,7 @@ $(function(){
             }
         });
 
+
 //    $('.editor').ckeditor({
 //        toolbar : [
 //            [ 'Source' ],
@@ -40,4 +61,22 @@ $(function(){
 //        ]
 //    });
 
+    project();
+
 });
+
+
+
+function project () {
+    'use strict';
+
+    $('.js-projectDetailItemShow').hover(function(){
+        $(this).parents('li').find('.js-projectDetailItem').show()
+    }, function(){
+        $(this).parents('li').find('.js-projectDetailItem').hide()
+    });
+
+
+
+
+}

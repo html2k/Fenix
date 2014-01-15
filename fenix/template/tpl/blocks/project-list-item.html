@@ -1,0 +1,39 @@
+<li class="box" data-id="<?= $param['object']['id']; ?>" data-code="<?= $param['object']['object']; ?>">
+    <i class="<?= $param['icon']; ?>"></i>
+    <b class="project-list-num"><?= $param['index']; ?></b>
+    <a class="name" href="?mode=project&id=<?= $param['id']; ?>"><?= $param['name']; ?></a>
+
+    <span class="param-list pull-right">
+        <span class="mr-small">
+            <i class="icon-help js-projectDetailItemShow"></i>
+        </span>
+
+
+        <a href="?mode=elem&name=<?= $param['object']['object']; ?>&id=<?= $param['object']['id']?>"><i class="icon-pencil"></i></a>
+        <a href="?action=hideElement&id=<?= $param['object']['id']?>&hide=<?= (int) $param['object']['hide']?>"><i class="<?= $param['hide-icon']?>"></i></a>
+        <a href="?action=removeElem&id=<?= $param['object']['id']?>"><i class="icon-cancel"></i></a>
+    </span>
+
+    <div class="project-detail js-projectDetailItem">
+        <table class="table m-none">
+            <tr>
+                <td>ID</td>
+                <td class="w-full"><?= $param['id']?></td>
+            </tr>
+
+            <tr>
+                <td>REF</td>
+                <td><?= $param['ref']?></td>
+            </tr>
+
+            <? foreach($param['data-list'] as $k => $v): ?>
+                <? if($param['data'][$k] !== ''): ?>
+                    <tr>
+                        <td><?= $v['name']; ?></td>
+                        <td><?= $param['data'][$k]; ?></td>
+                    </tr>
+                <? endif; ?>
+            <? endforeach; ?>
+        </table>
+    </div>
+</li>

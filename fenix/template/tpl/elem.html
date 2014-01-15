@@ -1,4 +1,18 @@
-<h1 class="page-name">Редактор объекта</h1>
+<? if(count($crumbs)): ?>
+<ul class="project-crumbs">
+    <li><a href="?mode=project"><i class="icon-home"></i></a></li>
+    <? foreach($crumbs as $k => $v): ?>
+    <li>
+        <i class="project-crumbs-tail"></i>
+        <a href="?mode=project&id=<?= $k; ?>"><?= $v; ?></a>
+    </li>
+    <? endforeach; ?>
+</ul>
+<? endif; ?>
+
+
+<h1 class="mb-normal">Редактор объекта</h1>
+
 <form action="" method="post" enctype="multipart/form-data">
 <div class="split-box">
     <div class="ctrl-box first">
