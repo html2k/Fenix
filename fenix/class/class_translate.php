@@ -163,9 +163,9 @@ class Translate {
                     self::$translate_where_var[] = '(';
                     self::translate_where($val, $bVal, $bKey);
                     self::$translate_where_var[] = ')';
-                    
-                    //if($each + 1 < $len)
-                    self::$translate_where_var[] = isset($alias[$back_key]) ? $alias[$back_key] : $alias['$and'];
+
+                    if(end($option) !== $option[$key])
+                        self::$translate_where_var[] = isset($alias[$back_key]) ? $alias[$back_key] : $alias['$and'];
                     
                 }
                 continue;

@@ -30,7 +30,17 @@
                 <? if($param['data'][$k] !== ''): ?>
                     <tr>
                         <td><?= $v['name']; ?></td>
-                        <td><?= $param['data'][$k]; ?></td>
+                        <td>
+                            <? if($v['type'] == 'image'): ?>
+
+                                <? $size = resize(root . $param['data'][$k], 100); ?>
+
+                                <img src="<?= $param['data'][$k]; ?>" width="<?= $size[0]?>" height="<?= $size[1]?>"/>
+
+                            <? else: ?>
+                                <?= $param['data'][$k]; ?>
+                            <? endif ?>
+                        </td>
                     </tr>
                 <? endif; ?>
             <? endforeach; ?>

@@ -169,6 +169,9 @@ h3{ font-size: 14px; }
 .project-list li:hover{
     background: #f5f5f5;
 }
+.project-list li.active{
+    background: #FFECD4;
+}
 .project-list i{
     margin-right: 5px;
     font-size: 16px;
@@ -233,11 +236,12 @@ h3{ font-size: 14px; }
     display: none;
     position: absolute;
     right: 25px;
-    min-width: 200px;
+    min-width: 100px;
     max-width: 500px;
     margin-bottom: 10px;
     bottom: 100%;
     background: #fff;
+    box-shadow: 0 0 5px 0 rgba(0,0,0,0.2);
 }
 .project-detail td{
     line-height: 13px;

@@ -70,10 +70,99 @@ $(function(){
 function project () {
     'use strict';
 
+    /* Показать скрыть инфу про объект */
     $('.js-projectDetailItemShow').hover(function(){
-        $(this).parents('li').find('.js-projectDetailItem').show()
+        var position = $(this).offset(),
+            $block = $(this).parents('li').find('.js-projectDetailItem');
+
+        if(position.top - $block.innerHeight() <= 0){
+            $block.css({
+                'bottom' : 'auto',
+                'top': '100%',
+                'margin-top' : '10px'
+            })
+        }
+        $block.show()
     }, function(){
         $(this).parents('li').find('.js-projectDetailItem').hide()
+    });
+
+
+    var X, Y, $body = $('body'), allocation = false, items = [];
+    $(document).on('mousedown', function(event){
+        if($(event.target).closest('.project-list li').length){
+            X = undefined;
+            Y = undefined;
+            return;
+        }
+        X = event.pageX;
+        Y = event.pageY;
+
+        $(document).on('mousemove.allocation', function(event){
+            var x = event.pageX, y = event.pageY;
+
+            if(!allocation){
+                items = [];
+
+
+                $('.project-list li').each(function(){
+                    var pos = $(this).offset();
+
+
+                    pos.element = this;
+                    pos.width = $(this).width();
+                    pos.height = $(this).height();
+
+                    items.push(pos);
+
+                });
+
+
+                allocation = $('<div class="allocation" />');
+                $body.addClass('no-select').append(allocation);
+
+            }
+
+            var position = {left: X, top: Y};
+
+
+            if(X > x){
+                position.left = x;
+                position.width = X - x;
+            }else{
+                position.width = x - X;
+            }
+
+            if(Y > y){
+                position.top = y;
+                position.height = Y - y;
+            }else{
+                position.height = y - Y;
+            }
+
+            allocation.css(position);
+
+            var i = 0, len = items.length;
+            for(; i < len; i++){
+                console.log(
+
+
+                )
+            }
+
+
+
+        });
+
+    }).on('mouseup', function(){
+        $(document).off('mousemove.allocation');
+        if(allocation !== false){
+            allocation.remove();
+            allocation = false;
+            $body.removeClass('no-select');
+        }
+    }).on('mouseup', '.project-list li', function(){
+        $(this).toggleClass('active');
     });
 
 

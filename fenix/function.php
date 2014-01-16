@@ -98,9 +98,9 @@ function loadPath($db, $GLOB, $id){
 
 function removeElem($db, $io, $GLOB, $config, $id, $object = ''){
     while (true){
-        if($object == '')
+        if($object == ''){
             $object = $db->find($GLOB['namespace']['construct_db'], array('$or' => array('id' => $id, 'ref' => $id)));
-
+        }
         $db->remove($object[0]['object'], array('id' => $id));
         $db->remove($GLOB['namespace']['construct_db'], array('id' => $id));
         $path = root . '/' . $config['folder']['files'] . '/' . $id . '/';
@@ -109,7 +109,7 @@ function removeElem($db, $io, $GLOB, $config, $id, $object = ''){
         $find = $db->find($GLOB['namespace']['construct_db'], array('parent' => $id));
         if(count($find)){
             foreach($find as $v){
-                removeElem($db, $io, $GLOB, $config, $v['id'], $v);
+                removeElem($db, $io, $GLOB, $config, $v['id'], array($v));
             }
         }else{
             break;

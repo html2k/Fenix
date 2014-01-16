@@ -146,7 +146,27 @@ table td{
 .table tr:hover td {
     background: #f5f5f5;
 }
+
+.no-select{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 /* end Base style */
+
+
+/* =============================================== Allocation === */
+.allocation{
+    position: absolute;
+    width: auto;
+    z-index: 99;
+    border: 1px solid #FFA33A;
+    background: rgba(255,183,101, .2);
+}
+/* end Allocation */
 
 
 /* =============================================== Button === */
