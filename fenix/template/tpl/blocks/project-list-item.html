@@ -11,7 +11,7 @@
 
         <a href="?mode=elem&name=<?= $param['object']['object']; ?>&id=<?= $param['object']['id']?>"><i class="icon-pencil"></i></a>
         <a href="?action=hideElement&id=<?= $param['object']['id']?>&hide=<?= (int) $param['object']['hide']?>"><i class="<?= $param['hide-icon']?>"></i></a>
-        <a href="?action=removeElem&id=<?= $param['object']['id']?>"><i class="icon-cancel"></i></a>
+        <a href="?action=removeElem&id=<?= $param['object']['id']?>" class="spin" data-spin="Подождите идет удаление"><i class="icon-cancel"></i></a>
     </span>
 
     <div class="project-detail js-projectDetailItem">

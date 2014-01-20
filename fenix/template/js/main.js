@@ -2,73 +2,90 @@ $(function(){
     'use strict';
 
 
-        var $list = $('.project-list li');
-        $('.project-filter-objects span').each(function(){
-            var code = this.getAttribute('data-code'),
-                count = 0;
+   $('.editor').ckeditor({
+       toolbar : [
+           [ 'Source' ],
+           [ 'RemoveFormat', 'ShowBlocks', 'Maximize' ],
+           [ 'Styles', 'Format', 'FontSize' ], [ 'TextColor', 'BGColor' ], [ 'About' ],
+           '/',
 
-            if(code == 0){
-                count = $list.length;
-            }else{
-                $list.each(function(){
-                    if(this.getAttribute('data-code') === code){
-                        count++;
-                    }
-                });
-            }
-
-            if(count){
-                this.innerHTML += ' <sup>' +count+ '</sup>';
-            }else{
-                this.style.display = 'none';
-            }
-        }).on('mouseup', function(){
-            var $this = $(this),
-                $butten = $this.parent().children('span');
-
-            if(!$this.hasClass('current')){
-
-                $butten.removeClass('current');
-                $this.addClass('current');
-
-                $list.each(function(){
-
-                    if($this.data('code') === 0){
-                        this.style.display = 'block';
-                    }else{
-                        if(this.getAttribute('data-code') === $this.data('code')){
-                            this.style.display = 'block';
-                        }else{
-                            this.style.display = 'none';
-                        }
-                    }
-                });
-            }
-        });
-
-
-//    $('.editor').ckeditor({
-//        toolbar : [
-//            [ 'Source' ],
-//            [ 'RemoveFormat', 'ShowBlocks', 'Maximize' ],
-//            [ 'Styles', 'Format', 'FontSize' ], [ 'TextColor', 'BGColor' ], [ 'About' ],
-//            '/',
-//
-//            [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'],
-//            [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
-//            [ 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink' ],
-//            [ 'Table', 'Image', 'HorizontalRule', 'SpecialChar' ]
-//        ]
-//    });
+           [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'],
+           [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
+           [ 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink' ],
+           [ 'Table', 'Image', 'HorizontalRule', 'SpecialChar' ]
+       ]
+   });
 
     project();
 
 });
 
+    GLOBAL.watch('notification', function(message){
+        if(message.option){
+            $.post('', {
+                'action' : 'clearSystemMessage',
+                'id': message.option.key
+            });
+        }
+    });
 
+
+function spin(text){
+    $('.alpha').show();
+    Spin.set($('.alpha-message'), text || 'Подождите идет загрузка');
+}
+function stopSpin(){
+    Spin.remove($('.alpha-message'));
+    $('.alpha').hide();
+}
 
 function project () {
     'use strict';
+
+    var $list = $('.project-list li');
+    $('.project-filter-objects span').each(function(){
+        var code = this.getAttribute('data-code'),
+            count = 0;
+
+        if(code == 0){
+            count = $list.length;
+        }else{
+            $list.each(function(){
+                if(this.getAttribute('data-code') === code){
+                    count++;
+                }
+            });
+        }
+
+        if(count){
+            this.innerHTML += ' <sup>' +count+ '</sup>';
+        }else{
+            this.style.display = 'none';
+        }
+    }).on('mouseup', function(){
+        var $this = $(this),
+            $butten = $this.parent().children('span');
+
+        if(!$this.hasClass('current')){
+
+            $butten.removeClass('current');
+            $this.addClass('current');
+
+            $list.each(function(){
+
+                if($this.data('code') === 0){
+                    this.style.display = 'block';
+                }else{
+                    if(this.getAttribute('data-code') === $this.data('code')){
+                        this.style.display = 'block';
+                    }else{
+                        this.style.display = 'none';
+                    }
+                }
+            });
+        }
+    });
+
 
     /* Показать скрыть инфу про объект */
     $('.js-projectDetailItemShow').hover(function(){
@@ -163,7 +180,32 @@ function project () {
         }
     }).on('mouseup', '.project-list li', function(){
         $(this).toggleClass('active');
+
+    }).on('mouseup', '.js-projectEvent', function(){
+        var data = {
+            action: this.getAttribute('action'),
+            parent: GLOBAL.get('page').id,
+            id: []
+        };
+
+        spin('Подождите');
+
+        $('.project-list li.active').each(function(){
+            data.id.push(this.getAttribute('data-id') *1);
+        });
+
+        $.post('', data, function(response){
+            window.location = window.location.href;
+        });
+        
+
+    }).on('click', '.spin', function(){
+        console.log(1)
+        spin(this.getAttribute('data-spiner'));
     });
+
+
+
 
 
 

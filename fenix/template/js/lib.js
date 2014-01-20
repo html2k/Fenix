@@ -601,7 +601,7 @@ var Spin = (function () {
         $element.find('.spinner-text').text(text);
     };
     
-    lib.remove = function ($element, option) {
+    lib.remove = function ($element) {
         $element.find('.spinner').fadeTo(300, 0, function () {
             $(this).remove();
         });
@@ -645,18 +645,18 @@ var Notification = (function () {
 				
 			});
 		};
-	
 	lib.set = function (option) {
 		var template = $('<div class="notification-item"/>');
 		option = $.extend({}, opts, option);
 		
 		template.addClass('notification-item__' + option.flag);
-		template.text(option.message);
+		template.html(option.message);
 		
 		mes.push({
 			element : template,
 			index : mesIndex += 1,
-			hide : option.hide
+			hide : option.hide,
+            option: option
 		});
 		
 		if (option.show) {
@@ -691,20 +691,22 @@ var Notification = (function () {
 		var i = 0, len = mes.length;
 		if (!isNaN(index)) {
 			index = parseInt(index, 10);
+            var message = false;
 			for (i = 0; i < mes.length; i += 1) {
 				if (mes[i].index === index) {
-					mes.splice(i, 1);
+					message = mes.splice(i, 1);
 				}
 			}
+            GLOBAL.set('notification', message[0]);
 			$('.notification [data-index=' + index + ']').fadeTo(300, 0, function () {
 				$(this).remove();
 				if ($('.notification').children().length < 1) {
 					$('.notification').remove();
+                    
 				}
 			});
 		}
 	};
-
 	return lib;
 }());
 

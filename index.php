@@ -138,7 +138,28 @@
 
             case 'twig':
                 
-                
+               require_once $config['folder']['sys'] . '/templating/Twig/Autoloader.php';
+                Twig_Autoloader::register();
+
+                $loader = new Twig_Loader_Filesystem(root . '/template/');
+                $twig = new Twig_Environment($loader, array(
+                    //'cache' => $config['cache']
+                ));
+
+                require_once $config['folder']['template'] . '/main.php';
+
+                foreach($GLOB['template'] as $v){
+                    $filePHP = $config['folder']['template'] . '/php/'.$v . '.php';
+                    $fileHTML = 'twig/' . $v . '.twig';
+                    
+                    if(file_exists($filePHP)){
+                        require_once $filePHP;
+                        echo $twig->render($fileHTML, $GLOB);
+                    }else{
+                        throw new Exception("Error Processing Request", 404);
+                        
+                    }
+                } 
                 
             break;
 

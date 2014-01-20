@@ -27,6 +27,7 @@ switch ($_REQUEST['action']){
     break;
     
     case 'addUser':
+        $name = '';
         try {
             $query = array(
                 'login' => trim($_POST['name']),
@@ -40,13 +41,15 @@ switch ($_REQUEST['action']){
                 throw new Exception('Такой пользователь уже существует');
             }
             $db->insert($GLOB['namespace']['user'], $query);
+            $name = $query['login'];
         } catch (Exception $e){
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
+        setSystemMessage('good', 'Пользователь <b>'.$name.'</b> был создан');
         load_url();
     break;
     
-    case 'removeError':
+    case 'clearSystemMessage':
         $array = array();
         foreach($_SESSION['error'] as $v){
             if($v['id'] != $_POST['id']) $array[] = $v;
@@ -55,12 +58,16 @@ switch ($_REQUEST['action']){
     break;
     
     case 'removeUser': 
+        $name = '';
         try {
             $id = (int) $_GET['id'];
+            $name = $db->find($GLOB['namespace']['user'], array('id' => $id));
+            $name = $name[0]['login'];
             $db->remove($GLOB['namespace']['user'], array('id' => $id));
         }  catch (Exception $e){
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
+        setSystemMessage('good', 'Пользователь <b>'.$name.'</b> был удален');
         load_url();
     break;
 
@@ -95,7 +102,7 @@ switch ($_REQUEST['action']){
                 }
             }
         }  catch (Exception $e){
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
         load_url();
     break;
@@ -105,7 +112,7 @@ switch ($_REQUEST['action']){
             $id = (int) $_GET['id'];
             $db->remove($GLOB['namespace']['template'], array('id' => $id));
         }  catch (Exception $e){
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
         load_url();
     break;
@@ -122,7 +129,7 @@ switch ($_REQUEST['action']){
                 $db->insert($GLOB['namespace']['marker'], array( 'name' => $name ));
             }
         }  catch (Exception $e){
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
         load_url();
     break;
@@ -134,7 +141,7 @@ switch ($_REQUEST['action']){
             $db->update($GLOB['namespace']['marker'], array('template_id' => $id), array('id' => $marker));
             
         }  catch (Exception $e){
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
         load_url();
     break;
@@ -144,7 +151,7 @@ switch ($_REQUEST['action']){
             $id = (int) $_GET['id'];
             $db->remove($GLOB['namespace']['marker'], array('id' => $id));
         }  catch (Exception $e){
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
         load_url();
     break;
@@ -281,7 +288,7 @@ switch ($_REQUEST['action']){
                 ));
             }
         }  catch (Exception $e){
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
         load_url();
     break;
@@ -342,7 +349,7 @@ switch ($_REQUEST['action']){
                 'row' => $row
             ));
         }  catch (Exception $e){
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
         load_url();
     break;
@@ -356,7 +363,7 @@ switch ($_REQUEST['action']){
             $db->remove($GLOB['namespace']['struct_td'], array('parent' => $id));
             $db->remove_table($name);
         }  catch (Exception $e){
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
         load_url();
     break;
@@ -508,7 +515,7 @@ switch ($_REQUEST['action']){
 
                         $IMG->Process($path);
                         if(!$IMG->processed){
-                            setError('error', $IMG->error);
+                            setSystemMessage('error', $IMG->error);
                         }
                         $IMG->clean();
 
@@ -526,7 +533,7 @@ switch ($_REQUEST['action']){
                             $savePath = $savePath . $fileName . '.' . $mime;
                         }
                     }else{
-                        setError('error', $IMG->error);
+                        setSystemMessage('error', $IMG->error);
                     }
                     $form[$k] = file_exists(root . $savePath) ? $savePath : '';
                 }
@@ -579,48 +586,52 @@ switch ($_REQUEST['action']){
                 exit();
             }
         } catch (Exception $e) {
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
+        setSystemMessage('good', 'Елеменет был удален');
         load_url();
     break;
     
     
-    case 'removeIrtem':
+    case 'removeItem':
         try {
             foreach($_POST['id'] as $v){
                 removeElem($db, $io, $GLOB, $config, (int) $v);
             }
         } catch (Exception $e) {
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
     break;
     
-    case 'dubleIrtem':
+    case 'dubleItem':
         try {
             $parent = (int)$_POST['parent'];
             foreach($_POST['id'] as $v){
                 copyElem($db, $io, $GLOB, $config, (int) $v, $parent);
             }
         } catch (Exception $e) {
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
+        setSystemMessage('good', 'Элемент успешно скопирован в текущую деррикторию');
     break;
     
-    case 'copyIrtem':
+    case 'copyItem':
         try {
             $_SESSION['moveItem'] = array();
             $_SESSION['copyItem'] = $_POST['id'];
         } catch (Exception $exc) {
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
+        
+        setSystemMessage('good', 'Элемент успешно скопирован в текущую деррикторию');
     break;
     
-    case 'moveIrtem':
+    case 'moveItem':
         try {
             $_SESSION['copyItem'] = array();
             $_SESSION['moveItem'] = $_POST['id'];
         } catch (Exception $exc) {
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
     break;
 
@@ -637,7 +648,7 @@ switch ($_REQUEST['action']){
                 $event = 'move';
                 $_SESSION['moveItem'] = array();
             }else{
-                throw new Exception();  
+                throw new Exception();
             }
             
             foreach($id as $v){
@@ -648,8 +659,8 @@ switch ($_REQUEST['action']){
                     copyElem($db, $io, $GLOB, $config, (int) $v, $parent);
                 }
             }
-        } catch (Exception $exc) {
-            setError('error', $e);
+        } catch (Exception $e) {
+            setSystemMessage('error', $e);
         }
         load_url();
     break;
@@ -685,7 +696,7 @@ switch ($_REQUEST['action']){
             }
             
         } catch (Exception $e) {
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
         load_url();
     break;
@@ -699,7 +710,7 @@ switch ($_REQUEST['action']){
             }
             
         } catch (Exception $exc) {
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
     break;
     
@@ -710,7 +721,7 @@ switch ($_REQUEST['action']){
             $db->update($GLOB['namespace']['construct_db'], array('hide' => (int) $_GET['hide']), array('id' => $id));
             
         } catch (Exception $exc) {
-            setError('error', $e);
+            setSystemMessage('error', $e);
         }
 		load_url();
 	break;

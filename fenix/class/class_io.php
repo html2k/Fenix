@@ -107,7 +107,7 @@ class IO {
                     }
                 }
             } catch (Exception $exc) {
-                setError('error', $e);
+                setSystemMessage('error', $e);
             }
             return false;
 	}

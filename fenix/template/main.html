@@ -20,13 +20,12 @@
         </script>
 
         
-
-        <script src="template/js/jquery.js" type="text/javascript"></script>
+        <script src="template/js/jq.js" type="text/javascript"></script>
         <script src="plugin/ckeditor/ckeditor.js"></script>
         <script src="plugin/ckeditor/config.js"></script>
 	    <script src="plugin/ckeditor/adapters/jquery.js"></script>
 
-        <script src="template/js/jq.js" type="text/javascript"></script>
+
         <script src="template/js/lib.js" type="text/javascript"></script>
         <script src="template/js/datepicker.js" type="text/javascript"></script>
         <script src="template/js/main.js" type="text/javascript"></script>
@@ -78,19 +77,30 @@
         </div>
         <? endif;?>
         
-        
-        <div class="error-box">
-        <?
-            if(isset($_SESSION['error'])){
-                $list = array();
-                foreach($_SESSION['error'] as $v){
-                    $list[] = '<div class="'.$v['name'].'" data-id="'.$v['id'].'">';
-                    $list[] = '<p>'.$v['error'].'</p>';
-                    $list[] = '</div>';
-                }
-                echo implode('', $list);
-            }
-        ?>
+        <script>
+            $(function(){
+                <?
+                    if(isset($_SESSION['error'])){
+                        $list = array();
+                        foreach($_SESSION['error'] as $v){
+                            $list[] = 'Notification.set({';
+                                    $list[] = 'message: "'.$v['error'].'",';
+                                    $list[] = 'flag: "'.$v['name'].'",';
+                                    $list[] = 'key: "'.$v['id'].'"';
+                            $list[] = '});';
+                        }
+                        if(count($list)){
+                            echo implode("\n", $list);
+                            echo 'Notification.show();';
+                        }
+                    }
+                ?>
+            });
+        </script>
+
+
+        <div class="alpha">
+            <div class="alpha-message"></div>
         </div>
     </body>
 </html>

@@ -35,13 +35,13 @@
         <? endif; ?>
         
         <li>
-            <span class="false-link disable js-duble">Дублировать</span>
+            <span class="false-link disable js-projectEvent" action="dubleItem">Дублировать</span>
         </li>
         <li>
-            <span class="false-link disable js-copy">Копировать</span>
+            <span class="false-link disable js-projectEvent" action="copyItem">Копировать</span>
         </li>
         <li>
-            <span class="false-link disable js-move">Вырезать</span>
+            <span class="false-link disable js-projectEvent" action="moveItem">Вырезать</span>
         </li>
         
         
@@ -62,7 +62,7 @@
         <? endif; ?>
         
         <li>
-            <span class="disable false-link js-removeItem">Удалить</span>
+            <span class="disable false-link js-projectEvent" action="removeItem">Удалить</span>
         </li>
     </ul>
 
@@ -95,3 +95,11 @@
     <?= $previewList; ?>
 </div>
 <? endif; ?>
+
+<script type="text/javascript">
+    GLOBAL.set('page', {
+        'id': <?= (int) $GLOB['self_id']; ?>
+    });
+</script>
+<?
+?>

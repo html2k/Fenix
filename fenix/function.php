@@ -34,7 +34,7 @@ function byteConvert($size){
     }
 }
 
-function setError($name, $error){
+function setSystemMessage($name, $error){
     if(!isset($_SESSION['error'])) $_SESSION['error'] = array();
     $_SESSION['error'][] = array(
         'name' => $name,

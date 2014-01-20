@@ -247,4 +247,22 @@ h3{ font-size: 14px; }
     line-height: 13px;
     font-size: 11px;
 }
+.alpha{
+    display: none;
+    position: fixed;
+    z-index: 99;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.8);
+}
+.alpha-message{
+    position: absolute;
+    left: 30%;
+    top: 50%;
+    margin-top: -20px;
+    width: 40%;
+    color: #fff;
+}
 /* ================================ Project end */

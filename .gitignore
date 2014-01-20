@@ -1,0 +1,11 @@
+
+files/*
+template/*
+_install/
+.project
+
+*.prefs
+
+.settings/*
+
+.buildpath

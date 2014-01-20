@@ -26,7 +26,7 @@
         $tablParam = $tabl[0];
 
     }else{
-        setError('error', 'Не заданы параметры для редактирования');
+        setSystemMessage('error', 'Не заданы параметры для редактирования');
         load_url();
     }
     
