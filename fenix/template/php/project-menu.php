@@ -51,6 +51,9 @@
                             if($active == '' && $this->struct[$v['object']]['show_wood'] < 1) continue;
 
                             $elem = $this->find($v['object'], array('id' => $v['id']));
+                            if(!isset($elem[0])){
+                                continue;
+                            }
                             $elem = $elem[0];
                             $name = isset($elem['name']) && $elem['name'] !== '' ? $elem['name'] : 'undefiend-'.$v['id'];
 
@@ -104,7 +107,7 @@
 
 
     // Формируем хлебные крошки
-    $crumbs = [];
+    $crumbs = array();
     foreach($path as $v){
         $find = $db->find($v['object'], array('id' => $v['id']));
         $crumbs[$v['id']] = isset($find[0]['name']) &&  $find[0]['name'] != '' ? $find[0]['name'] : 'undefiend-'.$v['id'];

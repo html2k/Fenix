@@ -25,6 +25,10 @@
                 <td>REF</td>
                 <td><?= $param['ref']?></td>
             </tr>
+            <tr>
+                <td>Последнее изменение</td>
+                <td><?= $param['date']?></td>
+            </tr>
 
             <? foreach($param['data-list'] as $k => $v): ?>
                 <? if($param['data'][$k] !== ''): ?>

@@ -127,15 +127,6 @@ class IO {
             } 
             closedir($dir); 
         } 
-	
-	//-> Сжатие CSS
-	public function compress_css($string){
-		/* удалить комментарии */
-		$buffer = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $string);
-		/* удалить табуляции, пробелы, символы новой строки и т.д. */
-		$buffer = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $buffer);
-		return $buffer;
-	}
 
 	//-> Удаление файла или деректории
 	public function del($name){
@@ -218,14 +209,14 @@ class IO {
 		return $bytes;
     }
 
-    public function buffer($file, $param){
+    public function buffer($file, $param, $callbackParam = false){
         $result = '';
         if(file_exists($file)){
             ob_start();
                 $f = require $file;
                 $result = ob_get_contents();
                 if(is_callable($param)){
-                    $param($f);
+                    $result = $param($f, $callbackParam);
                 }
 
             ob_end_clean();

@@ -1,0 +1,73 @@
+<div class="box js-structTables">
+    <div class="col3">
+        <h3>Таблици</h3>
+        <ul class="list list__struct">
+        <? foreach($param['table'] as $k => $v): ?>
+            <li class="box" data-table="<?= $k?>">
+                <span class="false-link"><?= $k ?></span>
+                
+                <span class="pull-right">
+                    <span class="ml-normal" help="Количество записей в таблице"><?= $v['count'] ?></span>
+                    <span class="ml-normal" help="Количество занимаемой памяти"><?= byteConvert($v['size']) ?></span>
+                </span>
+            </li>
+        <? endforeach ?>
+        <ul>
+    </div>
+    <div class="col9">
+        <div class="m-box">
+
+            <span class="btn">
+                <span class="btn-in">Сформировать правило</span>
+            </span>
+            <span class="btn">
+                <span class="btn-in">Вставить</span>
+            </span>
+            <span class="btn btn__disable">
+                <span class="btn-in">Удалить</span>
+            </span>
+
+            <input type="text" name="" value="" class="inp" placeholder="Найти"/>
+
+            <? foreach ($param['data'] as $key => $value): ?>
+                <div class="dn js-structTable">
+                    <table class="table">
+
+                        <? if(isset($value[0])): ?>
+                            <tr class="not">
+                                <th width="18"><input type="checkbox"/></th>
+                                <? foreach($value[0] as $k => $v): ?>
+                                    <th>
+                                        <?= $k; ?>
+                                    </th>
+                                <? endforeach ?>
+                                <th width="43"></th>
+                            </tr>
+                        <? endif ?>
+
+                        <? foreach($value as $v): ?>
+                            <tr>
+                                <th><input type="checkbox"/></th>
+                                <? foreach($v as $tdCode => $k): ?>
+                                    <td data-name="<?=$tdCode?>"><?= $k?></td>
+                                <? endforeach ?>
+                                <th>
+                                    <i class="icon-pencil"></i>
+                                    <i class="icon-cancel"></i>
+                                </th>
+                            </tr>
+                        <? endforeach ?>
+
+                    </table>
+                    <? if($param['table'][$key]['count'] > 20): ?>
+                        <div class="t-center mb-normal">
+                            <span class="js-getNextPage" data-count="20" data-table="<?= $key; ?>" data-size="<?= $param['table'][$key]['count']?>">
+                                еще <?= $param['table'][$key]['count'] - 20?>
+                            </span>
+                        </div>
+                    <? endif ?>
+                </div>
+            <? endforeach ?>
+        </div>
+    </div>
+</div>

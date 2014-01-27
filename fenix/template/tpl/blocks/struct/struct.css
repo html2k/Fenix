@@ -1,0 +1,21 @@
+.setting-tebles{
+	margin: 0 0 15px 0;
+	padding: 0;
+	list-style-type: none;
+}
+.setting-tebles li{
+	margin: 0 -15px;
+	padding: 0 15px;
+	line-height: 30px;
+	height: 30px;
+	border-top: 1px solid #ddd;
+}
+.setting-tebles li:first-child{
+	border-top: none;
+}
+.setting-tebles li:nth-child(2n){
+	background: #f9f9f9;
+}
+.js-structTable .editable{
+	outline: 1px solid red
+}

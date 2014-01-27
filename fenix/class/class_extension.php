@@ -16,8 +16,8 @@
                 $this->config = $config;
             }
 
-            $this->buffer(root . '/' . $this->config['folder']['extension'] . '/extensions.php', function($res){
-                $this->extensions = $res;
+            $this->extensions = $this->buffer(root . '/' . $this->config['folder']['extension'] . '/extensions.php', function($res){
+                 return $res;
             });
 
             $path = root . '/' . $this->config['folder']['extension'] . '/';
@@ -50,31 +50,31 @@
                 'folder_name' => array_pop($arr)
             );
 
-            $this->buffer($manifest, function($MANIFEST){
-
-
-                // $this->global['folder_name'] Название папки в которой лежит расширение
-                // $this->extensions Скомпелированные расширения
-                // $MANIFEST Манифест текущего расширения
-
-
-                if(isset($this->extensions[$this->global['folder_name']])){
-                    // Если такое расширение было скомпилировано ранее проверяем
-                    // манифест на изменения и если такие были запускаием пересборку если нет ничего не делаем
-                    $isSame = true;
-                    foreach($this->extensions[$this->global['folder_name']] as $k => $v){
-                        if($k !== 'path' && $MANIFEST[$k] !== $v){
-                            $isSame = false;
-                            break;
-                        }
-                    }
-                    if($isSame){ return; }
-                }
-
-                $this->isCompile = true;
-                $this->extensions[$this->global['folder_name']] = $MANIFEST;
-                $this->extensions[$this->global['folder_name']]['path'] = $this->global['folder_name'];
+            $MANIFEST = $this->buffer($manifest, function($MANIFEST){
+				return $MANIFEST;
             });
+            
+            // $this->global['folder_name'] Название папки в которой лежит расширение
+            // $this->extensions Скомпелированные расширения
+            // $MANIFEST Манифест текущего расширения
+
+
+            if(isset($this->extensions[$this->global['folder_name']])){
+                // Если такое расширение было скомпилировано ранее проверяем
+                // манифест на изменения и если такие были запускаием пересборку если нет ничего не делаем
+                $isSame = true;
+                foreach($this->extensions[$this->global['folder_name']] as $k => $v){
+                    if($k !== 'path' && $MANIFEST[$k] !== $v){
+                        $isSame = false;
+                        break;
+                    }
+                }
+                if($isSame){ return; }
+            }
+
+            $this->isCompile = true;
+            $this->extensions[$this->global['folder_name']] = $MANIFEST;
+            $this->extensions[$this->global['folder_name']]['path'] = $this->global['folder_name'];
 
             $this->global = array();
         }
@@ -87,12 +87,11 @@
             foreach($this->extensions as $v){
                 $this->global['v'] = $v;
                 if(isset($v['action']) && isset($v['action'][$extensionName])){
-                    $this->buffer($extensionPath . $v['path'] . '/' . $v['action'][$extensionName], function($res){
-
-                        $this->global['v']['data'] = $res;
-                        array_push($this->global['result'], $this->global['v']);
-
+                    $res = $this->buffer($extensionPath . $v['path'] . '/' . $v['action'][$extensionName], function($res){
+						return $res;
                     });
+                    $this->global['v']['data'] = $res;
+                    array_push($this->global['result'], $this->global['v']);
                 }
             }
 

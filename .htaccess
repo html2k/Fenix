@@ -11,9 +11,12 @@ RewriteBase /
 Options +FollowSymlinks
 Options -Indexes
 
+
 RewriteRule ^fenix/?$ http://%{HTTP_HOST}/fenix/index.php?%{QUERY_STRING}
 #RewriteRule ^admin/?$ http://%{HTTP_HOST}/fenix/index.php?%{QUERY_STRING}
 
 RewriteRule ^([0-9A-Za-z_-]+)/?$ /?id=$1 [QSA]
 RewriteRule ^([0-9A-Za-z_-]+)/([0-9A-Za-z_-]+)/?$ /?mode=$1&id=$2 [QSA]
 #RewriteRule ^(.*)$ index.php
+
+

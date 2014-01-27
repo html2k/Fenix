@@ -32,6 +32,13 @@ h3{ font-size: 14px; }
     display: table-cell;
     height: 100%;
 }
+.disable,
+a.disable,
+.false-link.disable{
+    cursor: default;
+    color: #999;
+    border-bottom: none;
+}
 
 /* ================================ Header start */
 .header{
@@ -158,6 +165,7 @@ h3{ font-size: 14px; }
 }
 .project-list li{
     position: relative;
+    z-index: 1;
     line-height: 30px;
     margin: 0 -15px;
     padding: 0 15px;
@@ -167,6 +175,7 @@ h3{ font-size: 14px; }
 .project-list li:nth-child(2n){ background: #f9f9f9; }
 .project-list li:first-child{ border-top: none; }
 .project-list li:hover{
+    z-index: 2;
     background: #f5f5f5;
 }
 .project-list li.active{
@@ -266,3 +275,47 @@ h3{ font-size: 14px; }
     color: #fff;
 }
 /* ================================ Project end */
+
+.list{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+.list > li{
+    margin: 0;
+    height: 30px;
+    line-height: 30px;
+}
+.list__struct > li{
+    position: relative;
+    margin: 0 0  0 -15px;
+    padding: 0 15px;
+    cursor: pointer;
+}
+.list__struct > li.list-active_item:before{
+    position: absolute;
+    content: '';
+    left: 100%;
+    border: 15px solid transparent;
+    border-left-color: #34A2C6;
+}
+.list-active_item{
+    color: #fff;
+    background: #34A2C6;
+}
+.list-active_item .false-link{
+    color: #fff;
+    border: none;
+}
+.js-getNextPage{
+    display: inline-block;
+    padding: 0 15px;
+    height: 24px;
+    cursor: pointer;
+    line-height: 22px;
+    text-shadow: 1px 1px 0 #000;
+    color: #fff;
+    background: #555;
+    border-radius: 25px;
+    box-shadow: 0 0 5px 0 rgba(0,0,0,0.5);
+}

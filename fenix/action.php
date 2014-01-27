@@ -725,7 +725,53 @@ switch ($_REQUEST['action']){
         }
 		load_url();
 	break;
+
+    case 'loadTable':
+        try {
+            $count = (int) $_POST['count'];
+            $table = $_POST['table'];
+            
+            $result = $db->extract($db->go(array(
+                'event' => 'find',
+                'from' => $table,
+                'limit' => ('' . $count . ', 50')
+                )));
+            
+            
+            $result = array(
+                'message' => 'Данные загружены',
+                'count' => $count +50,
+                'result' => $result
+                );
+
+
+            echo json_encode($result);
+            
+        } catch (Exception $exc) {
+            setSystemMessage('error', $e);
+        }
+    break;
 	
+    case 'editRowInTable':
+        try{
+
+            
+            $where = array();
+            $update = array();
+
+            foreach ($_POST['row'] as $v) {
+                $where[$v['name']] = $v['defValue'];
+                $update[$v['name']] = $v['newValue'];
+            }
+
+            $db->update($_POST['table'], $update, $where);
+
+            echo 'Строка изменена';
+        } catch (Exception $exc) {
+            setSystemMessage('error', $e);
+        }
+    break;
+
 }
 
 exit();

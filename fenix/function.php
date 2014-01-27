@@ -181,3 +181,21 @@ function resize($url, $max){
     }
     return array($width, $height, $size[0], $size[1]);
 }
+
+
+function staticLoad($static, $debug = false){
+    $result = array();
+    if($debug){
+        foreach($static->getList('js', true) as $v){
+            $result[] = '<script src="'.$v.'" type="text/javascript"></script>';
+        }
+        foreach($static->getList('css', true) as $v){
+            $result[] = '<link rel="stylesheet" type="text/css" href="'.$v.'">';
+        }
+    }else{
+        $result[] = '<link rel="stylesheet" type="text/css" href="'. $static->get('css') .'?v='.$static->getVersion().'">';
+        $result[] = '<script src="'. $static->get('js') .'?v='.$static->getVersion().'" type="text/javascript"></script>';
+    }
+
+    return implode($result);
+}

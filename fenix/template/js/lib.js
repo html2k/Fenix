@@ -50,6 +50,13 @@ var GLOBAL = function(){
 
 
 /* ================================================================== Global Function === */
+function clearSelection() {
+    if (window.getSelection) {
+        window.getSelection().removeAllRanges();
+    } else {
+        document.selection.empty();
+    }
+}
 function is (el, type){
     var clas = Object.prototype.toString.call(el).slice(8, -1);
     return el !== undefined && el !== null && clas === type;
@@ -70,6 +77,29 @@ function doGetCaretPosition (ctrl) {
 		CaretPos = ctrl.selectionStart;
     }
 	return (CaretPos);
+};
+function getCaretPosition(editableDiv) {
+    var caretPos = 0, containerEl = null, sel, range;
+    if (window.getSelection) {
+        sel = window.getSelection();
+        if (sel.rangeCount) {
+            range = sel.getRangeAt(0);
+            if (range.commonAncestorContainer.parentNode == editableDiv) {
+                caretPos = range.endOffset;
+            }
+        }
+    } else if (document.selection && document.selection.createRange) {
+        range = document.selection.createRange();
+        if (range.parentElement() == editableDiv) {
+            var tempEl = document.createElement("span");
+            editableDiv.insertBefore(tempEl, editableDiv.firstChild);
+            var tempRange = range.duplicate();
+            tempRange.moveToElementText(tempEl);
+            tempRange.setEndPoint("EndToEnd", range);
+            caretPos = tempRange.text.length;
+        }
+    }
+    return caretPos;
 };
 function setCaretPosition (ctrl, pos) {
 	'use strict';

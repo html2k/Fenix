@@ -1,4 +1,4 @@
-<h1 class="page-name">Структура проекта</h1>
+<h1 class="page-name js-struct">Структура проекта</h1>
 
 <div class="box">
     <div class="col4">
@@ -9,7 +9,7 @@
                 $tables = $db->find($GLOB['namespace']['struct_db']);
                 $list = array();
                 foreach($tables as $v){
-                $list[] = '<li class="m-box">';
+                $list[] = '<li class="box">';
                 $list[] = '<a class="pull-left" href="?mode=object&id='.$v['id'].'">'.$v['name'].'</a>';
                 $list[] = '<span class="pull-right">';
                         $list[] = '<a href="?action=removeObject&id='.$v['id'].'&name='.$v['code'].'"><i class="icon-cancel"></i></a>';
@@ -21,24 +21,24 @@
             </ul>
 
             <span class="dropdown">
-                <span class="dropdown-name ibox-add-link">Добавить</span>
+                <span class="dropdown-name false-link">Добавить</span>
                 <span class="dropdown-block">
                     <i class="dropdown-tail"></i>
-                    <form action="" method="post">
-                        <input type="text" name="name" value="" class="inp" data-validate="empty" placeholder="Имя"/>
-                        <input type="text" name="code" value="" data-validate="empty,latin" class="inp" placeholder="Код"/>
+                    <form action="" method="post" ajax-success="ajaxForm" before-send="beforeSend">
+                        <input type="text" name="name" value="" class="inp" data-validate="empty" placeholder="Имя" help="Осмысленное название объекта"/>
+                        <input type="text" name="code" value="" isEmpty isEn class="inp" placeholder="Код" help="Только латинские буквы и цифры"/>
                         <input type="hidden" name="action" value="addObject"/>
-                        <div class="clear mb-middle">
-                            <a href="?mode=object" class="pull-right">Расширенный редактор</a>
+                        <div class="mb-middle t-right">
+                            <a href="?mode=object">Расширенный редактор</a>
                         </div>
-                        <div>
-                            <button class="btn" type="submit">
-                                <span class="btn-in">Добавить</span>
-                            </button>
-                            <span class="btn" onclick="$(document).trigger('dropdown-close')">
-                                <span class="btn-in">Отмена</span>
-                            </span>
-                        </div>
+                        
+                        <button class="btn btn__success btn__disable" type="submit">
+                            <span class="btn-in">Добавить</span>
+                        </button>
+                        <span class="btn" onclick="$(document).trigger('dropdown-close')">
+                            <span class="btn-in">Отмена</span>
+                        </span>
+                        
                     </form>
                 </span>
             </span>
@@ -52,7 +52,7 @@
             <ul class="setting-tebles">
                 <? foreach($markerList as $v): ?>
                 <? $templateID = explode(',', $v['template_id']); ?>
-                <li class="m-box" data-id="<?=$v['id'];?>">
+                <li class="box" data-id="<?=$v['id'];?>">
                     <span class="dropdown">
                         <span class="name dropdown-name"><?= $v['name'];?></span>
                         <span class="dropdown-block w-normal">
@@ -67,7 +67,7 @@
                                 <? endforeach; ?>
                                 <input type="hidden" name="marker" value="<?=$v['id']?>"/>
                                 <input type="hidden" name="action" value="markerAddTemplate"/>
-                                <button type="submit" class="btn btn__positive m_none mt_mini">
+                                <button type="submit" class="btn">
                                     <span class="btn-in">Сохранить</span>
                                 </button>
                             </form>
@@ -83,15 +83,15 @@
             </ul>
 
             <span class="dropdown">
-                <span class="dropdown-name ibox-add-link">Добавить</span>
+                <span class="dropdown-name false-link">Добавить</span>
                 <span class="dropdown-block js-MarkerBox js-add">
                     <i class="dropdown-tail"></i>
-                    <form action="" method="post">
+                    <form action="" method="post" ajax-success="ajaxForm" before-send="beforeSend">
                         <label class="inp-name">Имя маркера</label>
                         <input type="text" name="name" value="" class="inp" help="Имя маркера может содержать любые символы, но рекомендуется использовать осмысленные названия."/>
                         <input type="hidden" name="action" value="addMarker"/>
                         <div>
-                            <button class="btn btn__positive disable" type="submit" disabled="true">
+                            <button class="btn btn__success btn__disable" type="submit" disabled="true">
                                 <span class="btn-in">Добавить</span>
                             </button>
                             <span class="btn" onclick="$(document).trigger('dropdown-close')">
@@ -110,7 +110,7 @@
                 <?
                     $list = array();
                     foreach($templateList as $v){
-                        $list[] = '<li class="m-box" data-id="'.$v['id'].'">';
+                        $list[] = '<li class="box" data-id="'.$v['id'].'">';
                         $list[] = '<span class="name">'.$v['name'].'</span>';
                         $list[] = '<span class="pull-right">';
                             $list[] = '<i class="icon-pencil js-edit"></i>';
@@ -122,15 +122,15 @@
                 ?>
             </ul>
             <span class="dropdown">
-                <span class="dropdown-name ibox-add-link">Добавить</span>
+                <span class="dropdown-name false-link">Добавить</span>
                 <span class="dropdown-block js-TemplateBox js-add">
                     <i class="dropdown-tail"></i>
-                    <form action="" method="post">
+                    <form action="" method="post" ajax-success="ajaxForm" before-send="beforeSend">
                         <label class="inp-name">Имя шаблона</label>
                         <input type="text" name="name" value="" class="inp"  help="Имя шаблона должно содержать только латинские символы"/>
                         <input type="hidden" name="action" value="addTemplate"/>
                         <div>
-                            <button class="btn btn__positive disable" type="submit" disabled="true">
+                            <button class="btn btn__success btn__disable" type="submit" disabled="true">
                                 <span class="btn-in">Добавить</span>
                             </button>
                             <span class="btn" onclick="$(document).trigger('dropdown-close')">
@@ -144,29 +144,7 @@
     </div>
 </div>
 
+<hr class="mt-big mb-big" />
 
-<script>
-    (function(){
-        $(function(){
-            $('.js-edit').on('click', function(){
-                var $this = $(this),
-                    $li = $this.parents('li'),
-                    $name = $li.find('.name');
-                    
-                if(!$this.hasClass('dropdown_name')){
-                    var $parent = $this.parents('.ibox'),
-                        $form = $parent.find('.js-add').clone();
-                    $this.addClass('dropdown_name');
-                    $this.wrap('<span class="dropdown"/>');
-                    $this.parent().append($form);
-                    $form.removeClass('js-add').find('form').append('<input type="hidden" name="id" value="'+$li.data('id')+'"/>');
-                }
-                    
-                $li.find('.btn__positive .btn-in').text('Изменить');
-                $li.find('.inp').val($name.text());
-                
-            });
-        });
-    })();
-</script>
+<?= $io->buffer(sys . '/template/tpl/blocks/table/table.html', $tableInfo); ?>
 

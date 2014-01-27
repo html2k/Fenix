@@ -25,7 +25,10 @@
         require_once 'lang/ru.php';
     
     // Class
+    req($config, '/class/compress/cssmin.php');
+    req($config, '/class/compress/jsmin.php');
     req($config, '/class/class_io.php');
+    req($config, '/class/class_compress_static.php');
     req($config, '/class/class_extension.php');
     req($config, '/class/class_translate.php');
     req($config, '/class/class_convert_schem.php');
@@ -35,6 +38,8 @@
     
     $db = new Base($config['db']);
     $io = new IO();
+    $static = new CompressStatic(sys.'/template/compress_static/', 'app', sys.'/');
+
     $Extension = new Extension($config);
     
     // Logic
