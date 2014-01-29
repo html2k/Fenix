@@ -1,0 +1,11 @@
+<? foreach ($param as $value): ?>
+	
+	<h3><?= @$value['name']; ?></h3>
+	<?= @$value['block']; ?>
+
+
+	<? if(current($param) !== end($param)): ?>
+		<hr class="project-menu-line"/>
+	<? endif; ?>
+
+<? endforeach ?>

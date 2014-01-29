@@ -1,4 +1,3 @@
 <?
-    $extension = $Extension->getExtension('home.widget');
-
+    $extension = $Extension->get('home.widget');
 

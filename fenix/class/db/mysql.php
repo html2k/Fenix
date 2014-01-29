@@ -100,6 +100,21 @@ class Base extends ConvertSchem{
         return $this->query(parent::remove($from, $where));
     }
 
+    public function search($from, $where){
+        if(!is_array($where)) return array();
+
+        $w = '';
+
+        foreach($where as $k => $v){
+            if(is_string($v) || is_numeric($v)){
+
+                $w .= '`' . $k . '` LIKE \'%'. $v .'%\' OR ';
+            }
+        }
+        $w = substr($w, 0, -3);
+
+        return $this->extract($this->query('SELECT * FROM `'.$from.'` WHERE '.$w));
+    }
     public function creat_db($name){
         return $this->query('CREATE DATABASE `'.$name.'`');
     }

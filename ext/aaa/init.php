@@ -1,7 +1,9 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: mac
- * Date: 28.01.14
- * Time: 17:45
- */ 
+<?
+
+    $Extension->set('project.menu', array(
+
+        'name' => 'asdsadas',
+        'block' => $io->buffer($option['url'] . 'block.html')
+
+    ));
+

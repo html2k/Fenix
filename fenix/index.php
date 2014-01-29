@@ -40,7 +40,7 @@
     $io = new IO();
     $static = new CompressStatic(sys.'/template/compress_static/', 'app', sys.'/');
 
-    $Extension = new Extension($config);
+    $Extension = new Extension($GLOB['namespace'], $config, $db, $io, $static);
     
     // Logic
     if(isset($_REQUEST['action'])) 
@@ -50,18 +50,40 @@
     if(!isset($_SESSION['user']))
         require_once 'template/connect.php';
     
-    
+
     $_SESSION['back_param'] = $_REQUEST;
     
     // Template
     $mode = isset($_GET['mode']) ? $_GET['mode'] : 'home';
-    define('mode', $mode);
     $GLOB['mode'] = $mode;
 
     $php = 'template/php/' . $mode . '.php';
     $tpl = 'template/tpl/' . $mode . '.html';
-    
+
     require_once 'template/main.php';
+    $Extension->compile();
+
+    if(isset($_GET['extension']) && $_GET['extension'] !== ''){
+        $mode = $_GET['extension'];
+    }
+
+    $extensions = $Extension->get('page');
+    $extUrl = '';
+    $GLOB['extension-menu'] = array();
+
+    foreach ($extensions as $ext) {
+        $GLOB['extension-menu'][$ext['option']['code']] = $ext['option']['code'];
+        if($mode === $ext['option']['code']){
+            $extUrl = $ext['url'] . $ext['option']['page'];
+        }
+    }
+
+    if(isset($_GET['extension']) && $_GET['extension'] !== '' && $extUrl !== ''){
+        $php = $extUrl . '.php';
+        $tpl = $extUrl . '.html';
+    }
+    
+    define('mode', $mode);
     if(file_exists($php)) require_once $php;
     ob_start();
         if(file_exists($tpl)) require_once $tpl;

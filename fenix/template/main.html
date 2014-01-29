@@ -7,16 +7,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <meta name="author" content="LegGnom" />
 
-        
-
-
         <script>
             <?= 'window.$_GET = ' . json_encode($_GET); ?>
         </script>
 
-        
+        <script src="template/js/jq.js" type="text/javascript"></script>
+        <script src="plugin/ckeditor/ckeditor.js"></script>
+        <script src="plugin/ckeditor/config.js"></script>
+        <script src="plugin/ckeditor/adapters/jquery.js"></script>
         <?= staticLoad($static); ?>
-
     </head>
     <body>
         
@@ -26,12 +25,33 @@
                     <a class="header-logo" href="<?=$GLOB['url']['home'];?>">FenixCMS</a>
                 </div>
             </div>
-            <div class="col7">
+            <div class="col5">
                 <div class="m-box">
                     <ul class="header-menu">
-                        <?= $GLOB['topMenu']; ?>
+                        <? foreach($GLOB['menu'] as $k => $v): ?>
+                            <? $current = (mode == $k) ? ' class="current"' : ''; ?>
+                            <li<?=$current?>><a href="?mode=<?=$k?>"><?=$v?></a></li>
+                        <? endforeach; ?>
+
+                        <? if(count($GLOB['extension-menu'])): ?>
+                            <li>
+                                <i class="icon-menu"></i>
+                                <ul>
+                                    <? foreach($GLOB['extension-menu'] as $k => $v): ?>
+                                        <? $current = (mode == $k) ? ' class="current"' : ''; ?>
+                                        <li<?=$current?>><a href="?extension=<?=$k?>"><?=$v?></a></li>
+                                    <? endforeach; ?>
+                                </ul>
+                            </li>
+                        <? endif; ?>
+
                     </ul>
                 </div>
+            </div>
+            <div class="col2 header-search">
+                <input type="text" name="" value="" class="inp w-full"/>
+                <i class="icon-search"></i>
+                <div class="header-search-result-block"></div>
             </div>
             <div class="col2">
                 <div class="m-box">

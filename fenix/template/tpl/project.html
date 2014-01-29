@@ -13,15 +13,7 @@
 <div class="box">
     <ul class="project-event pull-right">
         <li>
-            <span class="dropdown">
-                <span class="dropdown-name false-link">Создать</span>
-                <span class="dropdown-block">
-                    <i class="dropdown-tail"></i>
-                    <ul class="project-list-created">
-                        <?= @$createList; ?>
-                    </ul>
-                </span>
-            </span>
+            <?= $GLOB['create-element-button']; ?>
         </li>
         <? if($GLOB['self_id']): ?>
             <li>
@@ -88,13 +80,6 @@
 <div class="project-list">
     <?= implode('', $selfList);?>
 </div>
-
-<? if(!count($selfItem)): ?>
-<div class="create-element-big-icon">
-    <h3>Создать елемент</h3>
-    <?= $previewList; ?>
-</div>
-<? endif; ?>
 
 <script type="text/javascript">
     GLOBAL.set('page', {

@@ -1,0 +1,15 @@
+<span class="dropdown">
+	<span class="dropdown-name false-link">Создать объект</span>
+	<span class="dropdown-block">
+		<i class="dropdown-tail"></i>
+		<ul class="project-list-created">
+		<? foreach($param['object'] as $value): ?>
+			<li>
+				<a href="?mode=elem&name=<?=$value['code']?>&parent=<?= $param['elemID']?>">
+					<i class="<?= $value['icon'];?>"></i><?= $value['name']; ?>
+				</a>
+			</li>
+		<? endforeach; ?>
+		</ul>
+	</span>
+</span>

@@ -1,6 +1,7 @@
 
 files/*
 template/*
+ext/*
 _install/
 .project
 
@@ -9,3 +10,17 @@ _install/
 .settings/*
 
 .buildpath
+
+atlassian-ide-plugin.xml
+
+favicon.ico
+
+template/main.php
+
+template/main.php
+
+ext/aaa/init.php
+
+ext/aaa/block.html
+
+.idea/workspace.xml

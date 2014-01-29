@@ -754,8 +754,6 @@ switch ($_REQUEST['action']){
 	
     case 'editRowInTable':
         try{
-
-            
             $where = array();
             $update = array();
 
@@ -772,6 +770,62 @@ switch ($_REQUEST['action']){
         }
     break;
 
+
+    case 'search':
+        try{
+            $val = $_POST['value'];
+
+            $result = array();
+            foreach($db->find($GLOB['namespace']['struct_db']) as $v){
+                $table = $v['code'];
+
+                $row = $db->extract($db->go(array(
+                    'event' => 'find',
+                    'from' => $table,
+                    'limit' => 1
+                )));
+                if(!isset($row[0])) continue;
+                $rows = $row[0];
+
+                $where = array();
+
+                foreach(array_keys($rows) as $row){
+                    $where[$row] = $val;
+                }
+
+                $find = $db->search($table, $where);
+                if(count($find) > 0){
+                    $result[] = array(
+                        'name' => $v['name'],
+                        'code' => $v['code'],
+                        'find' => $find
+                    );
+                }
+
+            }
+
+            header('Content-type: text/json');
+            header('Content-type: application/json');
+            echo json_encode($result);
+
+        } catch (Exception $exc) {
+            setSystemMessage('error', $e);
+        }
+    break;
 }
+
+
+$Extension->compile();
+$extensionAction = $Extension->get('action');
+foreach ($extensionAction as $ext) {
+    if($ext['option']['name'] === $_REQUEST['action']){
+        $fileInit = $ext['url'] . $ext['option']['init'];
+        if(file_exists($fileInit)){
+            require_once $fileInit;
+        }
+        break;
+    }
+}
+
 
 exit();

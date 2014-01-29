@@ -15,7 +15,7 @@ $config = array(
 	'files' => 'files',
 	'extension' => 'ext',
 ),
-'project_name' => 'Test',
-'templating' => 'twig',
+'project_name' => 'Test: Гостиница на покросвсом-стрешнево',
+'templating' => 'scooby',
 'lang' => 'ru'
 );
