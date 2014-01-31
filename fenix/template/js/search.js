@@ -31,16 +31,17 @@ function search(value, block){
         action : 'search',
         value : value
     }, function(res){
-        var list = document.createElement('UL');
-        var count = 0;
+        var list = document.createElement('UL'),
+            count = 0;
+
         for(var i = 0; i < res.length; i++){
             var li = addResultSearch(res[i]);
             list.appendChild(li);
             count += res[i].find.length;
         }
+
         if(count > 0){
             block.html(list);
-            //block.append('<span class="header-search-all">'+Показать все результаты+'</span>');
             block.slideDown(150);
         }else{
             block.html();
@@ -59,7 +60,6 @@ function addResultSearch(res){
     li.appendChild(list);
 
     var max = res.find.length > 5 ? 5 : res.find.length;
-    console.log(max)
     for(var i = 0; i < max; i++){
         var item = document.createElement('LI'),
             name = res.find[i].name ? res.find[i].name : 'undefiend - ' + res.find[i].id,
@@ -82,7 +82,7 @@ function addResultSearch(res){
                 tdDesc = document.createElement('TD');
 
             falseBlock.innerHTML = el;
-            el = falseBlock.innerText;
+            el = falseBlock.textContent;
 
             if(el.length < 1) continue;
 

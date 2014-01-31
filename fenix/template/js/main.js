@@ -3,16 +3,17 @@ $(function(){
 
 
    $('.editor').ckeditor({
+       extraPlugins: 'xcode',
+
        toolbar : [
            [ 'Source' ],
            [ 'RemoveFormat', 'ShowBlocks', 'Maximize' ],
-           [ 'Styles', 'Format', 'FontSize' ], [ 'TextColor', 'BGColor' ], [ 'About' ],
-           '/',
+           [ 'Styles', 'Format', 'FontSize' ], [ 'TextColor', 'BGColor' ],
 
            [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'],
            [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
            [ 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink' ],
-           [ 'Table', 'Image', 'HorizontalRule', 'SpecialChar' ]
+           [ 'Table', 'Image', 'HorizontalRule', 'SpecialChar', 'xcode' ]
        ]
    });
 

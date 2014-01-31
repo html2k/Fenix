@@ -5,43 +5,33 @@
         <div class="m-box">
             <h3>Обьекты</h3>
             <ul class="setting-tebles">
-                <?
-                $tables = $db->find($GLOB['namespace']['struct_db']);
-                $list = array();
-                foreach($tables as $v){
-                $list[] = '<li class="box">';
-                $list[] = '<a class="pull-left" href="?mode=object&id='.$v['id'].'">'.$v['name'].'</a>';
-                $list[] = '<span class="pull-right">';
-                        $list[] = '<a href="?action=removeObject&id='.$v['id'].'&name='.$v['code'].'"><i class="icon-cancel"></i></a>';
-                    $list[] = '</span>';
-                $list[] = '</li>';
-                }
-                echo implode('', $list);
-                ?>
+                <?= $io->buffer(sys . '/template/tpl/blocks/list__object.html', $db->find($GLOB['namespace']['struct_db'])); ?>
             </ul>
 
-            <span class="dropdown">
-                <span class="dropdown-name false-link">Добавить</span>
-                <span class="dropdown-block">
-                    <i class="dropdown-tail"></i>
-                    <form action="" method="post" ajax-success="ajaxForm" before-send="beforeSend">
-                        <input type="text" name="name" value="" class="inp" data-validate="empty" placeholder="Имя" help="Осмысленное название объекта"/>
-                        <input type="text" name="code" value="" isEmpty isEn class="inp" placeholder="Код" help="Только латинские буквы и цифры"/>
-                        <input type="hidden" name="action" value="addObject"/>
-                        <div class="mb-middle t-right">
-                            <a href="?mode=object">Расширенный редактор</a>
-                        </div>
-                        
-                        <button class="btn btn__success btn__disable" type="submit">
-                            <span class="btn-in">Добавить</span>
-                        </button>
-                        <span class="btn" onclick="$(document).trigger('dropdown-close')">
-                            <span class="btn-in">Отмена</span>
-                        </span>
-                        
-                    </form>
-                </span>
-            </span>
+
+            <? ob_start(); ?>
+                <form action="" method="post" ajax-success="ajaxForm" before-send="beforeSend">
+                    <input type="text" name="name" value="" class="inp" data-validate="empty" placeholder="Имя" help="Осмысленное название объекта"/>
+                    <input type="text" name="code" value="" isEmpty isEn class="inp" placeholder="Код" help="Только латинские буквы и цифры"/>
+                    <input type="hidden" name="action" value="addObject"/>
+                    <div class="mb-middle t-right">
+                        <a href="?mode=object">Расширенный редактор</a>
+                    </div>
+
+                    <button class="btn btn__success btn__disable" type="submit">
+                        <span class="btn-in">Добавить</span>
+                    </button>
+                    <span class="btn" onclick="$(document).trigger('dropdown-close')">
+                        <span class="btn-in">Отмена</span>
+                    </span>
+                </form>
+            <? $form = ob_get_clean(); ?>
+
+            <?= $io->buffer(sys . '/template/tpl/blocks/dropdown.html', array(
+                'name' => '<span class="false-link">Добавить</span>',
+                'block' => $form
+            )); ?>
+
             <a href="?mode=object" class="ibox-add-link">Расширенный редактор</a>
         </div>
     </div>
@@ -50,96 +40,68 @@
             <h3>Маркеры</h3>
 
             <ul class="setting-tebles">
-                <? foreach($markerList as $v): ?>
-                <? $templateID = explode(',', $v['template_id']); ?>
-                <li class="box" data-id="<?=$v['id'];?>">
-                    <span class="dropdown">
-                        <span class="name dropdown-name"><?= $v['name'];?></span>
-                        <span class="dropdown-block w-normal">
-                            <i class="dropdown-tail"></i>
-                            <form action="" method="post">
-
-                                <? foreach($templateList as $j): ?>
-                                <? $cheked = in_array($j['id'], $templateID) ? ' checked="true"' : ''?>
-                                <label data-id="<?= $j['id']?>" class="inp_name">
-                                    <input <?=$cheked;?> type="checkbox" name="id[]" value="<?= $j['id']?>"/><?=$j['name']?>
-                                </label>
-                                <? endforeach; ?>
-                                <input type="hidden" name="marker" value="<?=$v['id']?>"/>
-                                <input type="hidden" name="action" value="markerAddTemplate"/>
-                                <button type="submit" class="btn">
-                                    <span class="btn-in">Сохранить</span>
-                                </button>
-                            </form>
-                        </span>
-                    </span>
-                    <span class="pull-right">
-                        <i class="icon-pencil js-edit"></i>
-                        <a href="?action=removeMarker&id=<?=$v['id'];?>"><i class="icon-cancel"></i></a>
-                    </span>
-                </li>
-                <? endforeach; ?>
-
+                <?= $io->buffer(sys . '/template/tpl/blocks/list__marker.html', array(
+                    'markerList' => $markerList,
+                    'templateList' => $templateList,
+                    'io' => $io
+                )); ?>
             </ul>
 
-            <span class="dropdown">
-                <span class="dropdown-name false-link">Добавить</span>
-                <span class="dropdown-block js-MarkerBox js-add">
-                    <i class="dropdown-tail"></i>
-                    <form action="" method="post" ajax-success="ajaxForm" before-send="beforeSend">
-                        <label class="inp-name">Имя маркера</label>
-                        <input type="text" name="name" value="" class="inp" help="Имя маркера может содержать любые символы, но рекомендуется использовать осмысленные названия."/>
-                        <input type="hidden" name="action" value="addMarker"/>
-                        <div>
-                            <button class="btn btn__success btn__disable" type="submit" disabled="true">
-                                <span class="btn-in">Добавить</span>
-                            </button>
-                            <span class="btn" onclick="$(document).trigger('dropdown-close')">
-                                <span class="btn-in">Отмена</span>
-                            </span>
-                        </div>
-                    </form>
-                </span>
-            </span>
+
+            <? ob_start(); ?>
+                <form action="" method="post" ajax-success="ajaxForm" before-send="beforeSend">
+                    <label class="inp-name">Имя маркера</label>
+                    <input type="text" name="name" value="" class="inp" help="Имя маркера может содержать любые символы, но рекомендуется использовать осмысленные названия."/>
+                    <input type="hidden" name="action" value="addMarker"/>
+                    <div>
+                        <button class="btn btn__success btn__disable" type="submit" disabled="true">
+                            <span class="btn-in">Добавить</span>
+                        </button>
+                                <span class="btn" onclick="$(document).trigger('dropdown-close')">
+                                    <span class="btn-in">Отмена</span>
+                                </span>
+                    </div>
+                </form>
+            <? $form = ob_get_clean(); ?>
+
+            <?= $io->buffer(sys . '/template/tpl/blocks/dropdown.html', array(
+                'name' => '<span class="false-link">Добавить</span>',
+                'block' => $form
+            )); ?>
+
         </div>
     </div>
     <div class="col4">
         <div class="m-box">
             <h3>Шаблоны</h3>
             <ul class="setting-tebles">
-                <?
-                    $list = array();
-                    foreach($templateList as $v){
-                        $list[] = '<li class="box" data-id="'.$v['id'].'">';
-                        $list[] = '<span class="name">'.$v['name'].'</span>';
-                        $list[] = '<span class="pull-right">';
-                            $list[] = '<i class="icon-pencil js-edit"></i>';
-                            $list[] = '<a href="?action=removeTemplate&id='.$v['id'].'"><i class="icon-cancel"></i></a>';
-                        $list[] = '</span>';
-                        $list[] = '</li>';
-                        }
-                        echo implode('', $list);
-                ?>
+                <?= $io->buffer(sys . '/template/tpl/blocks/list__template.html', array(
+                    'list' => $templateList
+                )); ?>
             </ul>
-            <span class="dropdown">
-                <span class="dropdown-name false-link">Добавить</span>
-                <span class="dropdown-block js-TemplateBox js-add">
-                    <i class="dropdown-tail"></i>
-                    <form action="" method="post" ajax-success="ajaxForm" before-send="beforeSend">
-                        <label class="inp-name">Имя шаблона</label>
-                        <input type="text" name="name" value="" class="inp"  help="Имя шаблона должно содержать только латинские символы"/>
-                        <input type="hidden" name="action" value="addTemplate"/>
-                        <div>
-                            <button class="btn btn__success btn__disable" type="submit" disabled="true">
-                                <span class="btn-in">Добавить</span>
-                            </button>
-                            <span class="btn" onclick="$(document).trigger('dropdown-close')">
-                                <span class="btn-in">Отмена</span>
-                            </span>
-                        </div>
-                    </form>
-                </span>
-            </span>
+
+
+            <? ob_start(); ?>
+                <form action="" method="post" ajax-success="ajaxForm" before-send="beforeSend">
+                    <label class="inp-name">Имя шаблона</label>
+                    <input type="text" name="name" value="" class="inp"  help="Имя шаблона должно содержать только латинские символы"/>
+                    <input type="hidden" name="action" value="addTemplate"/>
+                    <div>
+                        <button class="btn btn__success btn__disable" type="submit" disabled="true">
+                            <span class="btn-in">Добавить</span>
+                        </button>
+                        <span class="btn" onclick="$(document).trigger('dropdown-close')">
+                            <span class="btn-in">Отмена</span>
+                        </span>
+                    </div>
+                </form>
+            <? $form = ob_get_clean(); ?>
+
+            <?= $io->buffer(sys . '/template/tpl/blocks/dropdown.html', array(
+                'name' => '<span class="false-link">Добавить</span>',
+                'block' => $form
+            )); ?>
+
         </div>
     </div>
 </div>

@@ -1,0 +1,11 @@
+<? foreach($param['list'] as $v): ?>
+
+    <li class="box" data-id="<?= $v['id']; ?>">
+        <span class="name"><?= $v['name']; ?></span>
+        <span class="pull-right">
+            <i class="icon-pencil js-edit"></i>
+            <a href="?action=removeTemplate&id=<?= $v['id']; ?>"><i class="icon-cancel"></i></a>
+        </span>
+    </li>
+
+<? endforeach; ?>

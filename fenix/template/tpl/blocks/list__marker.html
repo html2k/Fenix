@@ -1,0 +1,38 @@
+<? foreach($param['markerList'] as $v): ?>
+    <? $templateID = explode(',', $v['template_id']); ?>
+
+    <li class="box" data-id="<?=$v['id'];?>">
+
+        <? ob_start(); ?>
+            <form action="" method="post">
+
+                <? foreach($param['templateList'] as $j): ?>
+                <? $cheked = in_array($j['id'], $templateID) ? ' checked="true"' : ''?>
+                <label data-id="<?= $j['id']?>" class="inp-name">
+                    <input <?=$cheked;?> type="checkbox" name="id[]" value="<?= $j['id']?>"/><?=$j['name']?>
+                </label><br/>
+                <? endforeach; ?>
+                <input type="hidden" name="marker" value="<?=$v['id']?>"/>
+                <input type="hidden" name="action" value="markerAddTemplate"/>
+
+                <div class="mt-normal">
+                    <button type="submit" class="btn">
+                        <span class="btn-in">Сохранить</span>
+                    </button>
+                </div>
+            </form>
+        <? $a = ob_get_clean(); ?>
+
+        <?= $param['io']->buffer(sys . '/template/tpl/blocks/dropdown.html', array(
+            'name' => '<span class="false-link">'.$v['name'].'</span>',
+            'block' => $a
+        )); ?>
+
+
+        <span class="pull-right">
+            <i class="icon-pencil js-edit"></i>
+            <a href="?action=removeMarker&id=<?=$v['id'];?>"><i class="icon-cancel"></i></a>
+        </span>
+    </li>
+
+<? endforeach; ?>

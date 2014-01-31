@@ -1,0 +1,11 @@
+
+<? foreach($param as $v): ?>
+
+    <li class="box">
+        <a class="pull-left" href="?mode=object&id=<?= $v['id'];?>"><?= $v['name']?></a>
+        <span class="pull-right">
+            <a href="?action=removeObject&id=<?= $v['id']?>&name=<?= $v['code']?>"><i class="icon-cancel"></i></a>
+        </span>
+    </li>
+
+<? endforeach; ?>

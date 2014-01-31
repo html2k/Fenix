@@ -40,6 +40,7 @@ sup{
 .header-search-result-block{
     position: absolute;
     top: 17px;
+    height: 600px;
     left: 0;
     right: 0;
     display: none;
@@ -84,7 +85,7 @@ h3{ font-size: 14px; }
     display: table;
     height: 100%;
 }
-.dubl_box.box-table{ height: calc(100% - 35px); }
+.dubl_box.box-table{ height: calc(100% - 35px); width: 100%; }
 .box-table .box-cell{
     float: none;
     display: table-cell;
@@ -101,6 +102,7 @@ a.disable,
 /* ================================ Header start */
 .header{
     position: relative;
+    height: 35px;
     z-index: 4;
     margin: 0;
     background: #2d2d2d;

@@ -49,6 +49,27 @@ var GLOBAL = function(){
 }();
 
 
+var LIB = function(){
+
+    var tagsToReplace = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;'
+    };
+
+    return {
+        replaceTag: function (tag) {
+            return tagsToReplace[tag] || tag;
+        },
+
+        safe_tags_replace: function (str) {
+            return str.replace(/[&<>]/g, tagsToReplace);
+        }
+    };
+}();
+
+
+
 /* ================================================================== Global Function === */
 function clearSelection() {
     if (window.getSelection) {
@@ -557,37 +578,46 @@ function dump(list){
     $(window).resize(function () {
         resize();
     });
-    $(document).on('mouseup.popup', '[popup]', function (event) {
-        var $popupList = $('.popup'),
-            role = this.getAttribute('popup'),
-            $body = $('body'),
-            $popup = $popupList.closest('[role=' + role + ']:first'),
-            $close,
-            $alpha,
-            $wrap,
-            wHeight,
-            pHeight;
-        
-        if ($popup.length) {
-            $alpha = $('<div class="popup-alpha"/>');
-            $wrap = $('<div class="box-popup"/>');
-            $popup.wrap($wrap);
-            $body.append($alpha);
-            $body.css('overflow', 'hidden');
-            
-            eventCallStack('open', $popup, role);
-            
-            wHeight = $(window).height();
-            pHeight = $popup.height();
-            if (pHeight < wHeight - 40) {
-                $popup.css('margin-top', (wHeight / 2) - (pHeight / 2));
-            }
 
-            $popup.show();
-            $popup.find('[popup-close]').on('mouseup.popup-close', close);
-            event.stopPropagation();
-            $wrap.find('[autofocus]').focus();
+    LIB.popup = function(role){
+
+        if(role){
+            var $popupList = $('.popup'),
+                $body = $('body'),
+                $popup = $popupList.closest('[role=' + role + ']:first'),
+                $close,
+                $alpha,
+                $wrap,
+                wHeight,
+                pHeight;
+
+            if ($popup.length) {
+                $alpha = $('<div class="popup-alpha"/>');
+                $wrap = $('<div class="box-popup"/>');
+                $popup.wrap($wrap);
+                $body.append($alpha);
+                $body.css('overflow', 'hidden');
+
+                eventCallStack('open', $popup, role);
+
+                wHeight = $(window).height();
+                pHeight = $popup.height();
+                if (pHeight < wHeight - 40) {
+                    $popup.css('margin-top', (wHeight / 2) - (pHeight / 2));
+                }
+
+                $popup.show();
+                $popup.find('[popup-close]').on('mouseup.popup-close', close);
+                $wrap.find('[autofocus]').focus();
+            }
+            return $popup;
+        }else{
+            close();
         }
+    }
+
+    $(document).on('mouseup.popup', '[popup]', function (event) {
+        LIB.popup(this.getAttribute('popup'));
     }).on('mouseup.popup-close', function (event) {
         var el = $(event.target);
         if (event.target.tagName) {
