@@ -72,7 +72,7 @@
     $GLOB['extension-menu'] = array();
 
     foreach ($extensions as $ext) {
-        $GLOB['extension-menu'][$ext['option']['code']] = $ext['option']['code'];
+        $GLOB['extension-menu'][$ext['option']['code']] = $ext['option']['name'];
         if($mode === $ext['option']['code']){
             $extUrl = $ext['url'] . $ext['option']['page'];
         }

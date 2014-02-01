@@ -7,6 +7,14 @@ body{
     color: #333;
 }
 
+.no-select{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 
 /* =============================================== Grid === */
 .box{ zoom: 1; margin: 15px 0; }
@@ -146,28 +154,27 @@ table td{
 .table tr:hover td {
     background: #f5f5f5;
 }
-
-.no-select{
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
 /* end Base style */
 
-
-/* =============================================== Allocation === */
-.allocation{
-    position: absolute;
-    width: auto;
-    z-index: 99;
-    border: 1px solid #FFA33A;
-    background: rgba(255,183,101, .2);
+/* =============================================== List === */
+.list{
+    margin: 0 0 15px 0;
+    padding: 0;
+    list-style-type: none;
 }
-/* end Allocation */
-
+.list li{
+    padding: 0 15px;
+    line-height: 30px;
+    height: 30px;
+    border-top: 1px solid #ddd;
+}
+.list li:first-child{
+    border-top: none;
+}
+.list li:nth-child(2n){
+    background: #f9f9f9;
+}
+/* end List */
 
 /* =============================================== Button === */
 .btn{
@@ -513,6 +520,16 @@ table td{
 }
 
 @-webkit-keyframes btn__preload /* Safari and Chrome */
+{
+    from { background-position: 0 0; }
+    to { background-position: 0 -20px; }
+}
+@-moz-keyframes btn__preload /* Safari and Chrome */
+{
+    from { background-position: 0 0; }
+    to { background-position: 0 -20px; }
+}
+@-o-keyframes btn__preload /* Safari and Chrome */
 {
     from { background-position: 0 0; }
     to { background-position: 0 -20px; }

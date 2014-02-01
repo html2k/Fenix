@@ -1,5 +1,6 @@
 
 files/*
+backup/*
 template/*
 ext/*
 _install/

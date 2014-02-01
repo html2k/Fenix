@@ -26,6 +26,10 @@
                 <td><?= $param['ref']?></td>
             </tr>
             <tr>
+                <td>%</td>
+                <td><?= $param['num']?></td>
+            </tr>
+            <tr>
                 <td>Последнее изменение</td>
                 <td><?= $param['date']?></td>
             </tr>
@@ -35,7 +39,7 @@
                     <tr>
                         <td><?= $v['name']; ?></td>
                         <td>
-                            <? if($v['type'] == 'image'): ?>
+                            <? if($v['type'] == 'image' && file_exists($param['data'][$k])): ?>
 
                                 <? $size = resize(root . $param['data'][$k], 100); ?>
 

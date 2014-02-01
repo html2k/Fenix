@@ -33,7 +33,7 @@
     }
 
     $selfList = array();
-    $selfList[] = '<ul>';
+    $selfList[] = '<ul class="js-sortable-list">';
     foreach ($selfItem as $k => $j){
         $id = ($j['ref'] > 0) ? $j['ref'] : $j['id'];
         $item = $db->find($j['object'], array('id' => $id));
@@ -42,6 +42,7 @@
             'index' => $k + 1,
             'id' => $id,
             'ref' => $j['ref'],
+            'num' => $j['num'],
             'object' => $j,
             'date' => date('d.m.Y G:i (s)', $j['date']),
             'data' => $item[0],

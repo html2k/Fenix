@@ -39,6 +39,7 @@
                                 <ul>
                                     <? foreach($GLOB['extension-menu'] as $k => $v): ?>
                                         <? $current = (mode == $k) ? ' class="current"' : ''; ?>
+
                                         <li<?=$current?>><a href="?extension=<?=$k?>"><?=$v?></a></li>
                                     <? endforeach; ?>
                                 </ul>

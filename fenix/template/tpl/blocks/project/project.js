@@ -3,6 +3,21 @@ $(function(){
 	var $list = $('.project-list li');
     if(!$list.length) return;
 
+    LIB.sort($('.js-sortable-list li'), function($list){
+        spin('Подождите идет обработка');
+        var action = {
+            action: 'sortElem',
+            id: []
+        };
+        $list.each(function(){
+            action.id.push(this.getAttribute('data-id'));
+        });
+        $.post('', action, function(res){
+            window.location = window.location.href;
+        })
+    });
+
+
     $('.project-filter-objects span').each(function(){
         var code = this.getAttribute('data-code'),
             count = 0;
@@ -78,7 +93,7 @@ $(function(){
         if(k === 16){
             key.shift = true;
         }
-        
+
     }).on('keyup', function(){
         var k = event.which;
         if(k === 91 || k === 93 || k === 17){
@@ -89,78 +104,6 @@ $(function(){
             key.shift = false;
         }
 
-    }).on('mousedown', function(event){
-        if($(event.target).closest('.project-list li').length){
-            X = undefined;
-            Y = undefined;
-            return;
-        }
-        X = event.pageX;
-        Y = event.pageY;
-
-        $(document).on('mousemove.allocation', function(event){
-            var x = event.pageX, y = event.pageY;
-
-            if(!allocation){
-                items = [];
-
-
-                $('.project-list li').each(function(){
-                    var pos = $(this).offset();
-
-
-                    pos.element = this;
-                    pos.width = $(this).width();
-                    pos.height = $(this).height();
-
-                    items.push(pos);
-
-                });
-
-
-                allocation = $('<div class="allocation" />');
-                $body.addClass('no-select').append(allocation);
-
-            }
-
-            var position = {left: X, top: Y};
-
-
-            if(X > x){
-                position.left = x;
-                position.width = X - x;
-            }else{
-                position.width = x - X;
-            }
-
-            if(Y > y){
-                position.top = y;
-                position.height = Y - y;
-            }else{
-                position.height = y - Y;
-            }
-
-            allocation.css(position);
-
-            var i = 0, len = items.length;
-            for(; i < len; i++){
-                console.log(
-
-
-                )
-            }
-
-
-
-        });
-
-    }).on('mouseup', function(){
-        $(document).off('mousemove.allocation');
-        if(allocation !== false){
-            allocation.remove();
-            allocation = false;
-            $body.removeClass('no-select');
-        }
     }).on('mouseup', '.project-list li', function(event){ // Выделение эелементов списка
         var $list = $('.project-list li'),
             $this = $(this);
@@ -204,7 +147,7 @@ $(function(){
         $.post('', data, function(response){
             window.location = window.location.href;
         });
-        
+
 
     }).on('click', '.spin', function(){
         spin(this.getAttribute('data-spiner'));

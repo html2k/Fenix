@@ -48,7 +48,6 @@ var GLOBAL = function(){
     return lib;
 }();
 
-
 var LIB = function(){
 
     var tagsToReplace = {
@@ -68,16 +67,7 @@ var LIB = function(){
     };
 }();
 
-
-
 /* ================================================================== Global Function === */
-function clearSelection() {
-    if (window.getSelection) {
-        window.getSelection().removeAllRanges();
-    } else {
-        document.selection.empty();
-    }
-}
 function is (el, type){
     var clas = Object.prototype.toString.call(el).slice(8, -1);
     return el !== undefined && el !== null && clas === type;
@@ -98,29 +88,6 @@ function doGetCaretPosition (ctrl) {
 		CaretPos = ctrl.selectionStart;
     }
 	return (CaretPos);
-};
-function getCaretPosition(editableDiv) {
-    var caretPos = 0, containerEl = null, sel, range;
-    if (window.getSelection) {
-        sel = window.getSelection();
-        if (sel.rangeCount) {
-            range = sel.getRangeAt(0);
-            if (range.commonAncestorContainer.parentNode == editableDiv) {
-                caretPos = range.endOffset;
-            }
-        }
-    } else if (document.selection && document.selection.createRange) {
-        range = document.selection.createRange();
-        if (range.parentElement() == editableDiv) {
-            var tempEl = document.createElement("span");
-            editableDiv.insertBefore(tempEl, editableDiv.firstChild);
-            var tempRange = range.duplicate();
-            tempRange.moveToElementText(tempEl);
-            tempRange.setEndPoint("EndToEnd", range);
-            caretPos = tempRange.text.length;
-        }
-    }
-    return caretPos;
 };
 function setCaretPosition (ctrl, pos) {
 	'use strict';
@@ -578,46 +545,37 @@ function dump(list){
     $(window).resize(function () {
         resize();
     });
-
-    LIB.popup = function(role){
-
-        if(role){
-            var $popupList = $('.popup'),
-                $body = $('body'),
-                $popup = $popupList.closest('[role=' + role + ']:first'),
-                $close,
-                $alpha,
-                $wrap,
-                wHeight,
-                pHeight;
-
-            if ($popup.length) {
-                $alpha = $('<div class="popup-alpha"/>');
-                $wrap = $('<div class="box-popup"/>');
-                $popup.wrap($wrap);
-                $body.append($alpha);
-                $body.css('overflow', 'hidden');
-
-                eventCallStack('open', $popup, role);
-
-                wHeight = $(window).height();
-                pHeight = $popup.height();
-                if (pHeight < wHeight - 40) {
-                    $popup.css('margin-top', (wHeight / 2) - (pHeight / 2));
-                }
-
-                $popup.show();
-                $popup.find('[popup-close]').on('mouseup.popup-close', close);
-                $wrap.find('[autofocus]').focus();
-            }
-            return $popup;
-        }else{
-            close();
-        }
-    }
-
     $(document).on('mouseup.popup', '[popup]', function (event) {
-        LIB.popup(this.getAttribute('popup'));
+        var $popupList = $('.popup'),
+            role = this.getAttribute('popup'),
+            $body = $('body'),
+            $popup = $popupList.closest('[role=' + role + ']:first'),
+            $close,
+            $alpha,
+            $wrap,
+            wHeight,
+            pHeight;
+        
+        if ($popup.length) {
+            $alpha = $('<div class="popup-alpha"/>');
+            $wrap = $('<div class="box-popup"/>');
+            $popup.wrap($wrap);
+            $body.append($alpha);
+            $body.css('overflow', 'hidden');
+            
+            eventCallStack('open', $popup, role);
+            
+            wHeight = $(window).height();
+            pHeight = $popup.height();
+            if (pHeight < wHeight - 40) {
+                $popup.css('margin-top', (wHeight / 2) - (pHeight / 2));
+            }
+
+            $popup.show();
+            $popup.find('[popup-close]').on('mouseup.popup-close', close);
+            event.stopPropagation();
+            $wrap.find('[autofocus]').focus();
+        }
     }).on('mouseup.popup-close', function (event) {
         var el = $(event.target);
         if (event.target.tagName) {
@@ -661,7 +619,7 @@ var Spin = (function () {
         $element.find('.spinner-text').text(text);
     };
     
-    lib.remove = function ($element) {
+    lib.remove = function ($element, option) {
         $element.find('.spinner').fadeTo(300, 0, function () {
             $(this).remove();
         });
@@ -705,18 +663,18 @@ var Notification = (function () {
 				
 			});
 		};
+	
 	lib.set = function (option) {
 		var template = $('<div class="notification-item"/>');
 		option = $.extend({}, opts, option);
 		
 		template.addClass('notification-item__' + option.flag);
-		template.html(option.message);
+		template.text(option.message);
 		
 		mes.push({
 			element : template,
 			index : mesIndex += 1,
-			hide : option.hide,
-            option: option
+			hide : option.hide
 		});
 		
 		if (option.show) {
@@ -751,22 +709,20 @@ var Notification = (function () {
 		var i = 0, len = mes.length;
 		if (!isNaN(index)) {
 			index = parseInt(index, 10);
-            var message = false;
 			for (i = 0; i < mes.length; i += 1) {
 				if (mes[i].index === index) {
-					message = mes.splice(i, 1);
+					mes.splice(i, 1);
 				}
 			}
-            GLOBAL.set('notification', message[0]);
 			$('.notification [data-index=' + index + ']').fadeTo(300, 0, function () {
 				$(this).remove();
 				if ($('.notification').children().length < 1) {
 					$('.notification').remove();
-                    
 				}
 			});
 		}
 	};
+
 	return lib;
 }());
 
@@ -793,7 +749,34 @@ var Notification = (function () {
 
 /* ================================================================== Form === */
 (function(){
-    $(document).on('submit', 'form', function(event){
+
+    $(function(){
+
+        $('form').each(function(){
+
+            if(this.hasAttribute('ajax') && this.getAttribute('ajax') !== ''){
+                var $this = $(this);
+                $this.find('input, select, textarea').each(function(){
+                    $(this).trigger('input').trigger('blur');
+                });
+            }
+        });
+    });
+
+    $(document).on('input', 'form', function(){
+        var $this = $(this),
+            invalid = false;
+
+
+        if(this.hasAttribute('ajax') && this.getAttribute('ajax') !== ''){
+            $this.find('input, select, textarea').each(function(){
+                if($(this).hasClass('invalid')) invalid = true;
+            });
+
+            GLOBAL.set(this.getAttribute('ajax'), !invalid);
+        }
+
+    }).on('submit', 'form', function(event){
         var $this = $(this),
             invalid = false,
             data = {},
@@ -877,7 +860,9 @@ var Notification = (function () {
                 checkName = $option.eq(0).text()
             }
 
-            $this.wrap('<span class="btn js-btn-select"/>');
+            if(!$this.parent('.js-btn-select').length){
+                $this.wrap('<span class="btn js-btn-select"/>');
+            }
 
             var parent = $this.parent();
 
@@ -889,10 +874,15 @@ var Notification = (function () {
             $list.width($cloneUl.width());
             $cloneUl.remove();
 
+            if(!parent.find('.btn-in').length){
+                parent.append($('<span class="btn-in btn-in__first">'+ checkName +'</span>'));
+                parent.append($('<i class="btn-in btn-tail btn-in__last" />'));
+                parent.append($list);
+            }else{
+                parent.find('.btn-select');
+                parent.append($list);
+            }
 
-            parent.append($('<span class="btn-in btn-in__first">'+ checkName +'</span>'));
-            parent.append($('<i class="btn-in btn-tail btn-in__last" />'));
-            parent.append($list);
             $this.hide();
         });
     };
@@ -901,7 +891,8 @@ var Notification = (function () {
         $('.js-btn-select').removeClass('btn__active').children('ul').hide();
     };
 
-    $(document).on('mouseup', '.js-btn-select', function(event){
+    $(document).on('mouseup', '.js-btn-select', function(){
+        $(document).trigger('mouseup');
         var $this = $(this),
             $select = $this.find('select'),
             $option = $select.find('option'),
@@ -929,6 +920,92 @@ var Notification = (function () {
     $(function(){
         $('.ctrl-select').ctrlSelect();
     });
+}());
+
+
+/* ================================================================== Sort === */
+(function(){
+    LIB.sort = function($list, callback){
+
+        $list.off('mousedown.sort').on('mousedown.sort', function(event){
+            var t = this,
+                baseX = event.pageX,
+                baseY = event.pageY,
+                $this = $(t),
+                $body = $('body'),
+                list = [], $copy, $pointer, $rezerv;
+
+            $body.addClass('no-select');
+            $body.css('cursor', 'move');
+
+            $(document).off('mousemove.sort').on('mousemove.sort', function(event){
+                if(!$copy){
+                    $rezerv = $this.clone();
+                    $copy = $this.clone();
+                    $this.after($copy);
+
+                    $copy.addClass('js-pointer').css({
+                        background: 'rgba(250,125,125,0.9)'
+                    });
+
+                    $this.remove();
+
+                    $list = $list.parent().children(t.tagName.toLowerCase());
+
+                    $list.each(function(){
+                        var $t = $(this),
+                            pos = $t.offset();
+                        list.push({
+                            top: pos.top,
+                            left: pos.left,
+                            width: $t.width(),
+                            height: $t.height()
+                        });
+                    });
+
+                }
+
+                var x = event.pageX,
+                    y = event.pageY;
+
+                var i = 0, len = list.length;
+                for(; i < len; i++){
+                    if(y > list[i].top && y < list[i].top + list[i].height){
+                        var del = list[i].top + (list[i].height / 2);
+
+                        if(y < del){
+                            $list.eq(i).before($copy);
+                        }else{
+                            $list.eq(i).after($copy);
+                        }
+                    }
+                }
+
+
+            }).off('mouseup.sort').on('mouseup.sort', function(){
+                $(document).off('mousemove.sort').off('mouseup.sort');
+                $body.removeClass('no-select');
+                $body.css('cursor', 'auto');
+
+
+                if($copy.length && $rezerv.length){
+                    $copy.after($rezerv);
+                    $copy.remove();
+
+                    $list = $list.parent().children(t.tagName.toLowerCase());
+
+                    if(is(callback, 'Function')){
+                        callback($list);
+                    }
+
+                    LIB.sort($list, callback);
+                }
+            });
+
+        });
+
+    };
+
 }());
 
 
