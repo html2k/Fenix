@@ -19,3 +19,9 @@
 .js-structTable .editable{
 	outline: 1px solid red
 }
+
+.object-list{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}

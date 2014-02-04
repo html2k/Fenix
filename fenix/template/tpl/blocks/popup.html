@@ -1,0 +1,15 @@
+<div class="popup" role="<?= @$param['role']; ?>">
+    <div class="popup-header">
+        <h3><?= @$param['name']; ?></h3>
+        <i class="popup-close icon-cancel" popup-close></i>
+    </div>
+    <div class="popup-block">
+
+        <?= @$param['block']; ?>
+
+        <div class="clear mb-normal"></div>
+        <span class="btn" popup-close>
+            <span class="btn-in">Отмена</span>
+        </span>
+    </div>
+</div>

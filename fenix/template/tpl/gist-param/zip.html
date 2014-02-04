@@ -1,10 +1,10 @@
 <?
-    $check = isset($paramObjectItem['zip']) && $paramObjectItem['zip'] == 1 ? ' checked="true"' : '';
+    $check = isset($param['gist']['zip']) && $param['gist']['zip'] == 1 ? ' checked="true"' : '';
 ?>
 
-<div class="ctrl_group mr_micro js-param-zip">
-    <label class="inp_name mt_normal">
-        <input type="checkbox"<?= $check; ?> name="form[param][<?= @$key?>][zip]" value="1"/>
-        –Р—А—Е–Є–≤–Є—А–Њ–≤–∞—В—М
+<div class="ctrl-box mr-micro js-param-zip">
+    <label class="inp-name mt-normal">
+        <input type="checkbox"<?= $check; ?> name="form[param][<?= @$param['key']?>][zip]" value="1"/>
+        Сжать
     </label>
 </div>

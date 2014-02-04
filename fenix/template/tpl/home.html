@@ -1,12 +1,14 @@
 <h1 class="page-name">Главная</h1>
 
 <div class="box">
-<? foreach ($extension as $ext): ?>
-	<div class="col4">
-		<div class="m-box">
-			<h3><?= @$ext['option']['name']; ?></h3>
-			<?= @$ext['option']['body']; ?>
-		</div>
-	</div>
-<? endforeach; ?>
+<? if(count($extension)): ?>
+    <? foreach ($extension as $ext): ?>
+        <div class="col4">
+            <div class="m-box">
+                <h3><?= @$ext['option']['name']; ?></h3>
+                <?= @$ext['option']['body']; ?>
+            </div>
+        </div>
+    <? endforeach; ?>
+<? endif; ?>
 </div>

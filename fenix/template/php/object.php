@@ -24,7 +24,14 @@
         $td = $db->find($GLOB['namespace']['struct_td'], array( 'parent' => $id ));
         $paramObject = array();
         foreach ($td as $k => $v){
-            $paramObject[] = loadParam($k, $v, $manifest, sys . '/template/tpl/template/object_item.html');
+
+            $paramObject[] = $io->buffer(sys . '/template/tpl/template/object_item.html', array(
+                'io' => $io,
+                'key' => $key,
+                'value' => $value,
+                'manifest' => $manifest
+            ));
+
         }
         $paramObject = implode("\n", $paramObject);
     }

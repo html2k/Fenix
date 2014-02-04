@@ -1,17 +1,17 @@
 <?
     $value = '';
     $list = '';
-    if(isset($paramObjectItem['list']) && count($paramObjectItem['list']) > 0){
-        $value = json_encode($paramObjectItem['list']);
-        foreach($paramObjectItem['list'] as $v){
+    if(isset($param['gist']['list']) && count($param['gist']['list']) > 0){
+        $value = json_encode($param['gist']['list']);
+        foreach($param['gist']['list'] as $v){
             $list .= '<li>'.$v.'</li>';
         }
     }
     
 ?>
-<div class="ctrl_group mr_micro js-param-list">
-    <label class="inp_name">Параметры списка</label>
-    <div class="inp w_normal" contenteditable="true"></div>
-    <ul class="param-list-item w_normal"><?= $list; ?></ul>
-    <input type="hidden" name="form[param][<?= @$key?>][list]" value='<?= $value; ?>' class="inp w_normal"/>
+<div class="ctrl-group mr-micro js-param-list">
+    <label class="inp-name">Параметры списка</label>
+    <div class="inp w-normal" contenteditable="true"></div>
+    <ul class="param-list-item w-normal"><?= $list; ?></ul>
+    <input type="hidden" name="form[param][<?= @$param['key']?>][list]" value='<?= $value; ?>' class="inp w_normal"/>
 </div>

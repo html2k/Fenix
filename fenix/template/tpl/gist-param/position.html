@@ -1,15 +1,15 @@
 <?
-    $top = isset($paramObjectItem['top']) ? $paramObjectItem['top'] : '';
-    $left = isset($paramObjectItem['left']) ? $paramObjectItem['left'] : '';
+    $top = isset($param['gist']['top']) ? $param['gist']['top'] : '';
+    $left = isset($param['gist']['left']) ? $param['gist']['left'] : '';
 ?>
 
-<div class="split_box dib mr_micro js-param-position">
-    <div class="ctrl_group">
-        <label class="inp_name">Left</label>
-        <input type="text" name="form[param][<?= @$key?>][left]" value="<?= $left; ?>" class="inp w_mini first"/>
+<div class="split-box dib mr-micro js-param-position">
+    <div class="ctrl-box">
+        <label class="inp-name">Left</label>
+        <input type="text" name="form[param][<?= @$param['key']?>][left]" value="<?= $left; ?>" class="inp w-micro first"/>
     </div>
-    <div class="ctrl_group">
-        <label class="inp_name">Top</label>
-        <input type="text" name="form[param][<?= @$key?>][top]" value="<?= $top; ?>" class="inp w_mini last"/>
+    <div class="ctrl-box">
+        <label class="inp-name">Top</label>
+        <input type="text" name="form[param][<?= @$param['key']?>][top]" value="<?= $top; ?>" class="inp w-micro last"/>
     </div>
 </div>

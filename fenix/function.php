@@ -73,7 +73,7 @@ function hashGenerate($string){
 }
 
 function getIcon(){
-    $str = file(sys . '/template/css/font/config.json');
+    $str = file(sys . '/template/font/config.json');
     return json_decode(implode('', $str), true);
 }
 

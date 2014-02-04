@@ -5,6 +5,7 @@ sup{
     vertical-align: super;
     font-size: smaller;
 }
+.dib{ display: inline-block; }
 .page-name{
     background: #f2f2f2;
     font-size: 18px;
@@ -344,17 +345,6 @@ a.disable,
     color: #fff;
 }
 /* ================================ Project end */
-
-.list{
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-}
-.list > li{
-    margin: 0;
-    height: 30px;
-    line-height: 30px;
-}
 .list__struct > li{
     position: relative;
     margin: 0 0  0 -15px;
@@ -368,7 +358,7 @@ a.disable,
     border: 15px solid transparent;
     border-left-color: #34A2C6;
 }
-.list-active_item{
+.list__struct > li.list-active_item{
     color: #fff;
     background: #34A2C6;
 }

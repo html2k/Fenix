@@ -12,21 +12,8 @@
     </div>
     <div class="ctrl-box">
         <span class="inp-name">Иконка</span>
-        <span class="dropdown">
-            <span class="dropdown-name">
-                <? $icon =  isset($objectParam[0]['icon']) ? $objectParam[0]['icon'] : 'icon-doc';?>
-                <i class="<?= $icon; ?>"></i>
-            </span>
-            <span class="dropdown-block w_big">
-                <span class="dropdown-tail"></span>
-                <?
-                    $icon = getIcon();
-                    foreach($icon['glyphs'] as $v){
-                        echo '<i class="icon-'.$v['css'].'"></i>';
-                    }
-                ?>
-            </span>
-        </span>
+        <? $icon =  isset($objectParam[0]['icon']) ? $objectParam[0]['icon'] : 'icon-doc'; ?>
+        <i class="f-gigant <?= $icon; ?>" popup="icons"></i>
         <input type="hidden" name="icon" value="<?= isset($objectParam[0]['icon']) ? $objectParam[0]['icon'] : 'icon-doc'; ?>"/>
     </div>
     <div class="ctrl-box ml-small">
@@ -64,6 +51,25 @@
     <? endif; ?>
 </form>
 
+
+<? ob_start(); ?>
+    <? $icon =  isset($objectParam[0]['icon']) ? $objectParam[0]['icon'] : 'icon-doc'; ?>
+    <? $icons = getIcon() ?>
+    <? foreach($icons['glyphs'] as $v): ?>
+        <? $active = $icon === 'icon-'.$v['css'] ? 'active' : ''; ?>
+
+        <i class="icon-<?= $v['css'] ?> <?= $active; ?>"></i>
+    <? endforeach; ?>
+<? $icon = ob_get_clean(); ?>
+
+<?= $io->buffer(sys.'/template/tpl/blocks/popup.html', array(
+    'name' => 'Выберите иконку',
+    'role' => 'icons',
+    'block' => '<div class="object-icon-list">' . $icon . '</div>'
+)); ?>
+
+
+<? /*
 <script>
     (function(){
         
@@ -166,3 +172,4 @@
         });
     })();
 </script>
+       */ ?>

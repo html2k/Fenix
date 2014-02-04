@@ -2,16 +2,16 @@
     $option = array('none', 'scale', 'crop', 'width', 'height');
     $res = array();
     foreach($option as $v){
-        $selected = isset($paramObjectItem['method']) && $v === $paramObjectItem['method'] ? ' selected="true"' : '';
+        $selected = isset($param['gist']['method']) && $v === $param['gist']['method'] ? ' selected="true"' : '';
         $res[] = '<option'.$selected.'>'.$v.'</option>';
     }
     $res = implode('', $res);
 ?>
 
 
-<div class="ctrl_group mr_micro js-param-method">
-    <label class="inp_name">Метод</label>
-    <select name="form[param][<?= @$key?>][method]">
+<div class="ctrl-box mr-micro js-param-method">
+    <label class="inp-name">Метод</label>
+    <select name="form[param][<?= @$param['key']?>][method]" class="ctrl-select">
         <?= $res; ?>
     </select>
 </div>

@@ -1,0 +1,29 @@
+.object-icon-list{
+    font-size: 25px;
+}
+
+.object-icon-list i{
+    display: inline-block;
+    padding: 5px;
+    border-radius: 3px;
+}
+.object-icon-list i:hover{
+    cursor: pointer;
+    background: #fdf5ce;
+    box-shadow: inset 0 0 0 1px #f79219, 0 0 3px 0 rgba(0,0,0,0.3);
+}
+.object-icon-list i.active:hover,
+.object-icon-list i.active{
+    color: #fff;
+    background: #f79219;
+}
+
+
+.object-list{}
+.object-list > li{
+    position: relative;
+}
+.object-list .object-type{
+    z-index: 2;
+}
+

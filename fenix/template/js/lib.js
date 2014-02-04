@@ -153,23 +153,24 @@ function dump(list){
 (function () {
     'use strict';
     var element = '[isNumber], [isEn], [isRu], [isEmpty]';
-    $(document).on('input', element, function () {
-        var value = this.value,
-            isNumber = this.hasAttribute('isNumber'),
-            isEn = this.hasAttribute('isEn'),
-            isRu = this.hasAttribute('isRu'),
-            isEmpty = this.hasAttribute('isEmpty'),
+
+    LIB.validate = function(element){
+        var value = element.value,
+            isNumber = element.hasAttribute('isNumber'),
+            isEn = element.hasAttribute('isEn'),
+            isRu = element.hasAttribute('isRu'),
+            isEmpty = element.hasAttribute('isEmpty'),
             is = true;
-        
-        
+
+
         if (isNumber && !/^[0-9]$/.test(value)) {
             is = false;
         }
-        
+
         if (isEn && /[а-яёА-ЯЁ]/.test(value)) {
             is = false;
         }
-        
+
         if (isRu && /[a-zA-Z]/.test(value)) {
             is = false;
         }
@@ -177,8 +178,12 @@ function dump(list){
         if (isEmpty && value.length < 1){
             is = false;
         }
-        
-        if (is) {
+
+        return is
+    };
+
+    $(document).on('input', element, function () {
+        if (LIB.validate(this)) {
             $(this).removeClass('invalid');
         } else {
             $(this).addClass('invalid');
@@ -542,40 +547,49 @@ function dump(list){
             });
             $('body').css('overflow', 'auto');
         };
+
+
+    LIB.popup = function(role){
+        if(role){
+            var $popupList = $('.popup'),
+                $body = $('body'),
+                $popup = $popupList.closest('[role=' + role + ']:first'),
+                $close,
+                $alpha,
+                $wrap,
+                wHeight,
+                pHeight;
+
+            if ($popup.length) {
+                $alpha = $('<div class="popup-alpha"/>');
+                $wrap = $('<div class="box-popup"/>');
+                $popup.wrap($wrap);
+                $body.append($alpha);
+                $body.css('overflow', 'hidden');
+
+                eventCallStack('open', $popup, role);
+
+                wHeight = $(window).height();
+                pHeight = $popup.height();
+                if (pHeight < wHeight - 40) {
+                    $popup.css('margin-top', (wHeight / 2) - (pHeight / 2));
+                }
+
+                $popup.show();
+                $popup.find('[popup-close]').on('mouseup.popup-close', close);
+                $wrap.find('[autofocus]').focus();
+                return $popup;
+            }
+        }else{
+            close();
+        }
+    };
+
     $(window).resize(function () {
         resize();
     });
     $(document).on('mouseup.popup', '[popup]', function (event) {
-        var $popupList = $('.popup'),
-            role = this.getAttribute('popup'),
-            $body = $('body'),
-            $popup = $popupList.closest('[role=' + role + ']:first'),
-            $close,
-            $alpha,
-            $wrap,
-            wHeight,
-            pHeight;
-        
-        if ($popup.length) {
-            $alpha = $('<div class="popup-alpha"/>');
-            $wrap = $('<div class="box-popup"/>');
-            $popup.wrap($wrap);
-            $body.append($alpha);
-            $body.css('overflow', 'hidden');
-            
-            eventCallStack('open', $popup, role);
-            
-            wHeight = $(window).height();
-            pHeight = $popup.height();
-            if (pHeight < wHeight - 40) {
-                $popup.css('margin-top', (wHeight / 2) - (pHeight / 2));
-            }
-
-            $popup.show();
-            $popup.find('[popup-close]').on('mouseup.popup-close', close);
-            event.stopPropagation();
-            $wrap.find('[autofocus]').focus();
-        }
+        LIB.popup(this.getAttribute('popup'));
     }).on('mouseup.popup-close', function (event) {
         var el = $(event.target);
         if (event.target.tagName) {
@@ -754,11 +768,14 @@ var Notification = (function () {
 
         $('form').each(function(){
 
-            if(this.hasAttribute('ajax') && this.getAttribute('ajax') !== ''){
-                var $this = $(this);
+            if(this.hasAttribute('watch') && this.getAttribute('watch') !== ''){
+                var $this = $(this),
+                    invalid = false;
                 $this.find('input, select, textarea').each(function(){
-                    $(this).trigger('input').trigger('blur');
+                    if(!LIB.validate(this)) invalid = true;
                 });
+
+                GLOBAL.set(this.getAttribute('watch'), {is: !invalid, form: this});
             }
         });
     });
@@ -768,12 +785,12 @@ var Notification = (function () {
             invalid = false;
 
 
-        if(this.hasAttribute('ajax') && this.getAttribute('ajax') !== ''){
+        if(this.hasAttribute('watch') && this.getAttribute('watch') !== ''){
             $this.find('input, select, textarea').each(function(){
-                if($(this).hasClass('invalid')) invalid = true;
+                if(!LIB.validate(this)) invalid = true;
             });
 
-            GLOBAL.set(this.getAttribute('ajax'), !invalid);
+            GLOBAL.set(this.getAttribute('watch'), {is: !invalid, form: this});
         }
 
     }).on('submit', 'form', function(event){
@@ -879,6 +896,7 @@ var Notification = (function () {
                 parent.append($('<i class="btn-in btn-tail btn-in__last" />'));
                 parent.append($list);
             }else{
+                parent.find('.btn-select').remove();
                 parent.find('.btn-select');
                 parent.append($list);
             }
@@ -902,10 +920,20 @@ var Notification = (function () {
         $ul.show();
 
         $li.off('click').on('click', function(){
-            var index = $li.index($(this));
-            $option.attr('checked', false).eq(index).attr('checked', true);
+            var index = $li.index($(this)),
+                value = $option.eq(index).val();
+            $option.attr('selected', false).eq(index).attr('selected', true);
 
-            $select.val($option.eq(index).val());
+            $select.val(value);
+
+            if($select.attr('watch') && $select.attr('watch') !== ''){
+                GLOBAL.set($select.attr('watch'), {
+                    value: value,
+                    select: $select,
+                    block: $this
+                });
+            }
+
             $this.children('.btn-in.btn-in__first').text($(this).text());
             hideSelect();
         });

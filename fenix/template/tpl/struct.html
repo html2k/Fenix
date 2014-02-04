@@ -10,9 +10,9 @@
 
 
             <? ob_start(); ?>
-                <form action="" method="post" ajax-success="ajaxForm" before-send="beforeSend">
-                    <input type="text" name="name" value="" class="inp" data-validate="empty" placeholder="Имя" help="Осмысленное название объекта"/>
-                    <input type="text" name="code" value="" isEmpty isEn class="inp" placeholder="Код" help="Только латинские буквы и цифры"/>
+                <form action="" method="post" watch="structForm" before-send="beforeSend">
+                    <input type="text" name="name" value="" class="inp" autocomplete="off" data-validate="empty" placeholder="Имя" help="Осмысленное название объекта"/>
+                    <input type="text" name="code" value="" autocomplete="off" isEmpty isEn class="inp" placeholder="Код" help="Только латинские буквы и цифры"/>
                     <input type="hidden" name="action" value="addObject"/>
                     <div class="mb-middle t-right">
                         <a href="?mode=object">Расширенный редактор</a>
@@ -49,17 +49,17 @@
 
 
             <? ob_start(); ?>
-                <form action="" method="post" ajax-success="ajaxForm" before-send="beforeSend">
+                <form action="" method="post" watch="structForm" before-send="beforeSend">
                     <label class="inp-name">Имя маркера</label>
-                    <input type="text" name="name" value="" class="inp" help="Имя маркера может содержать любые символы, но рекомендуется использовать осмысленные названия."/>
+                    <input type="text" name="name" value="" class="inp" autocomplete="off" isEmpty help="Имя маркера может содержать любые символы, но рекомендуется использовать осмысленные названия."/>
                     <input type="hidden" name="action" value="addMarker"/>
                     <div>
                         <button class="btn btn__success btn__disable" type="submit" disabled="true">
                             <span class="btn-in">Добавить</span>
                         </button>
-                                <span class="btn" onclick="$(document).trigger('dropdown-close')">
-                                    <span class="btn-in">Отмена</span>
-                                </span>
+                        <span class="btn" onclick="$(document).trigger('dropdown-close')">
+                            <span class="btn-in">Отмена</span>
+                        </span>
                     </div>
                 </form>
             <? $form = ob_get_clean(); ?>
@@ -82,9 +82,9 @@
 
 
             <? ob_start(); ?>
-                <form action="" method="post" ajax-success="ajaxForm" before-send="beforeSend">
+                <form action="" method="post" watch="structForm" before-send="beforeSend">
                     <label class="inp-name">Имя шаблона</label>
-                    <input type="text" name="name" value="" class="inp"  help="Имя шаблона должно содержать только латинские символы"/>
+                    <input type="text" name="name" value="" class="inp" autocomplete="off" isEmpty isEn help="Имя шаблона должно содержать только латинские символы"/>
                     <input type="hidden" name="action" value="addTemplate"/>
                     <div>
                         <button class="btn btn__success btn__disable" type="submit" disabled="true">

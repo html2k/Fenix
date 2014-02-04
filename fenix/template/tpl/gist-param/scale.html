@@ -1,15 +1,15 @@
 <?
-    $width = isset($paramObjectItem['width']) ? (int) $paramObjectItem['width'] : '';
-    $height = isset($paramObjectItem['height']) ? (int) $paramObjectItem['height'] : '';
+    $width = isset($param['gist']['width']) ? (int) $param['gist']['width'] : '';
+    $height = isset($param['gist']['height']) ? (int) $param['gist']['height'] : '';
 ?>
 
-<div class="split_box dib mr_micro js-param-scale">
-    <div class="ctrl_group">
-        <label class="inp_name">Ширина</label>
-        <input type="text" name="form[param][<?= @$key?>][width]" value="<?= $width; ?>" class="inp w_mini first"/>
+<div class="split-box dib mr-micro js-param-scale">
+    <div class="ctrl-box">
+        <label class="inp-name">Ширина</label>
+        <input type="text" name="form[param][<?= @$param['key']?>][width]" value="<?= $width; ?>" class="inp w-small first"/>
     </div>
-    <div class="ctrl_group">
-        <label class="inp_name">Высота</label>
-        <input type="text" name="form[param][<?= @$key?>][height]" value="<?= $height; ?>" class="inp w_mini last"/>
+    <div class="ctrl-box">
+        <label class="inp-name">Высота</label>
+        <input type="text" name="form[param][<?= @$param['key']?>][height]" value="<?= $height; ?>" class="inp w-small last"/>
     </div>
 </div>

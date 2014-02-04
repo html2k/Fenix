@@ -370,11 +370,16 @@ switch ($_REQUEST['action']){
 
     case 'getItemObject':
         $key = (int) $_POST['index'];
-        echo loadParam($key, array(), $manifest, sys . '/template/tpl/template/object_item.html');
+        echo $io->buffer(sys . '/template/tpl/template/object_item.html', array(
+            'io' => $io,
+            'key' => $key,
+            'value' => array(),
+            'manifest' => $manifest
+        ));
     break;
 
     case 'getGist':
-        $type = $_POST['type'];
+        $type = isset($_POST['type']) && $_POST['type'] !== '' ? $_POST['type'] : 'string';
         $key = (int) $_POST['key'];
         $path = sys.'/template/tpl/gist-param/';
         if(isset($manifest['gist'][$type])){
@@ -817,6 +822,7 @@ switch ($_REQUEST['action']){
 
 $Extension->compile();
 $extensionAction = $Extension->get('action');
+if(count($extensionAction)){
 foreach ($extensionAction as $ext) {
     if($ext['option']['name'] === $_REQUEST['action']){
         $fileInit = $ext['url'] . $ext['option']['init'];
@@ -826,6 +832,6 @@ foreach ($extensionAction as $ext) {
         break;
     }
 }
-
+}
 
 exit();
