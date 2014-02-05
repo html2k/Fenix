@@ -1,10 +1,27 @@
 <?
 
+function access(){
+
+    $arg = func_get_args();
+    if(count($arg)){
+        $res = false;
+        foreach($arg as $access){
+            if((int)$_SESSION['user']['access'] === $access){
+                $res = true;
+            }
+        }
+        if(!$res){
+            throw new Exception('Доступ запрещен', 403);
+        }
+    }
+}
+
 function load_url($url = false){
     // Переход на указанный url
-    if($url === false) $url = $_SERVER['HTTP_REFERER'];
+    if($url === false)
+        $url = $_SERVER['PHP_SELF'];
     else{
-        $ht = explode(':', $_SERVER['HTTP_REFERER']);
+        $ht =  (isset($_SERVER['HTTP_REFERER'])) ? explode(':', $_SERVER['HTTP_REFERER']) : array('');
         $url = $ht[0] . '://' . $_SERVER['HTTP_HOST'] . $url;
     }
     header("Location:". $url);

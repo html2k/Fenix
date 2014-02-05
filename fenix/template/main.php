@@ -43,8 +43,3 @@ $static->addFile(sys.'/template/css/sys.css');
 	$static->addFile(sys.'/template/tpl/blocks/struct/struct.css');
     $static->addFile(sys.'/template/tpl/blocks/object/object.css');
 
-	
-
-
-
-

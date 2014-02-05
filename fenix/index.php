@@ -84,12 +84,22 @@
         $php = $extUrl . '.php';
         $tpl = $extUrl . '.html';
     }
-    
+
     define('mode', $mode);
-    if(file_exists($php)) require_once $php;
-    ob_start();
-        if(file_exists($tpl)) require_once $tpl;
-        $GLOB['content'] = ob_get_contents();
-    ob_end_clean();
-    require_once 'template/main.html';
+
+
+    try{
+        if(file_exists($php)) require_once $php;
+        ob_start();
+            if(file_exists($tpl)) require_once $tpl;
+            $GLOB['content'] = ob_get_contents();
+        ob_end_clean();
+        require_once 'template/main.html';
+    }catch (Exception $e){
+
+        if($e->getCode() === 403){
+            setSystemMessage('warning', $e->getMessage());
+            load_url();
+        }
+    }
     

@@ -137,8 +137,8 @@
             break;
 
             case 'twig':
-                
-               require_once $config['folder']['sys'] . '/templating/Twig/Autoloader.php';
+
+                require_once $config['folder']['sys'] . '/templating/Twig/Autoloader.php';
                 Twig_Autoloader::register();
 
                 $loader = new Twig_Loader_Filesystem(root . '/template/');
@@ -147,19 +147,25 @@
                 ));
 
                 require_once $config['folder']['template'] . '/main.php';
-
+                $render = '';
                 foreach($GLOB['template'] as $v){
                     $filePHP = $config['folder']['template'] . '/php/'.$v . '.php';
                     $fileHTML = 'twig/' . $v . '.twig';
                     
                     if(file_exists($filePHP)){
                         require_once $filePHP;
-                        echo $twig->render($fileHTML, $GLOB);
+                        $render .= $twig->render($fileHTML, $GLOB);
                     }else{
                         throw new Exception("Error Processing Request", 404);
                         
                     }
-                } 
+                }
+                if(isset($_GET['show']) && $_GET['show'] == 'glob'){
+                    header('Content-Type: text/html');
+                    debug($GLOB);
+                }else{
+                    echo $render;
+                }
                 
             break;
 
