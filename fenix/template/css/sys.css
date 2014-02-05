@@ -104,7 +104,7 @@ a.disable,
 .header{
     position: relative;
     height: 35px;
-    z-index: 4;
+    z-index: 100;
     margin: 0;
     background: #2d2d2d;
 }

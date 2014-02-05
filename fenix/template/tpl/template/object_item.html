@@ -1,32 +1,39 @@
-<li class="mb-middle js-object-item">
+<li class="mb-middle js-object-item" style="z-index: <?= @$param['zIndex']?>">
     <div class="split-box m-none">
+
         <div class="ctrl-box">
             <label class="inp-name">Имя</label>
-            <input type="text" name="form[name][<?= @$param['key']?>]" value="<?= @$param['value']['name']; ?>" class="inp first" data-validate="empty"/>
+            <input type="text" name="form[name][<?= @$param['key']?>]" value="<?= @$param['value']['name']; ?>" class="inp first" isEmpty help="Имя будет отображаться в Проекте"/>
         </div>
+
         <div class="ctrl-box">
             <label class="inp-name">Код</label>
-            <input type="text" name="form[code][<?= @$param['key']?>]" value="<?= @$param['value']['code']; ?>" class="inp" data-validate="empty,latin"/>
+            <input type="text" name="form[code][<?= @$param['key']?>]" value="<?= @$param['value']['code']; ?>" class="inp" isEmpty isEn help="Код это имя ячейки в базе данных"/>
         </div>
+
         <div class="ctrl-box object-type">
             <label class="inp-name">Тип</label>
-            <select name="form[type][<?= @$param['key']?>]" class="js-type ctrl-select" watch="objectType">
-                <?
-                    foreach($param['manifest']['gist'] as $k => $v){
-                        $selected = (isset($param['value']) && $param['value']['type'] == $k) ? ' selected="true"' : '';
-                        echo '<option'.$selected.' value="'.$k.'">'.$v['name'].'</option>';
-                    }
-                ?>
-            </select>
+            <span help="Тип определяет то какие данные могут быть созданы">
+                <select name="form[type][<?= @$param['key']?>]" class="js-type ctrl-select" watch="objectType">
+                    <?
+                        foreach($param['manifest']['gist'] as $k => $v){
+                            $selected = (isset($param['value']) && $param['value']['type'] == $k) ? ' selected="true"' : '';
+                            echo '<option'.$selected.' value="'.$k.'">'.$v['name'].'</option>';
+                        }
+                    ?>
+                </select>
+            </span>
         </div>
-        <div class="ctrl-box">
+
+        <div class="ctrl-box" >
             <label class="inp-name">&#160;</label>
-            <div class="btn js-showSetting">
+            <div class="btn js-showSetting" help="Настройки ячейки позволяют кастомизировать работу ячейки и задать ее размер. Для каждого типа есть свой набор настроек подходящий только ему.">
                 <span class="btn-in">
                     <i class="icon-cog"></i>
                 </span>
             </div>
         </div>
+
         <div class="ctrl-box">
             <label class="inp-name">&#160;</label>
             <span class="btn last js-removeItem">
@@ -35,14 +42,17 @@
                 </span>
             </span>
         </div>
+
     </div>
     
     <div class="js-setting dn">
 
 
         <?
-            if(isset($paramObjectItem)){
+            if(isset($param['value'])){
                 $gist = (isset($param['value']['type'])) ? $param['manifest']['gist'][$param['value']['type']] : $param['manifest']['gist']['string'];
+
+
 
                 foreach($gist['param'] as $v){
 
@@ -54,7 +64,7 @@
                     echo $param['io']->buffer(sys . '/template/tpl/gist-param/' . $v . '.html', array(
                         'key' => $param['key'],
                         'gist' => $paramGIST,
-                        'manifest' => $manifest
+                        'manifest' => $param['manifest']
                     ));
                 }
             }

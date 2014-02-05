@@ -27,3 +27,7 @@
     z-index: 2;
 }
 
+.object-icon i{
+    cursor: pointer;
+    font-size: 28px;
+}

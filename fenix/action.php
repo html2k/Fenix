@@ -160,13 +160,13 @@ switch ($_REQUEST['action']){
         try{
             if(empty($_POST['code'])) throw new Exception('Не введен код объекта');
             if(empty($_POST['name'])) throw new Exception('Не введено имя объекта');
-			
+
             $toDB = array(
                 'name' => $_POST['name'],
                 'code' => $_POST['code'],
                 'icon' => $_POST['icon'],
                 'show_wood' => isset($_POST['show_wood']) ? $_POST['show_wood'] : 0,
-                'show_sistem' => $_POST['show_sistem']
+                'show_sistem' => isset($_POST['show_sistem']) ? $_POST['show_sistem'] : 0
             );
 
             /* Формирование таблици */

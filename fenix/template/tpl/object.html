@@ -1,28 +1,28 @@
 <h1 class="page-name">Редактор объекта</h1>
 
-<form action="" method="post">
+<form action="" method="post" watch="structForm">
     <h3>Параметры таблици</h3>
     <div class="ctrl-box">
         <label class="inp-name">Имя</label>
-        <input type="text" name="name" value="<?= @$objectParam[0]['name']?>" class="inp" data-validate="empty"/>
+        <input type="text" name="name" value="<?= @$objectParam[0]['name']?>" class="inp" isEmpty help="Это название будет отображаться в Проекте как имя создаваемого/редактируемого объекта" />
     </div>
     <div class="ctrl-box">
         <label class="inp-name">Код</label>
-        <input type="text" name="code" value="<?= @$objectParam[0]['code']?>" class="inp" data-validate="empty,latin" />
+        <input type="text" name="code" value="<?= @$objectParam[0]['code']?>" class="inp" isEmpty isEn help="Это имя создаваемой/редактируемой таблице таблици, где будут храниться записи." />
     </div>
-    <div class="ctrl-box">
+    <div class="ctrl-box object-icon js-object-icon">
         <span class="inp-name">Иконка</span>
         <? $icon =  isset($objectParam[0]['icon']) ? $objectParam[0]['icon'] : 'icon-doc'; ?>
-        <i class="f-gigant <?= $icon; ?>" popup="icons"></i>
-        <input type="hidden" name="icon" value="<?= isset($objectParam[0]['icon']) ? $objectParam[0]['icon'] : 'icon-doc'; ?>"/>
+        <i class="<?= $icon; ?>" popup="icons" help="Выберите иконку, она поможет вам лучше ориентироваться в проекте."></i>
+        <input type="hidden" name="icon" value="<?= isset($objectParam[0]['icon']) ? $objectParam[0]['icon'] : 'icon-doc'; ?>" class="js-object-icon-input"/>
     </div>
     <div class="ctrl-box ml-small">
         <span class="inp-name">Системные настройки</span>
-        <label class="inp-name">
+        <label class="inp-name" help="В проекте может быть очень много записей. Скройте их в дереве (в списке проекта они всеравно будут отображаться), для того чтобы было проще работать с проектом">
             <input type="checkbox" name="show_wood" value="1" <?= isset($objectParam) && $objectParam[0]['show_wood'] > 0 ? 'checked="true"' : '' ?>/> Показывать в дереве
         </label>
-        <label class="inp-name">
-            <input type="checkbox" name="show_sistem" value="1" <?= isset($objectParam) && $objectParam[0]['show_sistem'] > 0 ? 'checked="true"' : '' ?>/> Показывать в Системные настройки
+        <label class="inp-name" help="Системные настройки включают в себя ЧПУ и маркер макетов. Если объект не будет использован как страница лучше спрятать системные настройки">
+            <input type="checkbox" name="show_sistem" value="1" <?= isset($objectParam) && $objectParam[0]['show_sistem'] > 0 ? 'checked="true"' : '' ?>/> Показывать системные настройки
         </label>
     </div>
     
@@ -32,7 +32,7 @@
     <ul class="object-list"><?= $paramObject; ?></ul>
     
     <div class="mt_big">
-        <button class="btn btn__positive" type="submit">
+        <button class="btn btn__disable btn__success" type="submit" disabled="disabled">
             <span class="btn-in">Сохранить</span>
         </button>
         <a href="?mode=struct" class="btn">
@@ -40,7 +40,7 @@
         </a>
         
         <span class="btn js-add">
-            <span class="btn-in">Добавить сущность</span>
+            <span class="btn-in">Добавить ячейку</span>
         </span>
     </div>
     
@@ -58,118 +58,13 @@
     <? foreach($icons['glyphs'] as $v): ?>
         <? $active = $icon === 'icon-'.$v['css'] ? 'active' : ''; ?>
 
-        <i class="icon-<?= $v['css'] ?> <?= $active; ?>"></i>
+        <i class="icon-<?= $v['css'] ?> <?= $active; ?>" data-class="icon-<?= $v['css'] ?>"></i>
     <? endforeach; ?>
 <? $icon = ob_get_clean(); ?>
 
 <?= $io->buffer(sys.'/template/tpl/blocks/popup.html', array(
     'name' => 'Выберите иконку',
     'role' => 'icons',
+    'class' => 'js-object-icon-list',
     'block' => '<div class="object-icon-list">' . $icon . '</div>'
 )); ?>
-
-
-<? /*
-<script>
-    (function(){
-        
-        $(document).on('mouseup', '.js-removeItem', function(){
-            $(this).parents('li').remove();
-        });
-        
-        function paramReplace(el){
-            var list = $('.object-list'),
-                type = el.find('.js-type option:selected').val(),
-                $block = el.find('.js-setting'),
-                key = list.children().index(el);
-                
-            
-            $.post('', {action : 'getGist', type : type, key : key}, function(respons){
-                $block.empty().append(respons);
-            });
-        };
-        $(function(){
-            var list = $('.object-list');
-                add = function(){
-                    var len = list.children().length
-                    $.post('', {action : 'getItemObject', index : len}, function(respons){
-                        list.append(respons);
-                        $('.ctrl-select').ctrlSelect();
-                    });
-                };
-            if(list.children().length < 1) add();
-            $('.js-add').on('click', add);
-        });
-        
-        $(document).on('click', '.btn_select li', function(){
-            if(!$(this).parents('.btn_select').children('.js-type').length) return;
-            paramReplace($(this).parents('li'));
-        });
-        
-        $(document).on('click', '.js-showSetting', function(){
-            var $this = $(this),
-                $li = $this.parents('li'),
-                $setting = $li.find('.js-setting');
-            if($this.hasClass('active')){
-                $setting.slideUp(300);
-                $this.removeClass('active');
-            }else{
-                $setting.slideDown(300);
-                $this.addClass('active');
-            }
-            
-        }).on('click', '.icon-control .dropdown_block i', function(){
-            var $this = $(this),
-                $parent = $this.parents('.icon-control'),
-                $ico = $parent.find('.dropdown_name i'),
-                $inp = $parent.find('input'),
-                clas = this.className;
-            
-            
-            $inp.val(clas)
-            $ico[0].className = clas;
-            CallStack.go();
-            
-        });
-        
-    })();
-    
-    
-    (function(){
-        $(document).on('keydown', '.js-param-list div.inp', function(event){
-            
-            if(event.keyCode == 13){
-                var value = this.innerText,
-                    $parent = $(this).parents('.js-param-list'),
-                    list = $('ul', $parent),
-                    inp = $('input', $parent),
-                    res = inp.val(),
-                    item = $('<li/>').text(value);
-                    
-
-                if(!!res) res = JSON.parse(res);
-                else res = [];
-                
-                res.push(value);
-                inp.val(JSON.stringify(res));
-                this.innerText = '';
-                list.append(item);
-                return false;
-            }
-        }).on('click', '.js-param-list li', function(){
-            var $list = $('.js-param-list li'),
-                $this = $(this),
-                $parent = $this.parents('.js-param-list'),
-                $inp = $parent.find('input'),
-                val = $inp.val(),
-                index = $list.index($this);
-                
-            val = JSON.parse(val);
-            
-            val.splice(index, 1);
-            $this.remove();
-            $inp.val(JSON.stringify(val))
-        });
-    })();
-</script>
-       */ ?>

@@ -22,13 +22,16 @@
         $id = $_GET['id'];
         $objectParam = $db->find($GLOB['namespace']['struct_db'], array('id' => $id));
         $td = $db->find($GLOB['namespace']['struct_td'], array( 'parent' => $id ));
+
+        $len = count($td);
         $paramObject = array();
         foreach ($td as $k => $v){
 
             $paramObject[] = $io->buffer(sys . '/template/tpl/template/object_item.html', array(
                 'io' => $io,
-                'key' => $key,
-                'value' => $value,
+                'key' => $k,
+                'value' => $v,
+                'zIndex' => $len - $k,
                 'manifest' => $manifest
             ));
 
