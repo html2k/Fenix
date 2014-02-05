@@ -20,10 +20,13 @@ $(function(){
 });
 
     GLOBAL.watch('notification', function(message){
+        console.log(message);
         if(message && message.option){
             $.post('', {
                 'action' : 'clearSystemMessage',
                 'id': message.option.key
+            }, function(res){
+                console.log(res)
             });
         }
     });

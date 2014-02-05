@@ -36,6 +36,8 @@ $static->addFile(sys.'/template/css/sys.css');
 	$static->addFile(sys.'/template/tpl/blocks/table/table.js');
 	$static->addFile(sys.'/template/tpl/blocks/project/project.js');
     $static->addFile(sys.'/template/tpl/blocks/object/object.js');
+    $static->addFile(sys.'/template/js/setting.js');
+
 
 
 	$static->addFile(sys.'/template/tpl/blocks/struct/struct.css');

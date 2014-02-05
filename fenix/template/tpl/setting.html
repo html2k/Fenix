@@ -6,20 +6,18 @@
         <div class="col5">
             <div class="m-box">
                 <ul class="setting-tebles">
-                    <?
-                $list = array();
-                foreach($GLOB['users'] as $item){
-                    $list[] = '<li class="m-box">';
-                    $list[] = '<span class="name">'.$item['login'].'</span>';
-                    $list[] = '<span class="pull-right">';
-                        $list[] = $manifest['access'][$item['access']] . "&#160;";
-                        $list[] = '<i class="icon-pencil"></i>';
-                        $list[] = '<a href="?action=removeUser&id='.$item['id'].'"><i class="icon-cancel"></i></a>';
-                    $list[] = '</span>';
-                    $list[] = '</li>';
-                    }
-                    echo implode('', $list);
-                    ?>
+
+                    <? foreach($GLOB['users'] as $item): ?>
+                        <li class="m-box">
+                            <span class="name"><?= $item['login']; ?></span>
+                            <span class="pull-right">
+                                <?= $manifest['access'][$item['access']]; ?>&#160;
+                                <i class="icon-pencil js-user-list" data-login="<?= $item['login']; ?>" data-access="<?= $item['access']; ?>" data-id="<?= $item['id']; ?>"></i>
+                                <a href="?action=removeUser&id=<?= $item['id']; ?>"><i class="icon-cancel"></i></a>
+                            </span>
+                        </li>
+                    <? endforeach; ?>
+
                 </ul>
 
                 <? ob_start(); ?>
@@ -64,3 +62,30 @@
     </div>
 </div>
 
+
+<? ob_start(); ?>
+<form action="" method="post" watch="structForm">
+
+    <input type="text" name="name" value="" placeholder="Логин" class="inp" autofocus="" isEmpty/>
+    <input type="text" name="pass" value="" placeholder="Пароль" class="inp" help="Пароль не будет изменен если это поле оставить пустым"/>
+
+    <select name="access" class="ctrl-select">
+        <option value="2">Пользователь</option>
+        <option value="1">Администратор</option>
+        <option value="0">ROOT</option>
+    </select>
+
+    <button class="btn btn__success btn__disable" type="submit" disabled="disabled">
+        <span class="btn-in">Изменить</span>
+    </button>
+
+    <input type="hidden" name="id" value="" />
+    <input type="hidden" name="action" value="editUser"/>
+</form>
+<? $form = ob_get_clean(); ?>
+
+<?= $io->buffer(sys.'/template/tpl/blocks/popup.html', array(
+    'name' => 'Изменение настроек пользователя',
+    'role' => 'userSetting',
+    'block' => $form
+)); ?>

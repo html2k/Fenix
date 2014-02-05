@@ -101,10 +101,11 @@ a.disable,
 }
 
 /* ================================ Header start */
+.notification{ z-index: 9; }
 .header{
     position: relative;
     height: 35px;
-    z-index: 100;
+    z-index: 8;
     margin: 0;
     background: #2d2d2d;
 }

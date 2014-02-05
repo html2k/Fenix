@@ -48,16 +48,28 @@ switch ($_REQUEST['action']){
         setSystemMessage('good', 'Пользователь <b>'.$name.'</b> был создан');
         load_url();
     break;
-    
-    case 'clearSystemMessage':
-        $array = array();
-        foreach($_SESSION['error'] as $v){
-            if($v['id'] != $_POST['id']) $array[] = $v;
+
+    case 'editUser':
+        try {
+            $id = (int) $_POST['id'];
+            $query = array(
+                'login' => trim($_POST['name']),
+                'access' => $_POST['access']
+            );
+
+            if($_POST['pass'] !== '')
+                $query['pass'] = hashGenerate(strtolower(trim($_POST['pass'])));
+
+            $db->update($GLOB['namespace']['user'], $query, array('id' => $id));
+            $name = $query['login'];
+        } catch (Exception $e){
+            setSystemMessage('error', $e);
         }
-        $_SESSION['error'] = $array;
+        setSystemMessage('good', 'Данные пользователя <b>'.$name.'</b> были изменены');
+        load_url();
     break;
-    
-    case 'removeUser': 
+
+    case 'removeUser':
         $name = '';
         try {
             $id = (int) $_GET['id'];
@@ -69,6 +81,14 @@ switch ($_REQUEST['action']){
         }
         setSystemMessage('good', 'Пользователь <b>'.$name.'</b> был удален');
         load_url();
+        break;
+    
+    case 'clearSystemMessage':
+        $array = array();
+        foreach($_SESSION['error'] as $v){
+            if($v['id'] != $_POST['id']) $array[] = $v;
+        }
+        $_SESSION['error'] = $array;
     break;
 
     case 'addTemplate':

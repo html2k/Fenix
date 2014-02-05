@@ -3,13 +3,13 @@
 	'/Users/mac/project/Fenix/fenix/template/font/fontello.css' => 'ed32101df62ad76378d67c73ba7a7c20e6e21e47',
 	'/Users/mac/project/Fenix/fenix/template/font/animation.css' => '181bbc89ec978981bf0ef8c7239710ae5b3ad6a1',
 	'/Users/mac/project/Fenix/fenix/template/css/responsive-style.css' => '70b771ec87e29cc11c4c21f5b5e5fb771316aec0',
-	'/Users/mac/project/Fenix/fenix/template/css/style.css' => '60061209fe8573cde89368da05882a226832941b',
-	'/Users/mac/project/Fenix/fenix/template/css/sys.css' => '84cf69ddc92b976d64e0352845b8dda23bed9eaa',
+	'/Users/mac/project/Fenix/fenix/template/css/style.css' => 'fd653ca2b160db276395b9ab09b5691aefa0bc80',
+	'/Users/mac/project/Fenix/fenix/template/css/sys.css' => 'ee3f806c72795ce0e990510400e3470316837f1e',
 	'/Users/mac/project/Fenix/fenix/template/tpl/blocks/struct/struct.css' => '91ddc068b7a4cabd7f1baba3cfdd50b3f3ac18a9',
-	'version' => 1391616926,
-	'/Users/mac/project/Fenix/fenix/template/js/lib.js' => 'effdcdc3f3a5b1b30b6dfda011a8cf663fb39345',
+	'version' => 1391628463,
+	'/Users/mac/project/Fenix/fenix/template/js/lib.js' => '54725b98b57928791afb2e1857322206eb586b48',
 	'/Users/mac/project/Fenix/fenix/template/js/datepicker.js' => 'ea5ecf5bd76b96f2ccb3c78eb67e6668b032e9da',
-	'/Users/mac/project/Fenix/fenix/template/js/main.js' => '40a8faf29f342afaf9e3b3c3b72fed2992a454c4',
+	'/Users/mac/project/Fenix/fenix/template/js/main.js' => 'eebfee81977875a343abc06a950ef7bf0d87042a',
 	'/Users/mac/project/Fenix/fenix/template/js/search.js' => 'ea12b4ffae29a267f08a7609ba0da79059fcd9c8',
 	'/Users/mac/project/Fenix/fenix/template/js/struct.js' => '84c134baebc61e92069bad8f4c5af02ac27a29a1',
 	'/Users/mac/project/Fenix/fenix/template/tpl/blocks/table/table.js' => 'bfd2cf963ef3b297f582beea58eae77b50ee5cc7',
@@ -19,5 +19,6 @@
 	'/Users/mac/project/Fenix/ext//backup/buckup.js' => 'b55878220f2b83cc54db0c5a2f60d17eb174a8ee',
 	'/Users/mac/project/Fenix/ext//li/li.js' => '2767ac2d9f57b166950102b09b9cfadc571cdfcc',
 	'/Users/mac/project/Fenix/fenix/template/tpl/blocks/object/object.css' => '7bbd309876eaac31cba4791c23668b368b1ba7ab',
-	'/Users/mac/project/Fenix/fenix/template/tpl/blocks/object/object.js' => '36812147af4d3e3f0e0a2be20601cedb9ab18e8a'
+	'/Users/mac/project/Fenix/fenix/template/tpl/blocks/object/object.js' => '36812147af4d3e3f0e0a2be20601cedb9ab18e8a',
+	'/Users/mac/project/Fenix/fenix/template/js/setting.js' => 'e883fd0cc62222c9a3c3b01385cad2ef66a8930d'
 	); ?>

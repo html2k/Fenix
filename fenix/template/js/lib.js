@@ -646,98 +646,100 @@ var Spin = (function () {
 
 /* ================================================================== Notification === */
 var Notification = (function () {
-	'use strict';
-	var lib = {},
-		mes = [],
-		mesIndex = 0,
-		opts = {
-			message : '',
-			flag : '',
-			show : false,
-			hide : true
-		},
-		show = function (list, index) {
-			var c = 0, len = list.length - 1,
-				init = function (el) {
-					var clear = setTimeout(function () {
-							Notification.remove(el.data('index'));
-						}, 3000);
-					el.off('mouseover.notif').on('mouseover.notif', function () {
-						clearTimeout(clear);
-					}).off('mouseout.notif').on('mouseout.notif', function () {
-						init(el);
-					});
-				};
-			list.each(function (k, e) {
-				$(this).fadeTo(50 + (k + 1) * 100, 1, function () {
-					if (list.eq(len - k).data('hide') === true) {
-						init(list.eq(len - k));
-					}
-				});
-				
-			});
-		};
-	
-	lib.set = function (option) {
-		var template = $('<div class="notification-item"/>');
-		option = $.extend({}, opts, option);
-		
-		template.addClass('notification-item__' + option.flag);
-		template.text(option.message);
-		
-		mes.push({
-			element : template,
-			index : mesIndex += 1,
-			hide : option.hide
-		});
-		
-		if (option.show) {
-			Notification.show();
-		}
-		return template;
-	};
-	
-	
-	lib.show = function () {
-		var i, len = mes.length, template,
-			event = function () {
-				Notification.remove(this.getAttribute('data-index'));
-			};
-		
-		if ($('.notification').length < 1) {
-			$('body').append('<div class="notification"/>');
-		}
-		template = $('.notification');
-		
-		for (i = 0; i < len; i += 1) {
-			mes[i].element.on('click', event);
-			mes[i].element.attr('data-index', mes[i].index);
-			mes[i].element.attr('data-hide', mes[i].hide);
-			template.prepend(mes[i].element);
-		}
-		$('body').append(template);
-		show(template.children());
-	};
-	
-	lib.remove = function (index) {
-		var i = 0, len = mes.length;
-		if (!isNaN(index)) {
-			index = parseInt(index, 10);
-			for (i = 0; i < mes.length; i += 1) {
-				if (mes[i].index === index) {
-					mes.splice(i, 1);
-				}
-			}
-			$('.notification [data-index=' + index + ']').fadeTo(300, 0, function () {
-				$(this).remove();
-				if ($('.notification').children().length < 1) {
-					$('.notification').remove();
-				}
-			});
-		}
-	};
+    'use strict';
+    var lib = {},
+        mes = [],
+        mesIndex = 0,
+        opts = {
+            message : '',
+            flag : '',
+            show : false,
+            hide : true
+        },
+        show = function (list, index) {
+            var c = 0, len = list.length - 1,
+                init = function (el) {
+                    var clear = setTimeout(function () {
+                        Notification.remove(el.data('index'));
+                    }, 3000);
+                    el.off('mouseover.notif').on('mouseover.notif', function () {
+                        clearTimeout(clear);
+                    }).off('mouseout.notif').on('mouseout.notif', function () {
+                        init(el);
+                    });
+                };
+            list.each(function (k, e) {
+                $(this).fadeTo(50 + (k + 1) * 100, 1, function () {
+                    if (list.eq(len - k).data('hide') === true) {
+                        init(list.eq(len - k));
+                    }
+                });
 
-	return lib;
+            });
+        };
+    lib.set = function (option) {
+        var template = $('<div class="notification-item"/>');
+        option = $.extend({}, opts, option);
+
+        template.addClass('notification-item__' + option.flag);
+        template.html(option.message);
+
+        mes.push({
+            element : template,
+            index : mesIndex += 1,
+            hide : option.hide,
+            option: option
+        });
+
+        if (option.show) {
+            Notification.show();
+        }
+        return template;
+    };
+
+
+    lib.show = function () {
+        var i, len = mes.length, template,
+            event = function () {
+                Notification.remove(this.getAttribute('data-index'));
+            };
+
+        if ($('.notification').length < 1) {
+            $('body').append('<div class="notification"/>');
+        }
+        template = $('.notification');
+
+        for (i = 0; i < len; i += 1) {
+            mes[i].element.on('click', event);
+            mes[i].element.attr('data-index', mes[i].index);
+            mes[i].element.attr('data-hide', mes[i].hide);
+            template.prepend(mes[i].element);
+        }
+        $('body').append(template);
+        show(template.children());
+    };
+
+    lib.remove = function (index) {
+        var i = 0, len = mes.length;
+        if (!isNaN(index)) {
+            index = parseInt(index, 10);
+            var message = false;
+            for (i = 0; i < mes.length; i += 1) {
+                if (mes[i].index === index) {
+                    message = mes.splice(i, 1);
+                }
+            }
+            GLOBAL.set('notification', message[0]);
+            $('.notification [data-index=' + index + ']').fadeTo(300, 0, function () {
+                $(this).remove();
+                if ($('.notification').children().length < 1) {
+                    $('.notification').remove();
+
+                }
+            });
+        }
+    };
+    return lib;
 }());
 
 
