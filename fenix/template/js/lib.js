@@ -910,7 +910,7 @@ var Notification = (function () {
     };
 
     $(document).on('mouseup', '.js-btn-select', function(){
-        $(document).trigger('mouseup');
+        hideSelect();
         var $this = $(this),
             $select = $this.find('select'),
             $option = $select.find('option'),

@@ -21,34 +21,39 @@
                     echo implode('', $list);
                     ?>
                 </ul>
-                <span class="dropdown">
-                    <span class="dropdown-name false-link">Добавить</span>
-                    <span class="dropdown-block">
-                        <i class="dropdown-tail"></i>
 
-                        <form action="" method="post" class="FormUser">
-                            <input type="text" name="name" value="" placeholder="Логин" class="inp" autofocus=""/>
-                            <input type="text" name="pass" value="" placeholder="Пароль" class="inp" onlyEn/>
-                            <div class="mb-middle">
-                                <span class="inp-name">Права доступа</span>
-                                <select name="access">
-                                    <option value="2">Пользователь</option>
-                                    <option value="1">Администратор</option>
-                                    <option value="0">ROOT</option>
-                                </select>
-                            </div>
-                            <div class="mt_mini">
-                                <button class="btn" type="submit">
-                                    <span class="btn-in">Добавить</span>
-                                </button>
-                                    <span class="btn" onclick="$(document).trigger('dropdown-close')">
-                                        <span class="btn-in">Отмена</span>
-                                    </span>
-                            </div>
-                            <input type="hidden" name="action" value="addUser"/>
-                        </form>
-                    </span>
-                </span>
+                <? ob_start(); ?>
+                    <form action="" method="post" watch="structForm">
+                        <input type="text" name="name" value="" placeholder="Логин" class="inp" autofocus="" isEmpty/>
+                        <input type="text" name="pass" value="" placeholder="Пароль" class="inp" isEmpty/>
+
+                        <div class="mb-middle" style="position: relative; z-index:2;">
+                            <span class="inp-name">Права доступа</span>
+                            <select name="access" class="ctrl-select">
+                                <option value="2">Пользователь</option>
+                                <option value="1">Администратор</option>
+                                <option value="0">ROOT</option>
+                            </select>
+                        </div>
+
+                        <div class="mt_mini">
+                            <button class="btn btn__success btn__disable" type="submit" disabled="disabled">
+                                <span class="btn-in">Добавить</span>
+                            </button>
+                            <span class="btn" onclick="$(document).trigger('dropdown-close')">
+                                <span class="btn-in">Отмена</span>
+                            </span>
+                        </div>
+                        <input type="hidden" name="action" value="addUser"/>
+                    </form>
+                <? $form = ob_get_clean(); ?>
+
+
+                <?= $io->buffer(sys . '/template/tpl/blocks/dropdown.html', array(
+                    'name' => '<span class="false-link">Добавить</span>',
+                    'block' => $form
+                )); ?>
+
             </div>
         </div>
         <div class="col7">
