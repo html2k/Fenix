@@ -5,71 +5,29 @@ class Templating extends Base{
     
     function __construct($param, $namespace) {
         parent::__construct($param);
+        $this->cursor = $this;
         $this->namespace = $namespace;
     }
 
-    public function get($id = false, $callback){
+    public function get($param){
 
-        if($id === false || $id == '' || $id === 0){
+        if(!is_array($param) || !isset($param['object']) || !isset($param['id'])){
             throw new Exception('Не заданы условия выборки');
         }
-
-        $where = array();
-
-        if(is_numeric($id)){
-            $where = array('id' => (int) $id, 'hide' => 0);
-        }else{
-            $where = array('chpu' => $id, 'hide' => 0);
-        }
-
-
-        return $this->extract($this->go(array(
-            'event' => 'find',
-            'from' => $this->namespace['construct_db'],
-            'where' => array('id' => (int) $id, 'hide' => 0),
-            'order' => 'num'
-        )), function($item){
-            $objectId = (isset($item['ref']) && $item['ref'] != 0) ? $item['ref'] : $item['id'];
-            $data = $this->findOn($item['object'], array('id' => $objectId));
-            $v['data'] = isset($data[0]) ? $data[0] : array();
-            return $v;
-        });
-
+        return $this->findOne($param['object'], array('id' => $param['id']));
     }
     
-    public function getList($param, $order = false, $limit = false){
+    public function getList($param, $callback = null){
         $result = array();
-        $find = array();
         if(is_array($param)){
             if(!isset($param['hide'])) $param['hide'] = 0;
-			$find = $this->extract($this->go(array(
+            $result = $this->extract($this->go(array(
 				'event' => 'find',
 				'from' => $this->namespace['construct_db'],
 				'where' => $param,
 				'order' => 'num'
-			)));
+			)), $callback);
 			
-        }else if(is_numeric($param)){
-			$find = $this->extract($this->go(array(
-				'event' => 'find',
-				'from' => $this->namespace['construct_db'],
-				'where' => array('id' => (int) $param, 'hide' => 0),
-				'order' => 'num'
-			)));
-        }else if(is_string($param)){
-			$find = $this->extract($this->go(array(
-				'event' => 'find',
-				'from' => $this->namespace['construct_db'],
-				'where' => array('chpu' => $param, 'hide' => 0),
-				'order' => 'num'
-			)));
-        }
-        
-        foreach($find as $v){
-            $objectId = (isset($v['ref']) && $v['ref'] != 0) ? $v['ref'] : $v['id'];
-            $data = $this->find($v['object'], array('id' => $objectId));
-            $v['data'] = isset($data[0]) ? $data[0] : array();
-            $result[] = $v;
         }
         return $result;
     }

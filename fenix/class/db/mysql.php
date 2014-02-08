@@ -2,6 +2,7 @@
 class Base extends ConvertSchem{
     
     private $connect = false;
+    protected $cursor = false;
             
     function __construct($param) {
         $this->init($param);
@@ -9,7 +10,7 @@ class Base extends ConvertSchem{
     
     function init($param){
         $param['pass'] = (isset($param['pass'])) ? $param['pass'] : '';
-        
+        $this->curcor = $this;
         try {
             $this->connect = @mysql_connect($param['host'], $param['user'], $param['pass']);
         } catch (Exception $exc) {
@@ -74,10 +75,8 @@ class Base extends ConvertSchem{
         $i = 0;
         while($item = mysql_fetch_assoc($query)){
             if(is_callable($callback)){
-                $res[$i] = $callback($item);
-            }
-
-            if(!isset($res[$i]) || !$res[$i]){
+                $res[$i] = $callback($item, $this->cursor);
+            }else{
                 foreach($item as $k => $v){
                     $item[$k] = $this->resc($v);
                 }
@@ -92,12 +91,11 @@ class Base extends ConvertSchem{
         return $this->query(parent::go($param));
     }
     
-    public function find($from, $option = array()){
-        return $this->extract($this->query(parent::find($from, $option)));
+    public function find($from, $option = array(), $callback = null){
+        return $this->extract($this->query(parent::find($from, $option)), $callback);
     }
-
     public function findOne($from, $option = array()){
-        return $this->extract($this->query(parent::find($from, $option)));
+        return mysql_fetch_assoc($this->query(parent::find($from, $option)));
     }
     
     public function insert($from, $insert){
@@ -112,7 +110,7 @@ class Base extends ConvertSchem{
         return $this->query(parent::remove($from, $where));
     }
 
-    public function search($from, $where){
+    public function search($from, $where, $callback = null){
         if(!is_array($where)) return array();
 
         $w = '';
@@ -125,7 +123,7 @@ class Base extends ConvertSchem{
         }
         $w = substr($w, 0, -3);
 
-        return $this->extract($this->query('SELECT * FROM `'.$from.'` WHERE '.$w));
+        return $this->extract($this->query('SELECT * FROM `'.$from.'` WHERE '.$w), $callback);
     }
     public function creat_db($name){
         return $this->query('CREATE DATABASE `'.$name.'`');

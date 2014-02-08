@@ -27,8 +27,8 @@
                 $this->result = implode('', $this->result);
         }
 
-        public function find($a, $b = array()) {
-            return parent::find($a, $b);
+        public function find($a, $b = array(), $callback = null) {
+            return parent::find($a, $b, $callback);
         }
 
         public function perform($a, $b) {
