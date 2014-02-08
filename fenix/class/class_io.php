@@ -28,6 +28,9 @@ class IO {
 		$result = array('file' => array(), 'dir' => array());
         $name .= ($name{strlen($name)-1} === '') ? '/' : '';
 
+        if(!is_dir($name)) return array();
+
+
 		if($handle = opendir($name)){
 			while(false !== ($entry = readdir($handle))){
 				if($entry != '.' && $entry != '..'){
@@ -43,7 +46,7 @@ class IO {
 		if($res !== false)
 			if($res == 'dir') return $result['dir'];
 			else if($res == 'file') return $result['file'];
-			
+
 		return  $result;
 	}
 	
@@ -52,8 +55,8 @@ class IO {
 	public function tree($name){
 		$dir = $this->read_dir($name);
 		
-		$this->tree['dir'] += $dir['dir'];
-		$this->tree['file'] += $dir['file'];
+		$this->tree['dir'] = $dir['dir'];
+		$this->tree['file'] = $dir['file'];
 		$this->tree__init($dir['dir']);
 		
 		return $this->tree;
@@ -68,8 +71,8 @@ class IO {
 		}
 		
 	//-> Создание файла
-	public function create_file($name){ fclose(fopen($name, 'w+')); chmod($name, 0777); }
-	public function create_dir($name, $mod = 0777){ return mkdir($name, $mod, true); }
+	public function create_file($name, $mod = 0777){ fclose(fopen($name, 'w+')); chmod($name, $mod); }
+	public function create_dir($name, $mod = 0777){ mkdir($name, $mod, true); chmod($name, $mod); }
 
 	
 	//-> Запись в файл

@@ -120,7 +120,6 @@ $(function(){
                 $list.eq(start).addClass('active');
                 start++;
             }
-            clearSelection();
         }else{
             $list.removeClass('active');
             $this.addClass('active');

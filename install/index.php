@@ -2,6 +2,7 @@
     session_start();
 
     define('system_static', true);
+    define('connect_to_db', true);
     define('sys', root.'/fenix');
 
     require_once sys . '/manifest.php';
@@ -63,13 +64,27 @@
             $folderFrom = root.'/install/templating/'.$config['templating'] . '/';
             $folderTo = root . '/' . $config['folder']['template'] . '/';
 
-            $io->create_dir($folderTo);
-            $dir = $io->read_dir($folderFrom);
+            if(!is_dir($folderTo))
+                $io->create_dir($folderTo);
+
+            $dir = $io->tree($folderFrom);
+
+
+            foreach($dir['dir'] as $v){
+                $folder = str_replace($folderFrom, '', $v);
+
+                if(!is_dir($folderTo . $folder))
+                    $io->create_dir($folderTo . $folder);
+            }
 
             foreach($dir['file'] as $v){
                 $file = explode('/', $v);
 
-                $io->copy($v, $folderTo . end($file));
+                $file = str_replace($folderFrom, '', $v);
+
+                if(!file_exists($folderTo . $file)){
+                    $io->copy($v, $folderTo . $file);
+                }
             }
 
             load_url();

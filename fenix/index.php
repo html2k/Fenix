@@ -5,6 +5,7 @@
     session_start();
 
     define('system_static', true);
+    define('connect_to_db', true);
     define('root', $_SERVER['DOCUMENT_ROOT']);
 
     require_once root . '/config.php';

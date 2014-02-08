@@ -29,11 +29,13 @@
     if(!req($config, '/class/db/' . $config['db']['type'] . '.php'))
         req($config, '/class/db/mysql.php');
 
-    $db = new Base($config['db']);
     $io = new IO();
     $static = new CompressStatic(sys.'/template/compress_static/', 'app', sys.'/');
 
-    $Extension = new Extension($GLOB['namespace'], $config, $db, $io, $static);
+    if(connect_to_db){
+        $db = new Base($config['db']);
+        $Extension = new Extension($GLOB['namespace'], $config, $db, $io, $static);
+    }
 
 
 

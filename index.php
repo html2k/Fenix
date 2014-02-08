@@ -11,6 +11,7 @@
         }
 
         define('system_static', false);
+        define('connect_to_db', false);
         require_once 'config.php';
         define('sys', root . '/' . $config['folder']['sys']);
         require_once sys . '/requerid.php';

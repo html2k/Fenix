@@ -13,6 +13,7 @@ Options +FollowSymlinks
 Options -Indexes
 
 
+
 RewriteRule ^fenix/?$ http://%{HTTP_HOST}/fenix/index.php?%{QUERY_STRING}
 
 #RewriteCond %{QUERY_STRING} base64_encode[^(]*\([^)]*\) [OR]

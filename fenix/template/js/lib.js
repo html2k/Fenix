@@ -963,12 +963,17 @@ var Notification = (function () {
                 baseY = event.pageY,
                 $this = $(t),
                 $body = $('body'),
-                list = [], $copy, $pointer, $rezerv;
+                list = [], $copy, $rezerv;
 
             $body.addClass('no-select');
             $body.css('cursor', 'move');
 
             $(document).off('mousemove.sort').on('mousemove.sort', function(event){
+                var x = event.pageX,
+                    y = event.pageY;
+
+                if(baseX === x && baseY !== y) return;
+
                 if(!$copy){
                     $rezerv = $this.clone();
                     $copy = $this.clone();
@@ -992,11 +997,7 @@ var Notification = (function () {
                             height: $t.height()
                         });
                     });
-
                 }
-
-                var x = event.pageX,
-                    y = event.pageY;
 
                 var i = 0, len = list.length;
                 for(; i < len; i++){
@@ -1018,7 +1019,7 @@ var Notification = (function () {
                 $body.css('cursor', 'auto');
 
 
-                if($copy.length && $rezerv.length){
+                if($copy && $copy.length && $rezerv && $rezerv.length){
                     $copy.after($rezerv);
                     $copy.remove();
 

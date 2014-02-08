@@ -24,14 +24,16 @@
             $extensionFolder = root.'/'.$this->config['folder']['extension'] . '/';
             $extensionList = $this->read_dir($extensionFolder, 'dir');
 
-            foreach ($extensionList as $value) {
-                $files = $this->read_dir($value, 'file');
-                foreach ($files as $file) {
-                    if(strpos($file, 'init.php') > -1){
-                        $this->extFolder = $value;
-                        $this->loadExtension($file, $this->namespace, $this, $this->db, $this->io, array(
-                            'url' => $value
-                        ));
+            if(count($extensionList)){
+                foreach ($extensionList as $value) {
+                    $files = $this->read_dir($value, 'file');
+                    foreach ($files as $file) {
+                        if(strpos($file, 'init.php') > -1){
+                            $this->extFolder = $value;
+                            $this->loadExtension($file, $this->namespace, $this, $this->db, $this->io, array(
+                                'url' => $value
+                            ));
+                        }
                     }
                 }
             }

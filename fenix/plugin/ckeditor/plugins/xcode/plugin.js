@@ -7,8 +7,6 @@ CKEDITOR.plugins.add('xcode', {
                 $area = $popup.find('textarea'),
                 $save = $popup.find('.btn__success');
 
-
-            console.log(value);
             if(value){
                 $area.val(value);
             }
