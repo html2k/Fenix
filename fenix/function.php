@@ -200,18 +200,18 @@ function resize($url, $max){
 }
 
 
-function staticLoad($static, $debug = false){
+function staticLoad($static, $debug = false, $url = ''){
     $result = array();
     if($debug){
         foreach($static->getList('js', true) as $v){
-            $result[] = '<script src="'.$v.'" type="text/javascript"></script>';
+            $result[] = '<script src="'.$url.$v.'" type="text/javascript"></script>';
         }
         foreach($static->getList('css', true) as $v){
-            $result[] = '<link rel="stylesheet" type="text/css" href="'.$v.'">';
+            $result[] = '<link rel="stylesheet" type="text/css" href="'.$url.$v.'">';
         }
     }else{
-        $result[] = '<link rel="stylesheet" type="text/css" href="'. $static->get('css') .'?v='.$static->getVersion().'">';
-        $result[] = '<script src="'. $static->get('js') .'?v='.$static->getVersion().'" type="text/javascript"></script>';
+        $result[] = '<link rel="stylesheet" type="text/css" href="'. $url . $static->get('css') .'?v='.$static->getVersion().'">';
+        $result[] = '<script src="'.$url . $static->get('js') .'?v='.$static->getVersion().'" type="text/javascript"></script>';
     }
 
     return implode($result);

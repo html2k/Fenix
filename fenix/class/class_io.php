@@ -26,7 +26,7 @@ class IO {
 	//-> Чтение дерриктории
 	public function read_dir($name, $res = false){
 		$result = array('file' => array(), 'dir' => array());
-        $name .= ($name{strlen($name)-1} !== '') ? '/' : '';
+        $name .= ($name{strlen($name)-1} === '') ? '/' : '';
 
 		if($handle = opendir($name)){
 			while(false !== ($entry = readdir($handle))){
@@ -69,7 +69,7 @@ class IO {
 		
 	//-> Создание файла
 	public function create_file($name){ fclose(fopen($name, 'w+')); chmod($name, 0777); }
-	public function create_dir($name, $mod = 0777){ return @mkdir($name, $mod, true); }
+	public function create_dir($name, $mod = 0777){ return mkdir($name, $mod, true); }
 
 	
 	//-> Запись в файл

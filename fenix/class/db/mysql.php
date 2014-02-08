@@ -15,7 +15,7 @@ class Base extends ConvertSchem{
         } catch (Exception $exc) {
             $this->connect = false;
         }
-        
+
         if($this->connect){
             $use = mysql_select_db($param['name']);
             if($use === false){
@@ -29,7 +29,9 @@ class Base extends ConvertSchem{
             mysql_query ("set character_set_client='utf8'");
             mysql_query ("set character_set_results='utf8'");
             mysql_query ("set collation_connection='utf8_general_ci'");
+            return true;
         }
+        return false;
     }
     
     function isConnect(){ return !!$this->connect; }
@@ -66,16 +68,22 @@ class Base extends ConvertSchem{
             'full_count' => $full_count);
     }
 
-    public function extract($query){
+    public function extract($query, $callback = null){
         if($query === false) return array();
         $res = array();
+        $i = 0;
         while($item = mysql_fetch_assoc($query)){
-			foreach($item as $k => $v){
-					$item[$k] = $this->resc($v);
-			}
-			
-		
-			$res[] = $item;
+            if(is_callable($callback)){
+                $res[$i] = $callback($item);
+            }
+
+            if(!isset($res[$i]) || !$res[$i]){
+                foreach($item as $k => $v){
+                    $item[$k] = $this->resc($v);
+                }
+                $res[$i] = $item;
+            }
+            $i++;
 		}
         return $res;
     }
@@ -85,6 +93,10 @@ class Base extends ConvertSchem{
     }
     
     public function find($from, $option = array()){
+        return $this->extract($this->query(parent::find($from, $option)));
+    }
+
+    public function findOne($from, $option = array()){
         return $this->extract($this->query(parent::find($from, $option)));
     }
     

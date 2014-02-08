@@ -144,6 +144,5 @@ $manifest = array(
             'files' => 'files',
             'extension' => 'ext'
         )
-
     )
 );

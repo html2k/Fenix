@@ -5,6 +5,7 @@ template/*
 ext/*
 _install/
 .project
+.idea/*
 
 *.prefs
 

@@ -1,32 +1,31 @@
 $(function(){ 
     'use strict';
 
+    if($.fn.ckeditor){
+       $('.editor').ckeditor({
+           extraPlugins: 'xcode',
 
-   $('.editor').ckeditor({
-       extraPlugins: 'xcode',
+           toolbar : [
+               [ 'Source' ],
+               [ 'RemoveFormat', 'ShowBlocks', 'Maximize' ],
+               [ 'Styles', 'Format', 'FontSize' ], [ 'TextColor', 'BGColor' ],
 
-       toolbar : [
-           [ 'Source' ],
-           [ 'RemoveFormat', 'ShowBlocks', 'Maximize' ],
-           [ 'Styles', 'Format', 'FontSize' ], [ 'TextColor', 'BGColor' ],
+               [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'],
+               [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
+               [ 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink' ],
+               [ 'Table', 'Image', 'HorizontalRule', 'SpecialChar', 'xcode' ]
+           ]
+       });
 
-           [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'],
-           [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
-           [ 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink' ],
-           [ 'Table', 'Image', 'HorizontalRule', 'SpecialChar', 'xcode' ]
-       ]
-   });
-
+    }
 });
 
     GLOBAL.watch('notification', function(message){
-        console.log(message);
         if(message && message.option){
             $.post('', {
                 'action' : 'clearSystemMessage',
                 'id': message.option.key
             }, function(res){
-                console.log(res)
             });
         }
     });
