@@ -123,6 +123,7 @@ figure figcaption
 }
 
 pre {
+    min-height: 1.5em;
     border: 1px dashed #ddd;
     background: #f7f7f7;
 }

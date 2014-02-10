@@ -51,6 +51,13 @@
             $login = trim($_POST['user']['login']);
             $pass = hashGenerate(strtolower(trim($_POST['user']['pass'])));
 
+            foreach($manifest['baseCollection'] as $k => $v){
+                $db->createCollection(array(
+                    'name' => $GLOB['namespace'][$k],
+                    'row' => $v
+                ));
+            }
+
             $find = $db->find($GLOB['namespace']['user'], array('login' => $login, 'pass' => $pass));
             if(count($find)){
                 $db->update($GLOB['namespace']['user'], array('access' => 0), array('id' => $find[0]['id']));

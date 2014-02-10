@@ -80,7 +80,7 @@ class ConvertSchem extends Translate{
             $null = (isset($option['null'])) ? $option['null'] : true;
             
             if(isset($this->system_alias[$type])) $type = $this->system_alias[$type];
-            if(!in_array($type, $alias)) throw 'NO TYPE';
+            if(!in_array($type, $alias)) throw new Exception('NO TYPE');
             
             $result = '`' . $name . '` ' . $type;
             if(is_numeric($size)) $result .= ' ('. $size .')';

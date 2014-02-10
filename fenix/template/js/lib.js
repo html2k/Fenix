@@ -57,12 +57,18 @@ var LIB = function(){
     };
 
     return {
-        replaceTag: function (tag) {
-            return tagsToReplace[tag] || tag;
+        escapeHtml: function (str) {
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
         },
 
-        safe_tags_replace: function (str) {
-            return str.replace(/[&<>]/g, tagsToReplace);
+
+        unescapeHtml: function (escapedStr) {
+            var div = document.createElement('div');
+            div.innerHTML = escapedStr;
+            var child = div.childNodes[0];
+            return child ? child.nodeValue : '';
         }
     };
 }();

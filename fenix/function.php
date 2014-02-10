@@ -1,7 +1,6 @@
 <?
 
 function access(){
-
     $arg = func_get_args();
     if(count($arg)){
         $res = false;
@@ -18,11 +17,9 @@ function access(){
 
 function load_url($url = false){
     // Переход на указанный url
-    if($url === false)
-        $url = $_SERVER['PHP_SELF'];
-    else{
-        $ht =  (isset($_SERVER['HTTP_REFERER'])) ? explode(':', $_SERVER['HTTP_REFERER']) : array('');
-        $url = $ht[0] . '://' . $_SERVER['HTTP_HOST'] . $url;
+
+    if($url === false){
+        $url = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : $_SERVER['HTTP_HOST'];
     }
     header("Location:". $url);
 }
