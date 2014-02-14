@@ -100,11 +100,13 @@ function loadParam($key, $paramObjectItem, $manifest, $tpl){
     return $result;
 }
 
+
 function loadPath($db, $GLOB, $id){
     $result = array();
     while(true){
         if($id == 0) return $result;
         $find = $db->find($GLOB['namespace']['construct_db'], array('id' => $id));
+        if(!count($find)) return $result;
         $id = $find[0]['parent'];
         array_unshift($result, array('id' => $find[0]['id'], 'object' => $find[0]['object'], 'ref' => $find[0]['ref']));
     }
@@ -212,4 +214,14 @@ function staticLoad($static, $debug = false, $url = ''){
     }
 
     return implode($result);
+}
+
+function contract(){
+    $arg = func_get_args();
+
+    if(func_num_args() > 1){
+        $context = $arg[0];
+        $test = array_slice(1, -1)
+    }
+
 }

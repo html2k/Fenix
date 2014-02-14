@@ -1,8 +1,9 @@
 <h1 class="page-name">Главная</h1>
 
+
+<? if(count($extWidget)): ?>
 <div class="box">
-<? if(count($extension)): ?>
-    <? foreach ($extension as $ext): ?>
+    <? foreach ($extWidget as $ext): ?>
         <div class="col4">
             <div class="m-box">
                 <h3><?= @$ext['option']['name']; ?></h3>
@@ -10,5 +11,15 @@
             </div>
         </div>
     <? endforeach; ?>
-<? endif; ?>
 </div>
+<? endif; ?>
+
+
+
+<? if(count($extApp)): ?>
+<div class="box">
+    <? foreach ($extApp as $ext): ?>
+        <?= @$ext['option']['block']; ?>
+    <? endforeach; ?>
+</div>
+<? endif; ?>

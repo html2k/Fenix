@@ -10,15 +10,32 @@ class Templating extends Base{
     }
 
     public function get($param){
-
-        if(!is_array($param) || !isset($param['object']) || !isset($param['id'])){
+        if(is_array($param) && isset($param['object']) && isset($param['id'])){
+            return $this->findOne($param['object'], array('id' => $param['id']));
+        }else if(is_numeric($param) && (int) $param !== 0){
+            return $this->findOne($this->namespace['construct_db'], array('id' => $param));
+        }else if(is_string($param) && $param !== ''){
+            return $this->findOne($this->namespace['construct_db'], array('chpu' => $param));
+        }else{
             throw new Exception('Не заданы условия выборки');
         }
-        return $this->findOne($param['object'], array('id' => $param['id']));
     }
     
     public function getList($param, $callback = null){
         $result = array();
+
+        if(!is_callable($callback)){
+            $callback = function($item, $db){
+                $item['data'] = $db->get($item);
+
+                foreach($item['data'] as $k => $v){
+                    $item['data'][$k] = $db->resc($v);
+                }
+
+                return $item;
+            };
+        }
+
         if(is_array($param)){
             if(!isset($param['hide'])) $param['hide'] = 0;
             $result = $this->extract($this->go(array(
@@ -39,34 +56,51 @@ class Templating extends Base{
 
     public function path($url){
         $path = array();
+
         $url = rawurldecode($url);
         if($url[0] == '/') $url = substr($url, 1);
         if(substr($url, -1) == '/') $url = substr ($url, 0, -1);
-        if($url !== false && count($url)){
+
+        if($url !== false && strlen($url)){
             $url = explode('/', $url);
-            $parentId = false;
-            foreach($url as $v){
-                if($v[0] == '?') continue;
 
-                $queryParem = array();
-                if(is_numeric($v)){
-                    $queryParem['id'] = $v;
+            $endCHPU = end($url);
+            $tree = array();
+            while(true){
+                if(empty($endCHPU)) break;
+
+                $item = $this->get($endCHPU);
+                if(!$item) break;
+
+                $tree[] = $item;
+                $endCHPU = $item['parent'];
+            }
+
+            if(count($tree) < count($url)) return false;
+
+            $url = array_reverse($url);
+            $k = 0;
+
+            foreach($tree as $t){
+
+                if((int) $t['active_path'] === 1){
+                    if(isset($url[$k]) && ($url[$k] == $t['id'] || $url[$k] == $t['chpu'])){
+                        $t['data'] = $this->get($t);
+                        $path[] = $t;
+                        $k++;
+                    }else{
+                        return false;
+                    }
                 }else{
-                    $queryParem['chpu'] = $v;
-                }
-                if($parentId !== false)
-                    $queryParem['parent'] = $parentId;
-
-                $find = $this->getList($queryParem);
-
-                if(count($find) > 0){
-                    $parentId = $find[0]['id'];
-                    $path[] = $find[0];
-                }else{
-                    $path = false;
-                    break;
+                    if(isset($url[$k]) && ($url[$k] == $t['id'] || $url[$k] == $t['chpu'])){
+                        $t['data'] = $this->get($t);
+                        $path[] = $t;
+                        $k++;
+                    }
                 }
             }
+            $path = array_reverse($path);
+
         }
         return $path;
     }

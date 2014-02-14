@@ -1,4 +1,4 @@
-<?  
+<?
     $path = loadPath($db, $GLOB, $GLOB['self_id']);
     
     // Левое меню

@@ -1,3 +1,7 @@
 <?
-    $extension = $Extension->get('home.widget');
+    $extWidget = $Extension->get('home.widget');
+
+    $extApp = $Extension->get('home.app');
+
+
 

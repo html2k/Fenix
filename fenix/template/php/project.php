@@ -2,7 +2,11 @@
 
     $GLOB['self_id'] = (isset($_GET['id'])) ? (int) $_GET['id'] : false;
     $GLOB['project_name'] = $config['project_name'];
-    
+
+    if($GLOB['self_id'] && !count($db->find($GLOB['namespace']['construct_db'], array('id' => $GLOB['self_id'])))){
+        throw new Exception('not found', 404);
+    }
+
     // Левое меню
     require_once sys . '/template/php/project-menu.php';
     

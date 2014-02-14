@@ -72,5 +72,9 @@
             setSystemMessage('warning', $e->getMessage());
             load_url();
         }
+        if($e->getCode() === 404){
+            setSystemMessage('warning', $e->getMessage());
+            load_url();
+        }
     }
     

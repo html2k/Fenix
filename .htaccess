@@ -2,7 +2,11 @@ AddDefaultCharset UTF-8
 php_flag display_errors on
 #php_value error_reporting 204
 #php_value upload_max_filesize 4M
+
+ErrorDocument 401 /index.php
+ErrorDocument 403 /index.php
 ErrorDocument 404 /index.php
+ErrorDocument 500 /index.php
 
 
 
@@ -12,7 +16,9 @@ RewriteBase /
 Options +FollowSymlinks
 Options -Indexes
 
-
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !(.*)/$
+RewriteRule ^(.*[^/])$ $1/ [L,R=301]
 
 RewriteRule ^fenix/?$ http://%{HTTP_HOST}/fenix/index.php?%{QUERY_STRING}
 

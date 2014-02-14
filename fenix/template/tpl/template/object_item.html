@@ -3,18 +3,18 @@
 
         <div class="ctrl-box">
             <label class="inp-name">Имя</label>
-            <input type="text" name="form[name][<?= @$param['key']?>]" value="<?= @$param['value']['name']; ?>" class="inp first" isEmpty help="Имя будет отображаться в Проекте"/>
+            <input type="text" name="row[name][<?= @$param['key']?>]" value="<?= @$param['value']['name']; ?>" class="inp first" isEmpty help="Имя будет отображаться в Проекте"/>
         </div>
 
         <div class="ctrl-box">
             <label class="inp-name">Код</label>
-            <input type="text" name="form[code][<?= @$param['key']?>]" value="<?= @$param['value']['code']; ?>" class="inp" isEmpty isEn help="Код это имя ячейки в базе данных"/>
+            <input type="text" name="row[code][<?= @$param['key']?>]" value="<?= @$param['value']['code']; ?>" class="inp" isEmpty isEn help="Код это имя ячейки в базе данных"/>
         </div>
 
         <div class="ctrl-box object-type">
             <label class="inp-name">Тип</label>
             <span help="Тип определяет то какие данные могут быть созданы">
-                <select name="form[type][<?= @$param['key']?>]" class="js-type ctrl-select" watch="objectType">
+                <select name="row[type][<?= @$param['key']?>]" class="js-type ctrl-select" watch="objectType">
                     <?
                         foreach($param['manifest']['gist'] as $k => $v){
                             $selected = (isset($param['value']) && $param['value']['type'] == $k) ? ' selected="true"' : '';

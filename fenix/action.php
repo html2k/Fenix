@@ -2,53 +2,6 @@
 
 switch ($_REQUEST['action']){
 
-    case 'connect':
-        $find = $db->find($GLOB['namespace']['user'], array(
-            'login' => $db->esc(trim($_POST['login'])),
-            'pass' => hashGenerate(strtolower(trim($db->esc($_POST['password']))))
-        ));
-        
-        if(count($find)){
-            $db->update($GLOB['namespace']['user'], array(
-                'last_date' => time()
-            ), array( 'id' => $find[0]['id'] ));
-            
-            $_SESSION['user'] = array(
-                'login' => $find[0]['login'],
-                'access' => $find[0]['access']
-            );
-        }
-        load_url();
-    break;
-    
-    case 'disconnect':
-        session_destroy();
-        load_url('/' . $config['folder']['sys'] . '/index.php');
-    break;
-    
-    case 'addUser':
-        $name = '';
-        try {
-            $query = array(
-                'login' => trim($_POST['name']),
-                'pass' => hashGenerate(strtolower(trim($_POST['pass']))),
-                'access' => $_POST['access']
-            );
-            
-            
-            $find = $db->find($GLOB['namespace']['user'], array('login' => $query['login']));
-            if(count($find) > 0){
-                throw new Exception('Такой пользователь уже существует');
-            }
-            $db->insert($GLOB['namespace']['user'], $query);
-            $name = $query['login'];
-        } catch (Exception $e){
-            setSystemMessage('error', $e);
-        }
-        setSystemMessage('good', 'Пользователь <b>'.$name.'</b> был создан');
-        load_url();
-    break;
-
     case 'editUser':
         try {
             $id = (int) $_POST['id'];
@@ -176,10 +129,12 @@ switch ($_REQUEST['action']){
         load_url();
     break;
 
-    case 'object': 
+    case 'object1':
         try{
             if(empty($_POST['code'])) throw new Exception('Не введен код объекта');
             if(empty($_POST['name'])) throw new Exception('Не введено имя объекта');
+
+
 
             $toDB = array(
                 'name' => $_POST['name'],
@@ -841,17 +796,191 @@ switch ($_REQUEST['action']){
 
 
 $Extension->compile();
-$extensionAction = $Extension->get('action');
-if(count($extensionAction)){
-foreach ($extensionAction as $ext) {
-    if($ext['option']['name'] === $_REQUEST['action']){
-        $fileInit = $ext['url'] . $ext['option']['init'];
-        if(file_exists($fileInit)){
-            require_once $fileInit;
+$extAction = $Extension->get('action');
+if(count($extAction)){
+    foreach ($extAction as $ext) {
+        if($ext['option']['name'] === $_REQUEST['action']){
+            $fileInit = $ext['url'] . $ext['option']['init'];
+            if(file_exists($fileInit)){
+                require_once $fileInit;
+            }
+            break;
         }
-        break;
     }
 }
-}
 
+
+$Action = new Action($db, $io, $GLOB, $config);
+
+$Action->test($_REQUEST, $_POST, $_GET, $_FILES);
+
+
+class Action {
+    function __construct($db, $io, $GLOB, $config){
+        $this->db = $db;
+        $this->io = $io;
+        $this->GLOB = $GLOB;
+        $this->config = $config;
+    }
+
+    public function test($request, $post, $get, $files){
+        if(isset($request['action'])){
+            if(method_exists(get_class(), ($request['action']))){
+
+                try {
+                    $this->{$request['action']}($post, $get, $files);
+                } catch (Exception $e){
+                    setSystemMessage('error', $e);
+                }
+            }
+        }
+    }
+
+    public function connect(){
+        $find = $this->db->findOne($this->GLOB['namespace']['user'], array(
+            'login' => $this->db->esc(trim($_POST['login'])),
+            'pass' => hashGenerate(strtolower(trim($this->db->esc($_POST['password']))))
+        ));
+
+        if($find !== false){
+            $this->db->update($this->GLOB['namespace']['user'], array(
+                'last_date' => time()
+            ), array( 'id' => $find['id'] ));
+
+            $_SESSION['user'] = array(
+                'login' => $find['login'],
+                'access' => $find['access']
+            );
+        }
+        load_url();
+    }
+
+
+    public function disconnect(){
+        session_destroy();
+        load_url('/' . $this->config['folder']['sys'] . '/index.php');
+    }
+
+    public function addUser(){
+        $query = array(
+            'login' => trim($_POST['name']),
+            'pass' => hashGenerate(strtolower(trim($_POST['pass']))),
+            'access' => $_POST['access']
+        );
+
+
+        $find = $this->db->find($this->GLOB['namespace']['user'], array('login' => $query['login']));
+        if(count($find) > 0){
+            throw new Exception('Такой пользователь уже существует');
+        }
+        $this->db->insert($this->GLOB['namespace']['user'], $query);
+        $name = $query['login'];
+        setSystemMessage('good', 'Пользователь <b>'.$name.'</b> был добавлен');
+        load_url();
+    }
+
+    public function object($post){
+        /**
+         * $post['name'] => Имя объекта
+         * $post['code'] => Имя таблици
+         * $post['icon'] => Иконка объекта
+         * $post['show_sistem'] => Показывать/скрывать системные настройки
+         * $post['show_wood'] => Показывать скрывать в левом меню
+         * $post['row'] => Массив полей
+         *
+         * row[
+         *  'name' => имя столбца
+         *  'code' => имя стобца в таблице
+         *  'type' => тип столбца
+         *  'param' => Массив параметров
+         * ]
+         * */
+
+        contract($post,
+            'name', // Имя объекта
+            'code', // Имя таблици
+            'icon', // Иконка объекта
+            '?show_sistem', // Показывать/скрывать системные настройки
+            '?show_wood', // Показывать скрывать в левом меню
+            'row', // Массив полей
+
+            'row|name', // имя столбца
+            'row|code', // имя стобца в таблице
+            'row|type', // тип столбца
+            'row|param' // Массив параметров
+        );
+
+
+        $this->saveObject(array(
+            'name' => $post['code'],
+            'row' => $post['row']
+        ));
+        debug($post);
+    }
+
+    public function saveObject($post){
+        /**
+         * $post['name'] => Имя таблици
+         * $post['row'] => Массив столбцов таблици
+         *
+         * row[
+         *  'name' => имя столбца
+         *  'code' => имя стобца в таблице
+         *  'type' => тип столбца
+         *  'param' => Массив параметров
+         * ]
+         */
+
+
+        debug($post);
+
+
+        $post = array(
+
+            'name' => 'as',
+            'code' => 'folder'
+
+        );
+
+
+        if(empty($post['code'])) throw new Exception('Не введен код объекта');
+        if(empty($post['name'])) throw new Exception('Не введено имя объекта');
+
+        $tables = $this->db->tables_info();
+        $tables = $tables['table'];
+
+
+        $CREATE_TABLE = array(
+            'name' => $post['name'],
+            'row' => array()
+        );
+
+
+        foreach($post['row'] as $v){
+
+        }
+
+        $TABLE_SCHEM = array();
+        if(isset($tables[$post['code']])){
+            $TABLE_SCHEM = $this->db->show_column($post['code']);
+            foreach($TABLE_SCHEM as $k => $v){
+
+            }
+        }else{
+            $this->db->createCollection(array(
+                'name' => $post['code'],
+                //'row' => $row
+            ));
+        }
+
+
+
+        debug($TABLE_SCHEM);
+
+
+    }
+
+
+
+}
 exit();
