@@ -1,8 +1,7 @@
 <?
-    function getValue($db, $name){
-        return (isset($object[$value])) ? $object[$value] : '';
-    }
-    
+//    function getValue($db, $name){
+//        return (isset($object[$value])) ? $object[$value] : '';
+//    }
     
     
     $leftMenu = $db->find($GLOB['namespace']['struct_db']);
@@ -23,19 +22,23 @@
         $objectParam = $db->find($GLOB['namespace']['struct_db'], array('id' => $id));
         $td = $db->find($GLOB['namespace']['struct_td'], array( 'parent' => $id ));
 
-        $len = count($td);
-        $paramObject = array();
-        foreach ($td as $k => $v){
+        if(is_array($objectParam) && is_array($td) && count($objectParam) && count($td)){
+            $len = count($td);
+            $paramObject = array();
+            foreach ($td as $k => $v){
 
-            $paramObject[] = $io->buffer(sys . '/template/tpl/template/object_item.html', array(
-                'io' => $io,
-                'key' => $k,
-                'value' => $v,
-                'zIndex' => $len - $k,
-                'manifest' => $manifest
-            ));
+                $paramObject[] = $io->buffer(sys . '/template/tpl/template/object_item.html', array(
+                    'io' => $io,
+                    'key' => $k,
+                    'value' => $v,
+                    'zIndex' => $len - $k,
+                    'manifest' => $manifest
+                ));
 
+            }
+            $paramObject = implode("\n", $paramObject);
+        }else{
+            throw new Exception('not found', 404);
         }
-        $paramObject = implode("\n", $paramObject);
     }
     

@@ -67,14 +67,24 @@
         ob_end_clean();
         require_once 'template/main.html';
     }catch (Exception $e){
+        $GLOB['leftMenu'] = '';
+
+        $param = array(
+            'code' => $e->getCode(),
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        );
+
 
         if($e->getCode() === 403){
-            setSystemMessage('warning', $e->getMessage());
-            load_url();
+            $param['text'] = 'Доступ запрещен';
         }
         if($e->getCode() === 404){
-            setSystemMessage('warning', $e->getMessage());
-            load_url();
+            $param['text'] = 'Такая страница не существует';
         }
+
+        $GLOB['content'] = $io->buffer(sys.'/template/error.html', $param);
+        require_once 'template/main.html';
     }
     

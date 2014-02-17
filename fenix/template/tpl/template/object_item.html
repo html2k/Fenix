@@ -9,6 +9,7 @@
         <div class="ctrl-box">
             <label class="inp-name">Код</label>
             <input type="text" name="row[code][<?= @$param['key']?>]" value="<?= @$param['value']['code']; ?>" class="inp" isEmpty isEn help="Код это имя ячейки в базе данных"/>
+            <input type="hidden" name="row[base][<?= @$param['key']?>]" value="<?= @$param['value']['code']; ?>" />
         </div>
 
         <div class="ctrl-box object-type">

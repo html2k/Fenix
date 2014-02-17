@@ -7,6 +7,11 @@ body{
     color: #333;
 }
 
+button::-moz-focus-inner {
+    padding: 0;
+    border: 0
+}
+
 .no-select{
     -webkit-touch-callout: none;
     -webkit-user-select: none;

@@ -51,16 +51,16 @@ $manifest = array(
         ),
         'template' => array(
             $manifest_id,
-            array('name' => 'name',         'type' => 'string', 'size' => 128)
+            array('name' => 'name',     'type' => 'string', 'size' => 128)
         ),
         'moduls' => array(
             $manifest_id,
-            array('name' => 'name',         'type' => 'string', 'size' => 128),
-            array('name' => 'code',         'type' => 'string', 'size' => 128),
-            array('name' => 'icon',         'type' => 'string', 'size' => 128),
-            array('name' => 'access',         'type' => 'int', 'size' => 2),
-            array('name' => 'ver',         'type' => 'string', 'size' => 128),
-            array('name' => 'type',         'type' => 'string', 'size' => 128)
+            array('name' => 'name',     'type' => 'string', 'size' => 128),
+            array('name' => 'code',     'type' => 'string', 'size' => 128),
+            array('name' => 'icon',     'type' => 'string', 'size' => 128),
+            array('name' => 'access',   'type' => 'int', 'size' => 2),
+            array('name' => 'ver',      'type' => 'string', 'size' => 128),
+            array('name' => 'type',     'type' => 'string', 'size' => 128)
         )
     ),
     'access' => array(

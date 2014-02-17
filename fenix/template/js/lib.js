@@ -930,9 +930,11 @@ var Notification = (function () {
         $li.off('click').on('click', function(){
             var index = $li.index($(this)),
                 value = $option.eq(index).val();
-            $option.attr('selected', false).eq(index).attr('selected', true);
 
             $select.val(value);
+            $option.attr('selected', false).eq(index).attr('selected', true);
+
+
 
             if($select.attr('watch') && $select.attr('watch') !== ''){
                 GLOBAL.set($select.attr('watch'), {

@@ -72,16 +72,27 @@ class ConvertSchem extends Translate{
                 'timestamp', 'hierarchyid', 'uniqueidentifier', 'sql_variant',
                 'xml', 'cursor', 'table'
             );
+
+            $default_size = array(
+                'bigint' => 2, 'numeric' => 2, 'bit' => 2, 'smallint' => 2,
+                'decimal' => 2, 'smallmoney' => 2, 'int' => 2, 'tinyint' => 2,
+                'money' => 2,'float' => 2, 'real' => 2,
+                'char' => 128, 'varchar' => 128, 'nchar' => 128, 'nvarchar' => 128
+            );
             
             $name = $option['name'];
             $type = trim(strtolower($option['type']));
-            $size = $option['size'];
+
             $index = (isset($option['index'])) ? $option['index'] : '';
-            $null = (isset($option['null'])) ? $option['null'] : true;
-            
+
+
             if(isset($this->system_alias[$type])) $type = $this->system_alias[$type];
             if(!in_array($type, $alias)) throw new Exception('NO TYPE');
-            
+
+            $size = isset($option['size']) ? $option['size'] : isset($default_size[$type]) ? $default_size[$type] : '';
+            $null = (isset($option['null'])) ? $option['null'] : true;
+
+
             $result = '`' . $name . '` ' . $type;
             if(is_numeric($size)) $result .= ' ('. $size .')';
 

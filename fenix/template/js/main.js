@@ -1,6 +1,8 @@
 $(function(){ 
     'use strict';
 
+    errorResize();
+
     if($.fn.ckeditor){
         $('.editor').ckeditor();
 
@@ -17,6 +19,23 @@ $(function(){
         }
     });
 
+$(window).resize(errorResize);
+
+function errorResize () {
+    var $errorPage = $('.error-page');
+
+    if($errorPage.length){
+        var $parentError = $('body'),
+            heightParent = $parentError.height(),
+            heightPage = $errorPage.height();
+
+
+
+        $errorPage.css({
+            marginTop: (heightParent / 2) - (heightPage / 2)
+        });
+    }
+}
 
 function spin(text){
     $('.alpha').show();

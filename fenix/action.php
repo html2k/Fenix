@@ -2,26 +2,6 @@
 
 switch ($_REQUEST['action']){
 
-    case 'editUser':
-        try {
-            $id = (int) $_POST['id'];
-            $query = array(
-                'login' => trim($_POST['name']),
-                'access' => $_POST['access']
-            );
-
-            if($_POST['pass'] !== '')
-                $query['pass'] = hashGenerate(strtolower(trim($_POST['pass'])));
-
-            $db->update($GLOB['namespace']['user'], $query, array('id' => $id));
-            $name = $query['login'];
-        } catch (Exception $e){
-            setSystemMessage('error', $e);
-        }
-        setSystemMessage('good', 'Данные пользователя <b>'.$name.'</b> были изменены');
-        load_url();
-    break;
-
     case 'removeUser':
         $name = '';
         try {
@@ -810,17 +790,39 @@ if(count($extAction)){
 }
 
 
-$Action = new Action($db, $io, $GLOB, $config);
+$Action = new Action($db, $io, $GLOB, $config, $manifest);
 
 $Action->test($_REQUEST, $_POST, $_GET, $_FILES);
 
 
 class Action {
-    function __construct($db, $io, $GLOB, $config){
+    function __construct($db, $io, $GLOB, $config, $manifest){
         $this->db = $db;
         $this->io = $io;
         $this->GLOB = $GLOB;
         $this->config = $config;
+        $this->manifest = $manifest;
+    }
+
+    private  function isSelfMethod(){
+        $backTrace = debug_backtrace();
+
+        foreach($backTrace as $v){
+
+            if(method_exists(get_class(), $v['function'])){
+
+            }else{
+                if(in_array($v['function'], array('require_once', 'require', 'include'))){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+
+        }
+        return true;
+//        debug($backTrace);
+//        debug(PHP_VERSION, PHP_MAJOR_VERSION, __FUNCTION__, __CLASS__, __METHOD__, $backTrace);
     }
 
     public function test($request, $post, $get, $files){
@@ -836,23 +838,28 @@ class Action {
         }
     }
 
-    public function connect(){
+    public function connect($post){
         $find = $this->db->findOne($this->GLOB['namespace']['user'], array(
-            'login' => $this->db->esc(trim($_POST['login'])),
-            'pass' => hashGenerate(strtolower(trim($this->db->esc($_POST['password']))))
+            'login' => $this->db->esc(trim($post['login'])),
+            'pass' => hashGenerate(strtolower(trim($this->db->esc($post['password']))))
         ));
 
-        if($find !== false){
+        if(is_array($find) && isset($find['login'])){
             $this->db->update($this->GLOB['namespace']['user'], array(
                 'last_date' => time()
             ), array( 'id' => $find['id'] ));
 
             $_SESSION['user'] = array(
+                'id' => $find['id'],
                 'login' => $find['login'],
                 'access' => $find['access']
             );
         }
-        load_url();
+        if($this->isSelfMethod()){
+            load_url();
+        }else{
+            return $_SESSION['user'];
+        }
     }
 
 
@@ -861,11 +868,11 @@ class Action {
         load_url('/' . $this->config['folder']['sys'] . '/index.php');
     }
 
-    public function addUser(){
+    public function addUser($post){
         $query = array(
-            'login' => trim($_POST['name']),
-            'pass' => hashGenerate(strtolower(trim($_POST['pass']))),
-            'access' => $_POST['access']
+            'login' => trim($post['name']),
+            'pass' => hashGenerate(strtolower(trim($post['pass']))),
+            'access' => $post['access']
         );
 
 
@@ -875,8 +882,37 @@ class Action {
         }
         $this->db->insert($this->GLOB['namespace']['user'], $query);
         $name = $query['login'];
-        setSystemMessage('good', 'Пользователь <b>'.$name.'</b> был добавлен');
-        load_url();
+
+
+        if($this->isSelfMethod()){
+            setSystemMessage('good', 'Пользователь <b>'.$name.'</b> был добавлен');
+            load_url();
+        }else{
+            return $query;
+        }
+    }
+
+    public function editUser($post){
+
+            $id = (int) $post['id'];
+            $query = array(
+                'login' => trim($post['name']),
+                'access' => $post['access']
+            );
+
+            if($post['pass'] !== '')
+                $query['pass'] = hashGenerate(strtolower(trim($_POST['pass'])));
+
+            $this->db->update($this->GLOB['namespace']['user'], $query, array('id' => $id));
+            $name = $query['login'];
+
+
+        if($this->isSelfMethod()){
+            setSystemMessage('good', 'Данные пользователя <b>'.$name.'</b> были изменены');
+            load_url();
+        }else{
+            return $query;
+        }
     }
 
     public function object($post){
@@ -896,26 +932,106 @@ class Action {
          * ]
          * */
 
-        contract($post,
-            'name', // Имя объекта
-            'code', // Имя таблици
-            'icon', // Иконка объекта
-            '?show_sistem', // Показывать/скрывать системные настройки
-            '?show_wood', // Показывать скрывать в левом меню
-            'row', // Массив полей
-
-            'row|name', // имя столбца
-            'row|code', // имя стобца в таблице
-            'row|type', // тип столбца
-            'row|param' // Массив параметров
-        );
-
-
-        $this->saveObject(array(
+        if(empty($post['name'])) throw new Exception('Не введено имя объекта');
+        if(empty($post['code'])) throw new Exception('Не введен код объекта');
+        $SAVE_OBJECT = $this->saveObject(array(
             'name' => $post['code'],
             'row' => $post['row']
         ));
-        debug($post);
+
+        $SAVE_OBJECT['name'] = $post['name'];
+        $SAVE_OBJECT['code'] = $post['code'];
+
+        $SAVE_OBJECT['icon'] = isset($post['icon']) ? $post['icon'] : '';
+        $SAVE_OBJECT['show_sistem'] = isset($post['show_sistem']) ? $post['show_sistem'] : '';
+        $SAVE_OBJECT['show_wood'] = isset($post['show_wood']) ? $post['show_wood'] : '';
+
+        $find = $this->db->findOne($this->GLOB['namespace']['struct_db'], array('code' => $SAVE_OBJECT['code']));
+        $TABLE_ID = false;
+        if($find === false){
+
+            $TABLE_ID = $this->db->insert($this->GLOB['namespace']['struct_db'], array(
+                'name' => $SAVE_OBJECT['name'],
+                'code' => $SAVE_OBJECT['code'],
+                'icon' => $SAVE_OBJECT['icon'],
+                'show_wood' => $SAVE_OBJECT['show_wood'],
+                'show_sistem' => $SAVE_OBJECT['show_sistem']
+            ));
+
+
+            foreach($SAVE_OBJECT['row'] as $k => $v){
+                $v['type'] = $v['base_type'];
+                $this->db->insert($this->GLOB['namespace']['struct_td'], array(
+                    'parent' => $TABLE_ID,
+                    'name' => $v['sys_name'],
+                    'code' => $v['name'],
+                    'num' => $k,
+                    'type' => $v['type'],
+                    'param' => json_encode($v['param']),
+                    'size' => $v['size']
+                ));
+
+            }
+            debug($SAVE_OBJECT);
+        }else{
+            $TABLE_ID = $find['id'];
+
+//            $this->db->remove($this->GLOB['namespace']['struct_td'], array(
+//                'parent' => $TABLE_ID
+//            ));
+
+            $rows = $this->db->find($this->GLOB['namespace']['struct_td'], array('parent' => $TABLE_ID));
+
+
+            //debug($SAVE_OBJECT);
+
+            foreach($SAVE_OBJECT['row'] as $k => $v){
+                $v['type'] = $v['base_type'];
+
+                if(!isset($v['param'])){
+                    $v['param'] = '';
+                }
+
+                $v['param'] = is_array($v['param']) ? json_encode($v['param']) : $v['param'];
+
+                if(isset($rows[$k])){
+                    $this->db->update($this->GLOB['namespace']['struct_td'], array(
+                        'parent' => $TABLE_ID,
+                        'name' => $v['sys_name'],
+                        'code' => $v['name'],
+                        'num' => $k,
+                        'type' => $v['type'],
+                        'param' => $v['param'],
+                        'size' => $v['size']
+                    ), array(
+                        'id' => $rows[$k]['id']
+                    ));
+
+                    unset($rows[$k]);
+                }else{
+                    $this->db->insert($this->GLOB['namespace']['struct_td'], array(
+                        'parent' => $TABLE_ID,
+                        'name' => $v['sys_name'],
+                        'code' => $v['name'],
+                        'num' => $k,
+                        'type' => $v['type'],
+                        'param' => $v['param'],
+                        'size' => $v['size']
+                    ));
+                }
+            }
+
+            foreach($rows as $v){
+                $this->db->remove($this->GLOB['namespace']['struct_td'], array('id' => $v['id']));
+            }
+
+
+            if($this->isSelfMethod()){
+                load_url();
+            }else{
+                return $SAVE_OBJECT;
+            }
+        }
     }
 
     public function saveObject($post){
@@ -924,30 +1040,18 @@ class Action {
          * $post['row'] => Массив столбцов таблици
          *
          * row[
-         *  'name' => имя столбца
          *  'code' => имя стобца в таблице
          *  'type' => тип столбца
+         *  'size' => размер параметров
          *  'param' => Массив параметров
          * ]
          */
 
-
-        debug($post);
-
-
-        $post = array(
-
-            'name' => 'as',
-            'code' => 'folder'
-
-        );
-
-
-        if(empty($post['code'])) throw new Exception('Не введен код объекта');
-        if(empty($post['name'])) throw new Exception('Не введено имя объекта');
+        if(empty($post['name'])) throw new Exception('Пустое значение имени таблици');
 
         $tables = $this->db->tables_info();
         $tables = $tables['table'];
+        $manifestGist = $this->manifest['gist'];
 
 
         $CREATE_TABLE = array(
@@ -956,31 +1060,120 @@ class Action {
         );
 
 
-        foreach($post['row'] as $v){
+        // Перебор входных параметров стобцов
+        if(isset($post['row']['code'])){
+            $isRows = array();
+            foreach($post['row']['code'] as $k => $v){
+                if(in_array($v, $isRows)) continue;
+                $isRows[] = $v;
+                $row = array('name' => $v);
 
-        }
+                $row['type'] = isset($post['row']['type'][$k]) ? $post['row']['type'][$k] : 'string';
 
-        $TABLE_SCHEM = array();
-        if(isset($tables[$post['code']])){
-            $TABLE_SCHEM = $this->db->show_column($post['code']);
-            foreach($TABLE_SCHEM as $k => $v){
 
+
+
+                // Если в манифесте есть такой тип и он не равен пустой строке
+                // Нужно когда создается системный тип
+                $row['base_type'] = $row['type'];
+                if(isset($manifestGist[$row['type']]) && $manifestGist[$row['type']] !== ''){
+                    $row['type'] = $manifestGist[$row['type']]['type'];
+                }
+
+
+
+                if(isset($post['row']['name'][$k])){
+                    $row['sys_name'] = $post['row']['name'][$k];
+                }
+
+                if(isset($post['row']['param']['size'][$k])){
+                    $row['size'] = $post['row']['param']['size'][$k];
+                }else{
+                    $row['size'] = '';
+                }
+
+                if(isset($post['row']['index'][$k])){
+                    $row['index'] = $post['row']['index'][$k];
+                }
+
+                if(isset($post['row']['base'][$k])){
+                    $row['base'] = $post['row']['base'][$k];
+                }
+
+                if(isset($post['row']['param'][$k])){
+                    $row['param'] = $post['row']['param'][$k];
+                }
+
+                $CREATE_TABLE['row'][] = $row;
             }
-        }else{
-            $this->db->createCollection(array(
-                'name' => $post['code'],
-                //'row' => $row
+        }
+
+        if(isset($tables[$CREATE_TABLE['name']])){ // Если уже есть такая таблица изменяем ее;
+            $ROWS = $this->rowInArray($CREATE_TABLE['name'], $CREATE_TABLE['row']);
+
+            $this->db->editCollection(array(
+                'name' => $CREATE_TABLE['name'],
+                'row' => $ROWS
             ));
+
+        }else{ // Если нет создаем
+
+            $this->db->createCollection(array(
+                'name' => $CREATE_TABLE['name'],
+                'row' => $CREATE_TABLE['row']
+            ));
+
         }
 
 
-
-        debug($TABLE_SCHEM);
-
-
+        return $CREATE_TABLE;
     }
 
+    public function rowInArray($tableName, $row){
+        /**
+         * $tableName => Имя таблици
+         * row[
+         *  'code' => имя стобца в таблице
+         *  'type' => тип столбца
+         *  'size' => Массив параметров
+         * ]
+         */
 
+
+        // Полсучаем список столбцов
+        $tableRows = $this->db->show_column($tableName);
+
+        foreach($row as $k => $v){
+            $row[$v['name']] = $v;
+            unset($row[$k]);
+        }
+
+        $result = array(
+            'add' => array(),
+            'change' => array(),
+            'drop' => array()
+        );
+
+        // Проверки на наличие изменение
+        foreach($tableRows as $v){
+
+            if(isset($row[$v['Field']]) && $row[$v['Field']]['base'] !== ''){ // Change
+                $result['change'][] = $row[$v['Field']];
+                unset($row[$v['Field']]);
+            }else if(!isset($row[$v['Field']])){ // Remove
+                $result['drop'][] = $v['Field'];
+            }
+
+        }
+        foreach($row as $k => $v){ // Add
+
+            $result['add'][] = $v;
+            unset($row[$k]);
+
+        }
+
+        return $result;
+    }
 
 }
 exit();

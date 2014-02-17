@@ -1,7 +1,7 @@
 <? return $config = array(
 	'db' => array(
 		'type' => 'mysql',
-		'name' => 'fenix-git',
+		'name' => 'fenix',
 		'user' => 'root',
 		'pass' => 'plan12w',
 		'port' => '',

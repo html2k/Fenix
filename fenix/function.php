@@ -24,10 +24,13 @@ function load_url($url = false){
     header("Location:". $url);
 }
 
-function debug($var, $bool = false){
-    if(!$bool) echo '<pre>';
-    var_dump($var);
-    if(!$bool) die();
+function debug(){
+    echo '<pre>';
+    $arg = func_get_args();
+    foreach($arg as $v){
+        var_dump($v);
+    }
+    die();
 }
 
 function req($config, $path){
@@ -214,14 +217,4 @@ function staticLoad($static, $debug = false, $url = ''){
     }
 
     return implode($result);
-}
-
-function contract(){
-    $arg = func_get_args();
-
-    if(func_num_args() > 1){
-        $context = $arg[0];
-        $test = array_slice(1, -1)
-    }
-
 }
