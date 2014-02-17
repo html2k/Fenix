@@ -2,312 +2,7 @@
 
 switch ($_REQUEST['action']){
 
-    case 'removeUser':
-        $name = '';
-        try {
-            $id = (int) $_GET['id'];
-            $name = $db->find($GLOB['namespace']['user'], array('id' => $id));
-            $name = $name[0]['login'];
-            $db->remove($GLOB['namespace']['user'], array('id' => $id));
-        }  catch (Exception $e){
-            setSystemMessage('error', $e);
-        }
-        setSystemMessage('good', 'Пользователь <b>'.$name.'</b> был удален');
-        load_url();
-        break;
-    
-    case 'clearSystemMessage':
-        $array = array();
-        foreach($_SESSION['error'] as $v){
-            if($v['id'] != $_POST['id']) $array[] = $v;
-        }
-        $_SESSION['error'] = $array;
-    break;
 
-    case 'addTemplate':
-        try{
-            $name = trim($_POST['name']);
-            $find = $db->find($GLOB['namespace']['template'], array('name' => $name));
-            if(count($find) > 0) throw new Exception('Шаблон с таким именем уже существует');
-            
-            if(isset($_POST['id'])){
-                $find = $db->find($GLOB['namespace']['template'], array('id' => (int) $_POST['id']));
-                
-                $db->update($GLOB['namespace']['template'], array( 'name' => $name ), array('id' => (int) $_POST['id']));
-                foreach($manifest['templating'][$config['templating']] as $v){
-                    $folder = root . '/' . $config['folder']['template'] . '/' . $v . '/';
-                    $new_file =  $folder . $name . '.' . $v;
-                    $file = $folder . $find[0]['name'] . '.' . $v;
-                    
-                    if(file_exists ($file))
-                        rename($file, $new_file);
-                }
-            }else{
-                $db->insert($GLOB['namespace']['template'], array( 'name' => $name ));
-                foreach($manifest['templating'][$config['templating']] as $v){
-                    $folder = root . '/' . $config['folder']['template'] . '/' . $v . '/';
-                    $file =  $folder . $name . '.' . $v;
-
-                    if(!file_exists ($folder))
-                        $io->create_dir($folder);
-                    if(!file_exists ($file))
-                        $io->create_file($file);
-                }
-            }
-        }  catch (Exception $e){
-            setSystemMessage('error', $e);
-        }
-        load_url();
-    break;
-    
-    case 'removeTemplate':
-        try{
-            $id = (int) $_GET['id'];
-            $db->remove($GLOB['namespace']['template'], array('id' => $id));
-        }  catch (Exception $e){
-            setSystemMessage('error', $e);
-        }
-        load_url();
-    break;
-
-    case 'addMarker':
-        try{
-            $name = trim($_POST['name']);
-            $find = $db->find($GLOB['namespace']['marker'], array('name' => $name));
-            if(count($find) > 0) throw new Exception('Макер с таким именем уже существует');
-            
-            if(isset($_POST['id'])){
-                $db->update($GLOB['namespace']['marker'], array( 'name' => $name ), array('id' => (int) $_POST['id']));
-            }else{
-                $db->insert($GLOB['namespace']['marker'], array( 'name' => $name ));
-            }
-        }  catch (Exception $e){
-            setSystemMessage('error', $e);
-        }
-        load_url();
-    break;
-    
-    case 'markerAddTemplate':
-        try {
-            $marker = $_POST['marker'];
-            $id = isset($_POST['id']) ? implode(',', $_POST['id']) : '';
-            $db->update($GLOB['namespace']['marker'], array('template_id' => $id), array('id' => $marker));
-            
-        }  catch (Exception $e){
-            setSystemMessage('error', $e);
-        }
-        load_url();
-    break;
-    
-    case 'removeMarker':
-        try{
-            $id = (int) $_GET['id'];
-            $db->remove($GLOB['namespace']['marker'], array('id' => $id));
-        }  catch (Exception $e){
-            setSystemMessage('error', $e);
-        }
-        load_url();
-    break;
-
-    case 'object1':
-        try{
-            if(empty($_POST['code'])) throw new Exception('Не введен код объекта');
-            if(empty($_POST['name'])) throw new Exception('Не введено имя объекта');
-
-
-
-            $toDB = array(
-                'name' => $_POST['name'],
-                'code' => $_POST['code'],
-                'icon' => $_POST['icon'],
-                'show_wood' => isset($_POST['show_wood']) ? $_POST['show_wood'] : 0,
-                'show_sistem' => isset($_POST['show_sistem']) ? $_POST['show_sistem'] : 0
-            );
-
-            /* Формирование таблици */
-            $row = array(
-                array('name' => 'id', 'type' => 'int', 'size' => 11, 'index' => 'ap')
-            );
-            $toTD = array();
-            foreach($_POST['form']['name'] as $k => $v){
-                
-                $param = isset($_POST['form']['param'][$k]) ? $_POST['form']['param'][$k] : array();
-                
-                if(isset($param['list'])){
-                    $param['list'] = json_decode($param['list']);
-                }
-                $manifetGist = $manifest['gist'][$_POST['form']['type'][$k]];
-                $type = $manifetGist['type'];
-                $size = isset($manifetGist['size']) ? $manifetGist['size'] : '';
-                $size = isset($param[$k]['size']) && $param[$k]['size'] != '' ? (int) $param[$k]['size'] : $size;
-
-                if(empty($_POST['form']['code'][$k])) throw new Exception('Не введен код поля');
-                if(empty($_POST['form']['name'][$k])) throw new Exception('Не введено имя поля');
-                
-                $row[] = array(
-                    'name' => $_POST['form']['code'][$k],
-                    'type' => $manifest['gist'][$_POST['form']['type'][$k]]['type'],
-                    'size' => $size
-                );
-                
-                $toTD[] = array(
-                    'id' => isset($_POST['form']['id'][$k]) && $_POST['form']['id'][$k] != '' ? $_POST['form']['id'][$k] : false,
-                    'name' => $v,
-                    'code' => $_POST['form']['code'][$k],
-                    'num' => $k,
-                    'type' => $_POST['form']['type'][$k],
-                    'param' => json_encode($param),
-                    'size' => $size
-                );
-            }
-            if(isset($_POST['id'])){
-                $id = (int) $_POST['id'];
-                $original = $db->find($GLOB['namespace']['struct_td'], array('parent' => $id));
-
-                $result = array('add' => array(), 'change' => array(), 'drop' => array() );
-                $row = array('add' => array(), 'change' => array(), 'drop' => array() );
-                $originalID = array();
-                foreach($original as $v){ $originalID[$v['id']] = $v['code']; }
-                
-                
-                $inspect = array();
-                foreach($toTD as $v){
-                    if($v['id'] !== false){
-                        if(isset($originalID[$v['id']])){
-                            $v['base'] = $originalID[$v['id']];
-                            $result['change'][] = $v;
-                            $inspect[] = $v['id'];
-                        }
-                    }else{
-                        $result['add'][] = $v;
-                    }
-                }
-                
-                foreach($originalID as $k => $v){
-                    if(!in_array($k, $inspect)) $result['drop'][] = array('id' => $k, 'name' => $v);
-                }
-                
-                foreach($result as $key => $v){
-                    foreach($v as $j){
-                        if($key == 'drop'){
-                            $row[$key][] = $j['name'];
-                        }else if($key == 'change'){
-                            $row[$key][] = array(
-                                'base' => $j['base'],
-                                'name' => $j['code'],
-                                'type' => $manifest['gist'][$j['type']]['type'],
-                                'size' => $j['size']
-                            );
-                        }else{
-                            $row[$key][] = array(
-                                'name' => $j['code'],
-                                'type' => $manifest['gist'][$j['type']]['type'],
-                                'size' => $j['size']
-                            );
-                        }
-                    }
-                }
-                $db->update($GLOB['namespace']['struct_db'], $toDB, array('id' => $id));
-                foreach($result['add'] as $v){
-                    unset($v['id']);
-                    $v['parent'] = $id;
-                    $db->insert($GLOB['namespace']['struct_td'], $v);
-                }
-                foreach($result['change'] as $v){
-                    $tId = $v['id'];
-                    unset($v['id']);
-                    unset($v['base']);
-                    $db->update($GLOB['namespace']['struct_td'], $v, array('id' => $tId));
-                }
-                foreach($result['drop'] as $v){
-                    $db->remove($GLOB['namespace']['struct_td'], array('id' => $v['id']));
-                }
-                
-                $db->editCollection(array(
-                    'name' => $_POST['code'],
-                    'row' => $row
-                ));
-                
-            }else{// Создание новой таблици
-                $db->insert($GLOB['namespace']['struct_db'], $toDB);
-                $parent = $db->lastID();
-                foreach ($toTD as $v){
-                    unset($v['id']);
-                    $v['parent'] = $parent;
-                    $db->insert($GLOB['namespace']['struct_td'], $v);
-                }
-
-                $db->createCollection(array(
-                    'name' => $_POST['code'],
-                    'row' => $row
-                ));
-            }
-        }  catch (Exception $e){
-            setSystemMessage('error', $e);
-        }
-        load_url();
-    break;
-
-    case 'addObject':
-        try{
-            if(empty($_POST['code'])) throw new Exception('Не введен код объекта');
-            if(empty($_POST['name'])) throw new Exception('Не введено имя объекта');
-            $toDB = array(
-                'name' => $_POST['name'],
-                'code' => $_POST['code'],
-                'icon' => 'icon-doc',
-                'show_wood' => 1,
-                'show_sistem' => 1
-            );
-            $td = array(
-                array('name' => 'Имя', 'code' => 'name', 'type' => 'string'),
-                array('name' => 'Описание', 'code' => 'text', 'type' => 'text'),
-                array('name' => 'Изображение', 'code' => 'image', 'type' => 'image')
-            );
-            $row = array( array('name' => 'id', 'type' => 'int', 'size' => 11, 'index' => 'ap') );
-            $toTD = array();
-            foreach($td as $k => $v){
-                $type = isset($manifest['gist'][$v['type']]) ? $manifest['gist'][$v['type']]['type'] : 'text';
-                
-                
-
-                
-                $size = (isset($manifest['gist'][$v['type']]['size'])) ? $manifest['gist'][$v['type']]['size'] : '';
-                $size = isset($v['size']) && $v['size'] != '' ? (int) $v['size'] : $size;
-
-                if(empty($v['code'])) throw new Exception('Не введен код поля');
-                if(empty($v['name'])) throw new Exception('Не введено имя поля');
-                
-                $row[] = array(
-                    'name' => $v['code'],
-                    'type' => $type,
-                    'size' => $size
-                );
-                $toTD[] = array(
-                    'name' => $v['name'],
-                    'code' => $v['code'],
-                    'num' => $k,
-                    'type' => $v['type'],
-                    'size' => $size
-                );
-            }
-
-            $db->insert($GLOB['namespace']['struct_db'], $toDB);
-            $parent = $db->lastID();
-            foreach ($toTD as $v){
-                $v['parent'] = $parent;
-                $db->insert($GLOB['namespace']['struct_td'], $v);
-            }
-
-            $db->createCollection(array(
-                'name' => $_POST['code'],
-                'row' => $row
-            ));
-        }  catch (Exception $e){
-            setSystemMessage('error', $e);
-        }
-        load_url();
-    break;
     
     case 'removeObject':
         try{
@@ -821,8 +516,6 @@ class Action {
 
         }
         return true;
-//        debug($backTrace);
-//        debug(PHP_VERSION, PHP_MAJOR_VERSION, __FUNCTION__, __CLASS__, __METHOD__, $backTrace);
     }
 
     public function test($request, $post, $get, $files){
@@ -915,6 +608,33 @@ class Action {
         }
     }
 
+    public function removeUser($post, $get){
+
+        $id = (int) $get['id'];
+        $find = $this->db->findOne($this->GLOB['namespace']['user'], array('id' => $id));
+        if(is_array($find)){
+            $name = $find['login'];
+            $this->db->remove($this->GLOB['namespace']['user'], array('id' => $id));
+        }else{
+            throw new Exception('Нет такого пользователя');
+        }
+
+        if($this->isSelfMethod()){
+            setSystemMessage('good', 'Пользователь <b>'.$name.'</b> был удален');
+            load_url();
+        }else{
+            return $find;
+        }
+    }
+
+    public function clearSystemMessage($post){
+        $array = array();
+        foreach($_SESSION['error'] as $v){
+            if($v['id'] != $post['id']) $array[] = $v;
+        }
+        $_SESSION['error'] = $array;
+    }
+
     public function object($post){
         /**
          * $post['name'] => Имя объекта
@@ -934,6 +654,19 @@ class Action {
 
         if(empty($post['name'])) throw new Exception('Не введено имя объекта');
         if(empty($post['code'])) throw new Exception('Не введен код объекта');
+
+        foreach($post['row'] as $k => $v){
+            if($v['code'] == 'id'){
+                unset($post['row'][$k]);
+            }
+        }
+        $post['row'] = array_unshift($post['row'], array(
+            'code' => 'id',
+            'type' => 'int',
+            'size' => 11
+        ));
+
+
         $SAVE_OBJECT = $this->saveObject(array(
             'name' => $post['code'],
             'row' => $post['row']
@@ -947,7 +680,6 @@ class Action {
         $SAVE_OBJECT['show_wood'] = isset($post['show_wood']) ? $post['show_wood'] : '';
 
         $find = $this->db->findOne($this->GLOB['namespace']['struct_db'], array('code' => $SAVE_OBJECT['code']));
-        $TABLE_ID = false;
         if($find === false){
 
             $TABLE_ID = $this->db->insert($this->GLOB['namespace']['struct_db'], array(
@@ -975,15 +707,7 @@ class Action {
             debug($SAVE_OBJECT);
         }else{
             $TABLE_ID = $find['id'];
-
-//            $this->db->remove($this->GLOB['namespace']['struct_td'], array(
-//                'parent' => $TABLE_ID
-//            ));
-
             $rows = $this->db->find($this->GLOB['namespace']['struct_td'], array('parent' => $TABLE_ID));
-
-
-            //debug($SAVE_OBJECT);
 
             foreach($SAVE_OBJECT['row'] as $k => $v){
                 $v['type'] = $v['base_type'];
@@ -1089,7 +813,7 @@ class Action {
                 if(isset($post['row']['param']['size'][$k])){
                     $row['size'] = $post['row']['param']['size'][$k];
                 }else{
-                    $row['size'] = '';
+                    $row['size'] = isset($post['row']['size'][$k]) ? $post['row']['size'][$k] : '';
                 }
 
                 if(isset($post['row']['index'][$k])){
@@ -1174,6 +898,127 @@ class Action {
 
         return $result;
     }
+
+    function addObject($post){
+        if(empty($_POST['code'])) throw new Exception('Не введен код объекта');
+        if(empty($_POST['name'])) throw new Exception('Не введено имя объекта');
+
+        $this->object(array(
+            'name' => $post['name'],
+            'code' => $post['code'],
+            'icon' => 'icon-doc',
+            'show_sistem' => 1,
+            'show_wood' => 1,
+            'row' => array(
+                array('name' => 'Имя', 'code' => 'name', 'type' => 'string'),
+                array('name' => 'Описание', 'code' => 'text', 'type' => 'text'),
+                array('name' => 'Изображение', 'code' => 'image', 'type' => 'image')
+            )
+        ));
+
+        if($this->isSelfMethod()){
+            load_url();
+        }
+    }
+
+    // Добавление шаблона
+    public function addTemplate($post){
+        $name = trim($post['name']);
+
+        $find = $this->db->find($this->GLOB['namespace']['template'], array('name' => $name));
+        if(count($find) > 0) throw new Exception('Шаблон с таким именем уже существует');
+
+        if(isset($post['id'])){
+            $find = $this->db->find($this->GLOB['namespace']['template'], array('id' => (int) $post['id']));
+
+            $this->db->update($this->GLOB['namespace']['template'], array( 'name' => $name ), array('id' => (int) $post['id']));
+            foreach($this->manifest['templating'][$this->config['templating']] as $v){
+
+                $folder = root . '/' . $this->config['folder']['template'] . '/' . $v . '/';
+                $new_file =  $folder . $name . '.' . $v;
+                $file = $folder . $find[0]['name'] . '.' . $v;
+
+                if(file_exists ($file))
+                    rename($file, $new_file);
+            }
+        }else{
+            $this->db->insert($this->GLOB['namespace']['template'], array( 'name' => $name ));
+
+            foreach($this->manifest['templating'][$this->config['templating']] as $v){
+                $folder = root . '/' . $config['folder']['template'] . '/' . $v . '/';
+                $file =  $folder . $name . '.' . $v;
+
+                if(!file_exists ($folder))
+                    $this->io->create_dir($folder);
+                if(!file_exists ($file))
+                    $this->io->create_file($file);
+            }
+        }
+
+        if($this->isSelfMethod()){
+            load_url();
+        }else{
+            return $name;
+        }
+    }
+
+    // Удаление шаблона
+    public function removeTemplate($post, $get) {
+        $id = (int) $get['id'];
+        $this->db->remove($this->GLOB['namespace']['template'], array('id' => $id));
+
+        if($this->isSelfMethod()){
+            load_url();
+        }
+    }
+
+    // Создание/редактирование маркера
+    public function addMarker($post) {
+        $name = trim($post['name']);
+
+        $find = $this->db->find($this->GLOB['namespace']['marker'], array('name' => $name));
+
+        if(count($find) > 0) throw new Exception('Макер с таким именем уже существует');
+
+        if(isset($post['id'])){
+            $this->db->update($this->GLOB['namespace']['marker'], array( 'name' => $name ), array('id' => (int) $post['id']));
+        }else{
+            $this->db->insert($this->GLOB['namespace']['marker'], array( 'name' => $name ));
+        }
+
+        if($this->isSelfMethod()){
+            load_url();
+        }else{
+            return $name;
+        }
+    }
+
+    // Добавление шаблона в маркер
+    public function markerAddTemplate($post) {
+        $marker = $_POST['marker'];
+        $id = isset($_POST['id']) ? implode(',', $post['id']) : '';
+        $this->db->update($this->GLOB['namespace']['marker'], array('template_id' => $id), array('id' => $marker));
+
+        if($this->isSelfMethod()){
+            load_url();
+        }else{
+            return $post['id'];
+        }
+    }
+
+    // Удаление маркера
+    public function removeMarker ($post, $get) {
+        $id = (int) $get['id'];
+        $this->db->remove($this->GLOB['namespace']['marker'], array('id' => $id));
+
+        if($this->isSelfMethod()){
+            load_url();
+        }else{
+            return $id;
+        }
+    }
+
+
 
 }
 exit();
