@@ -10,24 +10,37 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 
-    config.extraPlugins = 'blockquote';
-    config.extraPlugins = 'xcode';
+    var plugins = [
+        'blockquote',
+        //'googledocs',
+        //'page2images',
+        'tliyoutube',
+        'xdsoft_translater',
+        //'uploadcare',
+        'backup',
+        'stat',
+        'tabletools',
+        'insertpre'
+    ];
+
+    config.extraPlugins = plugins.join(',');
 
 
-    config.toolbarGroups = [
+
+
+        config.toolbarGroups = [
 		//{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
+        { name: 'tools' },
         { name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
         { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
 		{ name: 'links' },
 		{ name: 'insert' },
 		{ name: 'forms' },
-		{ name: 'tools' },
 		{ name: 'others' },
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
 		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
 		{ name: 'styles' },
 		{ name: 'colors' },
-        { name: 'others', groups: ['xcode']},
 	];
 
 	// Remove some buttons, provided by the standard plugins, which we don't
