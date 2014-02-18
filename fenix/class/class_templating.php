@@ -76,13 +76,18 @@ class Templating extends Base{
                 $endCHPU = $item['parent'];
             }
 
+			foreach($tree as $k => $v){
+				if((int)$v['active_path'] === 0)
+				unset($tree[$k]);
+			}
+
             if(count($tree) < count($url)) return false;
 
             $url = array_reverse($url);
             $k = 0;
-
+			
             foreach($tree as $t){
-
+				
                 if((int) $t['active_path'] === 1){
                     if(isset($url[$k]) && ($url[$k] == $t['id'] || $url[$k] == $t['chpu'])){
                         $t['data'] = $this->get($t);
