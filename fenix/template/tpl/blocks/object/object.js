@@ -9,7 +9,7 @@ $(function(){
 
             $list = $('.object-list');
             var $item = $list.children(),
-                count = $item.length;
+                count = $item.length - 1;
 
             $item.each(function(key, val){
                 this.style.zIndex = count - key;
@@ -31,7 +31,7 @@ $(function(){
 
     GLOBAL.watch('objectType', function(obj){
         var parent = obj.block.parents('.js-object-item');
-        loadParam(parent.find('.js-setting'), obj.value, $list.index(parent));
+        loadParam(parent.find('.js-setting'), obj.value, $list.children().index(parent));
     });
 
 

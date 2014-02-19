@@ -247,67 +247,6 @@ switch ($_REQUEST['action']){
         }
         load_url();
     break;
-
-    case 'addObject':
-        try{
-            if(empty($_POST['code'])) throw new Exception('Не введен код объекта');
-            if(empty($_POST['name'])) throw new Exception('Не введено имя объекта');
-            $toDB = array(
-                'name' => $_POST['name'],
-                'code' => $_POST['code'],
-                'icon' => 'icon-doc',
-                'show_wood' => 1,
-                'show_sistem' => 1
-            );
-            $td = array(
-                array('name' => 'Имя', 'code' => 'name', 'type' => 'string'),
-                array('name' => 'Описание', 'code' => 'text', 'type' => 'text'),
-                array('name' => 'Изображение', 'code' => 'image', 'type' => 'image')
-            );
-            $row = array( array('name' => 'id', 'type' => 'int', 'size' => 11, 'index' => 'ap') );
-            $toTD = array();
-            foreach($td as $k => $v){
-                $type = isset($manifest['gist'][$v['type']]) ? $manifest['gist'][$v['type']]['type'] : 'text';
-                
-                
-
-                
-                $size = (isset($manifest['gist'][$v['type']]['size'])) ? $manifest['gist'][$v['type']]['size'] : '';
-                $size = isset($v['size']) && $v['size'] != '' ? (int) $v['size'] : $size;
-
-                if(empty($v['code'])) throw new Exception('Не введен код поля');
-                if(empty($v['name'])) throw new Exception('Не введено имя поля');
-                
-                $row[] = array(
-                    'name' => $v['code'],
-                    'type' => $type,
-                    'size' => $size
-                );
-                $toTD[] = array(
-                    'name' => $v['name'],
-                    'code' => $v['code'],
-                    'num' => $k,
-                    'type' => $v['type'],
-                    'size' => $size
-                );
-            }
-
-            $db->insert($GLOB['namespace']['struct_db'], $toDB);
-            $parent = $db->lastID();
-            foreach ($toTD as $v){
-                $v['parent'] = $parent;
-                $db->insert($GLOB['namespace']['struct_td'], $v);
-            }
-
-            $db->createCollection(array(
-                'name' => $_POST['code'],
-                'row' => $row
-            ));
-        }  catch (Exception $e){
-            setSystemMessage('error', $e);
-        }
-        load_url();
-    break;
     
     case 'removeObject':
         try{
@@ -342,7 +281,10 @@ switch ($_REQUEST['action']){
             foreach($manifest['gist'][$type]['param'] as $v){
                 $file = $path . $v . '.html';
                 if(file_exists($file))
-                    $res[] = loadParam($key, array(), $manifest, $file);
+                    $res[] = $io->buffer($file, array(
+                        'key' => $key,
+                        'manifest' => $manifest
+                    ));
             }
             echo implode('', $res);
         }
@@ -526,9 +468,7 @@ switch ($_REQUEST['action']){
                 }
             }
         }
-        
-        
-        //debug($_POST['object']);
+
         if($updateId !== false){
             $db->update($_POST['object'], $form, array('id' => $updateId));
         }else{
@@ -821,8 +761,6 @@ class Action {
 
         }
         return true;
-//        debug($backTrace);
-//        debug(PHP_VERSION, PHP_MAJOR_VERSION, __FUNCTION__, __CLASS__, __METHOD__, $backTrace);
     }
 
     public function test($request, $post, $get, $files){
@@ -915,6 +853,27 @@ class Action {
         }
     }
 
+    public function addObject ($post){
+        $SAVE_OBJECT = $this->object(array(
+            'name' => $post['name'],
+            'code' => $post['code'],
+            'icon' => 'icon-doc',
+            'show_wood' => 1,
+            'show_sistem' => 1,
+            'row' => array(
+                array('name' => 'Имя', 'code' => 'name', 'type' => 'string'),
+                array('name' => 'Описание', 'code' => 'text', 'type' => 'text'),
+                array('name' => 'Изображение', 'code' => 'image', 'type' => 'image')
+            )
+        ));
+
+        if($this->isSelfMethod()){
+            load_url();
+        }else{
+            return $SAVE_OBJECT;
+        }
+    }
+
     public function object($post){
         /**
          * $post['name'] => Имя объекта
@@ -934,6 +893,9 @@ class Action {
 
         if(empty($post['name'])) throw new Exception('Не введено имя объекта');
         if(empty($post['code'])) throw new Exception('Не введен код объекта');
+
+        array_unshift($post['row'], array('code' => 'id', 'type' => 'int', 'size' => 11, 'index' => 'AP', 'remove_row' => 1));
+
         $SAVE_OBJECT = $this->saveObject(array(
             'name' => $post['code'],
             'row' => $post['row']
@@ -947,10 +909,9 @@ class Action {
         $SAVE_OBJECT['show_wood'] = isset($post['show_wood']) ? $post['show_wood'] : '';
 
         $find = $this->db->findOne($this->GLOB['namespace']['struct_db'], array('code' => $SAVE_OBJECT['code']));
-        $TABLE_ID = false;
         if($find === false){
 
-            $TABLE_ID = $this->db->insert($this->GLOB['namespace']['struct_db'], array(
+             $this->db->insert($this->GLOB['namespace']['struct_db'], array(
                 'name' => $SAVE_OBJECT['name'],
                 'code' => $SAVE_OBJECT['code'],
                 'icon' => $SAVE_OBJECT['icon'],
@@ -958,79 +919,81 @@ class Action {
                 'show_sistem' => $SAVE_OBJECT['show_sistem']
             ));
 
+            $TABLE_ID = $this->db->lastID();
 
-            foreach($SAVE_OBJECT['row'] as $k => $v){
+            $ROWS = array_merge(array(), $SAVE_OBJECT['row']['add'], $SAVE_OBJECT['row']['change']);
+
+
+            foreach($ROWS as $k => $v){
+                if(isset($v['remove_row']) && $v['remove_row'] === 1){
+                    continue;
+                }
+
                 $v['type'] = $v['base_type'];
                 $this->db->insert($this->GLOB['namespace']['struct_td'], array(
                     'parent' => $TABLE_ID,
-                    'name' => $v['sys_name'],
+                    'name' => $v['base_name'],
                     'code' => $v['name'],
                     'num' => $k,
-                    'type' => $v['type'],
-                    'param' => json_encode($v['param']),
+                    'type' => $v['base_type'],
+                    'param' => isset($v['param']) && is_array($v['param']) ? json_encode($v['param']) : '',
                     'size' => $v['size']
                 ));
-
             }
-            debug($SAVE_OBJECT);
         }else{
             $TABLE_ID = $find['id'];
 
-//            $this->db->remove($this->GLOB['namespace']['struct_td'], array(
-//                'parent' => $TABLE_ID
-//            ));
 
-            $rows = $this->db->find($this->GLOB['namespace']['struct_td'], array('parent' => $TABLE_ID));
+            $this->db->update($this->GLOB['namespace']['struct_db'], array(
+                'name' => $SAVE_OBJECT['name'],
+                'code' => $SAVE_OBJECT['code'],
+                'icon' => $SAVE_OBJECT['icon'],
+                'show_wood' => $SAVE_OBJECT['show_wood'],
+                'show_sistem' => $SAVE_OBJECT['show_sistem']
+            ), array(
+                'code' => $SAVE_OBJECT['code']
+            ));
 
-
-            //debug($SAVE_OBJECT);
-
-            foreach($SAVE_OBJECT['row'] as $k => $v){
-                $v['type'] = $v['base_type'];
-
-                if(!isset($v['param'])){
-                    $v['param'] = '';
-                }
-
-                $v['param'] = is_array($v['param']) ? json_encode($v['param']) : $v['param'];
-
-                if(isset($rows[$k])){
-                    $this->db->update($this->GLOB['namespace']['struct_td'], array(
-                        'parent' => $TABLE_ID,
-                        'name' => $v['sys_name'],
-                        'code' => $v['name'],
-                        'num' => $k,
-                        'type' => $v['type'],
-                        'param' => $v['param'],
-                        'size' => $v['size']
-                    ), array(
-                        'id' => $rows[$k]['id']
-                    ));
-
-                    unset($rows[$k]);
-                }else{
-                    $this->db->insert($this->GLOB['namespace']['struct_td'], array(
-                        'parent' => $TABLE_ID,
-                        'name' => $v['sys_name'],
-                        'code' => $v['name'],
-                        'num' => $k,
-                        'type' => $v['type'],
-                        'param' => $v['param'],
-                        'size' => $v['size']
-                    ));
-                }
+            foreach($SAVE_OBJECT['row']['add'] as $v){
+                $v['type'] = isset($v['base_type']) ? $v['base_type'] : isset($v['type']) ? $v['type'] : 'string';
+                $v['param'] = isset($v['param']) && is_array($v['param']) ? json_encode($v['param']) : '';
+                $this->db->insert($this->GLOB['namespace']['struct_td'], array(
+                    'parent' => $TABLE_ID,
+                    'name' => isset($v['base_name']) ? $v['base_name'] : 'undefined',
+                    'code' => $v['name'],
+                    'num' => $v['num'],
+                    'type' => $v['base_type'],
+                    'param' => $v['param'],
+                    'size' => $v['size']
+                ));
             }
 
-            foreach($rows as $v){
-                $this->db->remove($this->GLOB['namespace']['struct_td'], array('id' => $v['id']));
+            foreach($SAVE_OBJECT['row']['change'] as $v){
+                $v['type'] = isset($v['base_type']) ? $v['base_type'] : isset($v['type']) ? $v['type'] : 'string';
+                $v['param'] = isset($v['param']) && is_array($v['param']) ? json_encode($v['param']) : '';
+
+                $this->db->update($this->GLOB['namespace']['struct_td'], array(
+                    'parent' => $TABLE_ID,
+                    'name' => $v['base_name'],
+                    'code' => $v['name'],
+                    'num' => $v['num'],
+                    'type' => $v['base_type'],
+                    'param' => $v['param'],
+                    'size' => $v['size']
+                ), array(
+                    'id' => $v['id']
+                ));
             }
 
-
-            if($this->isSelfMethod()){
-                load_url();
-            }else{
-                return $SAVE_OBJECT;
+            foreach($SAVE_OBJECT['row']['drop'] as $v){
+                $this->db->remove($this->GLOB['namespace']['struct_td'], array('code' => $v));
             }
+        }
+
+        if($this->isSelfMethod()){
+            load_url();
+        }else{
+            return $SAVE_OBJECT;
         }
     }
 
@@ -1059,19 +1022,22 @@ class Action {
             'row' => array()
         );
 
-
         // Перебор входных параметров стобцов
-        if(isset($post['row']['code'])){
+        if(isset($post['row']) && is_array($post['row'])){
             $isRows = array();
-            foreach($post['row']['code'] as $k => $v){
-                if(in_array($v, $isRows)) continue;
-                $isRows[] = $v;
-                $row = array('name' => $v);
-
-                $row['type'] = isset($post['row']['type'][$k]) ? $post['row']['type'][$k] : 'string';
+            foreach($post['row'] as $v){
 
 
 
+                if(in_array($v['code'], $isRows)) continue;
+                $isRows[] = $v['code'];
+
+                $row = $v;
+
+                $row['base'] = isset($row['base']) ? $row['base'] : $v['code'];
+                $row['base_name'] = isset($v['name']) ? $v['name'] : 'undefiend';
+                $row['name'] = $v['code'];
+                $row['type'] = isset($v['type']) ? $v['type'] : 'string';
 
                 // Если в манифесте есть такой тип и он не равен пустой строке
                 // Нужно когда создается системный тип
@@ -1080,51 +1046,34 @@ class Action {
                     $row['type'] = $manifestGist[$row['type']]['type'];
                 }
 
-
-
-                if(isset($post['row']['name'][$k])){
-                    $row['sys_name'] = $post['row']['name'][$k];
-                }
-
-                if(isset($post['row']['param']['size'][$k])){
-                    $row['size'] = $post['row']['param']['size'][$k];
-                }else{
-                    $row['size'] = '';
-                }
-
-                if(isset($post['row']['index'][$k])){
-                    $row['index'] = $post['row']['index'][$k];
-                }
-
-                if(isset($post['row']['base'][$k])){
-                    $row['base'] = $post['row']['base'][$k];
-                }
-
-                if(isset($post['row']['param'][$k])){
-                    $row['param'] = $post['row']['param'][$k];
+                if(!isset($row['size'])){
+                    if(isset($row['param']) && $row['param']['size']){
+                        $row['size'] = $row['param']['size'];
+                    }else{
+                        $row['size'] = '';
+                    }
                 }
 
                 $CREATE_TABLE['row'][] = $row;
+
             }
         }
 
+
         if(isset($tables[$CREATE_TABLE['name']])){ // Если уже есть такая таблица изменяем ее;
-            $ROWS = $this->rowInArray($CREATE_TABLE['name'], $CREATE_TABLE['row']);
+            $CREATE_TABLE['row'] = $this->rowInArray($CREATE_TABLE['name'], $CREATE_TABLE['row']);
 
-            $this->db->editCollection(array(
-                'name' => $CREATE_TABLE['name'],
-                'row' => $ROWS
-            ));
+            if($this->db->editCollection($CREATE_TABLE) === false){
+                throw new Exception('Невозможно изменить таблицу');
+            }
 
-        }else{ // Если нет создаем
+        }else{ // Если нет, создаем
+            if($this->db->createCollection($CREATE_TABLE) === false){
+                throw new Exception('Невозможно создать таблицу');
+            }
 
-            $this->db->createCollection(array(
-                'name' => $CREATE_TABLE['name'],
-                'row' => $CREATE_TABLE['row']
-            ));
-
+            $CREATE_TABLE['row'] = array('add' => $CREATE_TABLE['row'], 'change' => array(), 'drop' => array());
         }
-
 
         return $CREATE_TABLE;
     }
@@ -1157,10 +1106,14 @@ class Action {
         // Проверки на наличие изменение
         foreach($tableRows as $v){
 
-            if(isset($row[$v['Field']]) && $row[$v['Field']]['base'] !== ''){ // Change
+            if(isset($row[$v['Field']])){ // Change
+                if(isset($row[$v['Field']]['remove_row']) && $row[$v['Field']]['remove_row'] == 1){
+                    unset($row[$v['Field']]);
+                    continue;
+                }
                 $result['change'][] = $row[$v['Field']];
                 unset($row[$v['Field']]);
-            }else if(!isset($row[$v['Field']])){ // Remove
+            }else{ // Remove
                 $result['drop'][] = $v['Field'];
             }
 

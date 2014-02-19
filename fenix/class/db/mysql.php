@@ -95,6 +95,7 @@ class Base extends ConvertSchem{
         return $this->extract($this->query(parent::find($from, $option)), $callback);
     }
     public function findOne($from, $option = array()){
+        //debug(parent::find($from, $option));
         return mysql_fetch_assoc($this->query(parent::find($from, $option)));
     }
     
@@ -134,6 +135,7 @@ class Base extends ConvertSchem{
     }
     
     public function editCollection($param){
+//        debug(parent::alterTable($param));
         return $this->query(parent::alterTable($param));
     }
     

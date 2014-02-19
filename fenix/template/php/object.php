@@ -1,9 +1,4 @@
 <?
-//    function getValue($db, $name){
-//        return (isset($object[$value])) ? $object[$value] : '';
-//    }
-    
-    
     $leftMenu = $db->find($GLOB['namespace']['struct_db']);
     $text = array('<h3>Объекты</h3><ul>');
     foreach($leftMenu as $v){

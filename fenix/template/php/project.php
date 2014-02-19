@@ -40,20 +40,24 @@
     $selfList[] = '<ul class="js-sortable-list">';
     foreach ($selfItem as $k => $j){
         $id = ($j['ref'] > 0) ? $j['ref'] : $j['id'];
-        $item = $db->find($j['object'], array('id' => $id));
 
-        $selfList[] = $io->buffer(sys . '/template/tpl/blocks/project-list-item.html', array(
-            'index' => $k + 1,
-            'id' => $id,
-            'ref' => $j['ref'],
-            'num' => $j['num'],
-            'object' => $j,
-            'date' => date('d.m.Y G:i (s)', $j['date']),
-            'data' => $item[0],
-            'name' => (isset($item[0]['name']) && $item[0]['name'] != '') ? $item[0]['name'] : 'undefiend-'.$j['id'],
-            'hide-icon' => $j['hide'] == 1 ? 'icon-eye-off' : 'icon-eye',
-            'icon' => $tabl[$j['object']]['icon'],
-            'data-list' => $tabl[$j['object']]['rows']
-        ));
+        $item = $db->findOne($j['object'], array('id' => $id));
+
+        //debug($item);
+        if(is_array($item)){
+            $selfList[] = $io->buffer(sys . '/template/tpl/blocks/project-list-item.html', array(
+                'index' => $k + 1,
+                'id' => $id,
+                'ref' => $j['ref'],
+                'num' => $j['num'],
+                'object' => $j,
+                'date' => date('d.m.Y G:i (s)', $j['date']),
+                'data' => $item,
+                'name' => (isset($item['name']) && $item['name'] != '') ? $item['name'] : 'undefiend-'.$j['id'],
+                'hide-icon' => $j['hide'] == 1 ? 'icon-eye-off' : 'icon-eye',
+                'icon' => $tabl[$j['object']]['icon'],
+                'data-list' => $tabl[$j['object']]['rows']
+            ));
+        }
     }
     $selfList[] = '</ul>';
