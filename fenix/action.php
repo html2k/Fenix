@@ -986,7 +986,7 @@ class Action {
             }
 
             foreach($SAVE_OBJECT['row']['drop'] as $v){
-                $this->db->remove($this->GLOB['namespace']['struct_td'], array('code' => $v));
+                $this->db->remove($this->GLOB['namespace']['struct_td'], array('code' => $v, 'parent' => $TABLE_ID));
             }
         }
 
