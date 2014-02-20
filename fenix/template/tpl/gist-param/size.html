@@ -1,7 +1,8 @@
 <?
     $size = isset($param['gist']['size']) ? $param['gist']['size'] : '';
 ?>
+
 <div class="ctrl-box mr-micro dib js-param-size">
     <label class="inp-name">Размер</label>
-    <input type="text" name="row[param][<?= @$param['key']?>][size]" value="<?= $size; ?>" class="inp w-small"/>
+    <input type="text" name="row[<?= @$param['key']?>][param][size]" value="<?= $size; ?>" class="inp w-small"/>
 </div>

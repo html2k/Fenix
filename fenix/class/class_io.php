@@ -228,4 +228,8 @@ class IO {
         }
         return $result;
     }
+
+    public function path($array = array()){
+        return implode(DIRECTORY_SEPARATOR, $array);
+    }
 }
