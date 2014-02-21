@@ -7,6 +7,7 @@ _install/
 .project
 .idea/*
 
+
 *.prefs
 
 .settings/*
@@ -20,6 +21,8 @@ favicon.ico
 template/main.php
 
 template/main.php
+
+config.php
 
 ext/aaa/init.php
 
