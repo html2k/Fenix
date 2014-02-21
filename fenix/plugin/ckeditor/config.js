@@ -10,21 +10,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 
-    var plugins = [
-        'blockquote',
-        //'googledocs',
-        //'page2images',
-        'tliyoutube',
-        'xdsoft_translater',
-        //'uploadcare',
-        //'backup',
-        //'stat',
-        'tabletools',
-        'insertpre',
-        'nofollow'
-    ];
-
-    config.extraPlugins = plugins.join(',');
+    config.extraPlugins = window.CONFIG_CKEDITOR.join(',');
 
 
 

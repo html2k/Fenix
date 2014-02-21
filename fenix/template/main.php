@@ -13,3 +13,9 @@ $GLOB['url'] = array(
 //-> leftMenu
 $GLOB['leftMenu'] = '';
 
+
+$script_config = implode('', array(
+    '<script>',
+    'window.CONFIG_CKEDITOR = ' . json_encode($config['ckeditor_config']),
+    '</script>'
+));

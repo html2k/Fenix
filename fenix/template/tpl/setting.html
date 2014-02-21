@@ -1,91 +1,20 @@
 <h1 class="page-name">Настройки системы</h1>
 
-<div>
-    <h3>Пользователи</h3>
-    <div class="box">
-        <div class="col5">
-            <div class="m-box">
-                <ul class="setting-tebles">
 
-                    <? foreach($GLOB['users'] as $item): ?>
-                        <li class="m-box">
-                            <span class="name"><?= $item['login']; ?></span>
-                            <span class="pull-right">
-                                <?= $manifest['access'][$item['access']]; ?>&#160;
-                                <i class="icon-pencil js-user-list" data-login="<?= $item['login']; ?>" data-access="<?= $item['access']; ?>" data-id="<?= $item['id']; ?>"></i>
-                                <a href="?action=removeUser&id=<?= $item['id']; ?>"><i class="icon-cancel"></i></a>
-                            </span>
-                        </li>
-                    <? endforeach; ?>
+<div class="tab-box tab-box__vertical">
+    <?= $io->buffer(sys.'/template/tpl/setting/user.html', array(
+        'manifest' => $manifest,
+        'GLOB' => $GLOB,
+        'io' => $io,
+        'class' => 'active'
+    )) ?>
 
-                </ul>
-
-                <? ob_start(); ?>
-                    <form action="" method="post" watch="structForm">
-                        <input type="text" name="name" value="" placeholder="Логин" class="inp" autofocus="" isEmpty/>
-                        <input type="text" name="pass" value="" placeholder="Пароль" class="inp" isEmpty/>
-
-                        <div class="mb-middle" style="position: relative; z-index:2;">
-                            <span class="inp-name">Права доступа</span>
-                            <select name="access" class="ctrl-select">
-                                <option value="2">Пользователь</option>
-                                <option value="1">Администратор</option>
-                                <option value="0">ROOT</option>
-                            </select>
-                        </div>
-
-                        <div class="mt_mini">
-                            <button class="btn btn__success btn__disable" type="submit" disabled="disabled">
-                                <span class="btn-in">Добавить</span>
-                            </button>
-                            <span class="btn" onclick="$(document).trigger('dropdown-close')">
-                                <span class="btn-in">Отмена</span>
-                            </span>
-                        </div>
-                        <input type="hidden" name="action" value="addUser"/>
-                    </form>
-                <? $form = ob_get_clean(); ?>
+    <?= $io->buffer(sys.'/template/tpl/setting/ckeditor.html', array(
+        'config' => $config
+    )) ?>
 
 
-                <?= $io->buffer(sys . '/template/tpl/blocks/dropdown.html', array(
-                    'name' => '<span class="false-link">Добавить</span>',
-                    'block' => $form
-                )); ?>
-
-            </div>
-        </div>
-        <div class="col7">
-            <div class="m-box">
-                <p>Будьте аккуратней с настройками пользователей, пользователи с правами <b>root</b> могут могут редактировать любую информацию в системе</p>
-            </div>
-        </div>
-    </div>
 </div>
 
 
-<? ob_start(); ?>
-<form action="" method="post" watch="structForm">
 
-    <input type="text" name="name" value="" placeholder="Логин" class="inp" autofocus="" isEmpty/>
-    <input type="text" name="pass" value="" placeholder="Пароль" class="inp" help="Пароль не будет изменен если это поле оставить пустым"/>
-
-    <select name="access" class="ctrl-select">
-        <option value="2">Пользователь</option>
-        <option value="1">Администратор</option>
-        <option value="0">ROOT</option>
-    </select>
-
-    <button class="btn btn__success btn__disable" type="submit" disabled="disabled">
-        <span class="btn-in">Изменить</span>
-    </button>
-
-    <input type="hidden" name="id" value="" />
-    <input type="hidden" name="action" value="editUser"/>
-</form>
-<? $form = ob_get_clean(); ?>
-
-<?= $io->buffer(sys.'/template/tpl/blocks/popup.html', array(
-    'name' => 'Изменение настроек пользователя',
-    'role' => 'userSetting',
-    'block' => $form
-)); ?>

@@ -16,5 +16,10 @@
 		'template' => 'template',
 		'files' => 'files',
 		'extension' => 'ext',
+	),
+	'ckeditor_config' => array(
+		'blockquote',
+		'googledocs',
+		'page2images',
 	)
 	); ?>
