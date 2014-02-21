@@ -143,6 +143,7 @@ $manifest = array(
             'template' => 'template',
             'files' => 'files',
             'extension' => 'ext'
-        )
+        ),
+        'ckeditor_config' => array()
     )
 );

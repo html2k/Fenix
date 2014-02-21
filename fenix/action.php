@@ -1128,5 +1128,19 @@ class Action {
         return $result;
     }
 
+    public function ckparam($post){
+
+        $this->config['ckeditor_config'] = $post['param'];
+        $array = '<? return $config = ' . $this->io->arrayToString($this->config) . '; ?>';
+
+        $this->io->write(root.'/config.php', '<? return $config = ' . $this->io->arrayToString($this->config) . '; ?>');
+
+        if($this->isSelfMethod()){
+            load_url();
+        }else{
+            return $this->config;
+        }
+    }
+
 }
 exit();

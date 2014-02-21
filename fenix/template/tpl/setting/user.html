@@ -1,0 +1,86 @@
+<h3 class="tab-btn <?= $param['class']; ?>">Пользователи</h3>
+<div class="tab-block <?= $param['class']; ?>">
+    <table class="table">
+        <? foreach($param['GLOB']['users'] as $item): ?>
+        <tr>
+            <td width="100%"><?= $item['login']; ?></td>
+
+            <th>
+                <?= $param['manifest']['access'][$item['access']]; ?>
+            </th>
+            <th>
+                <i class="icon-pencil js-user-list" data-login="<?= $item['login']; ?>" data-access="<?= $item['access']; ?>" data-id="<?= $item['id']; ?>"></i>
+            </th>
+            <th>
+                <a href="?action=removeUser&id=<?= $item['id']; ?>"><i class="icon-cancel"></i></a>
+            </th>
+        </tr>
+        <? endforeach; ?>
+    </table>
+
+    <div class="note">
+        Будьте аккуратней с настройками пользователей, пользователи с правами root могут могут редактировать любую информацию в системе
+    </div>
+
+    <? ob_start(); ?>
+    <form action="" method="post" watch="structForm">
+        <input type="text" name="name" value="" placeholder="Логин" class="inp" autofocus="" isEmpty/>
+        <input type="text" name="pass" value="" placeholder="Пароль" class="inp" isEmpty/>
+
+        <div class="mb-middle" style="position: relative; z-index:2;">
+            <span class="inp-name">Права доступа</span>
+            <select name="access" class="ctrl-select">
+                <option value="2">Пользователь</option>
+                <option value="1">Администратор</option>
+                <option value="0">ROOT</option>
+            </select>
+        </div>
+
+        <div class="mt_mini">
+            <button class="btn btn__success btn__disable" type="submit" disabled="disabled">
+                <span class="btn-in">Добавить</span>
+            </button>
+                    <span class="btn" onclick="$(document).trigger('dropdown-close')">
+                        <span class="btn-in">Отмена</span>
+                    </span>
+        </div>
+        <input type="hidden" name="action" value="addUser"/>
+    </form>
+    <? $form = ob_get_clean(); ?>
+
+
+    <?= $param['io']->buffer(sys . '/template/tpl/blocks/dropdown.html', array(
+        'name' => '<span class="btn"><span class="btn-in">Добавить</span></span>',
+        'block' => $form
+    )); ?>
+
+
+</div>
+
+
+<? ob_start(); ?>
+<form action="" method="post" watch="structForm">
+
+    <input type="text" name="name" value="" placeholder="Логин" class="inp" autofocus="" isEmpty/>
+    <input type="text" name="pass" value="" placeholder="Пароль" class="inp" help="Пароль не будет изменен если это поле оставить пустым"/>
+
+    <select name="access" class="ctrl-select">
+        <option value="2">Пользователь</option>
+        <option value="1">Администратор</option>
+        <option value="0">ROOT</option>
+    </select>
+
+    <button class="btn btn__success btn__disable" type="submit" disabled="disabled">
+        <span class="btn-in">Изменить</span>
+    </button>
+
+    <input type="hidden" name="id" value="" />
+    <input type="hidden" name="action" value="editUser"/>
+</form>
+<? $form = ob_get_clean(); ?>
+
+<?= $param['io']->buffer(sys.'/template/tpl/blocks/popup.html', array(
+    'name' => 'Изменение настроек пользователя',
+    'role' => 'userSetting',
+    'block' => $form
+)); ?>
