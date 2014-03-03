@@ -26,7 +26,7 @@ class IO {
 	//-> Чтение дерриктории
 	public function read_dir($name, $res = false){
 		$result = array('file' => array(), 'dir' => array());
-        $name .= ($name{strlen($name)-1} === '') ? '/' : '';
+        $name .= ($name{strlen($name)-1} !== '/') ? '/' : '';
 
         if(!is_dir($name)) return array();
 
@@ -58,7 +58,7 @@ class IO {
 		$this->tree['dir'] = $dir['dir'];
 		$this->tree['file'] = $dir['file'];
 		$this->tree__init($dir['dir']);
-		
+
 		return $this->tree;
 	}
 		private function tree__init($list){
@@ -231,5 +231,17 @@ class IO {
 
     public function path($array = array()){
         return implode(DIRECTORY_SEPARATOR, $array);
+    }
+
+    public function dirSize($dir){
+
+        $fs = 0;
+        $path = $this->tree($dir, 'file');
+
+        foreach($path['file'] as $v){
+            $fs += filesize($v);
+        }
+
+        return $fs;
     }
 }

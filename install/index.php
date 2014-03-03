@@ -4,6 +4,7 @@
     define('system_static', true);
     define('connect_to_db', true);
     define('sys', root.'/fenix');
+    define('LESS', sys . '/templating/lessphp/lessc.inc.php');
 
     require_once sys . '/manifest.php';
     $config = $manifest['defConfig'];
@@ -29,7 +30,7 @@
         $def = $manifest['defConfig'];
         $dbConfig = $_SESSION['dbConfig'];
 
-        $config = array();
+        $config = $def;
         $config['db'] = array();
         foreach($def['db'] as $k => $v){
             if(isset($dbConfig[$k]) && $dbConfig[$k] !== ''){

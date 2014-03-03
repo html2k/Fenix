@@ -1,5 +1,45 @@
 <h1 class="page-name">Главная</h1>
 
+<div class="box">
+    <div class="col8">
+        <h3>Последние изменения</h3>
+
+        <ul class="list">
+            <? foreach($lastChange as $v): ?>
+                <li>
+                    (<?= $v['date'] ?>) <sup><?= $v['id'] ?></sup> <a href="<?= $v['url']?>"><?= $v['name'] ?></a>
+                </li>
+            <? endforeach; ?>
+        </ul>
+
+    </div>
+
+    <div class="col4">
+        <div class="m-box">
+            <h3>Данные по системе</h3>
+            <table class="table">
+                <tr>
+                    <td>Свободное место на диске</td>
+                    <td><?= byteConvert(disk_free_space(root)); ?></td>
+                </tr>
+                <tr>
+                    <td>Занимаемое место на диске</td>
+                    <td><?= byteConvert($io->dirSize(root)); ?></td>
+                </tr>
+
+                <tr>
+                    <td>Версия PHP</td>
+                    <td><?= phpversion(); ?></td>
+                </tr>
+                <tr>
+                    <td>База данных</td>
+                    <td><?= $db->getInfo(); ?></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
 
 <? if(count($extWidget)): ?>
 <div class="box">

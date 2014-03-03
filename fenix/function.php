@@ -42,13 +42,11 @@ function req($config, $path){
         return false;
 }
 
-function byteConvert($size){
-    $size = (int) $size;
-    if($size > 1048576){
-            return sprintf("%01.2f", $size / 1048576) . 'Мб';
-    }else{
-            return sprintf("%01.2f", $size / 1024) . 'Кб';
-    }
+function byteConvert($bytes){
+    $symbols = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB');
+    $exp = floor(log($bytes)/log(1024));
+
+    return sprintf('%.2f '.$symbols[$exp], ($bytes/pow(1024, floor($exp))));
 }
 
 function setSystemMessage($name, $error){
