@@ -14,6 +14,8 @@ try{
     define('connect_to_db', false);
     require_once 'config.php';
     define('sys', root . '/' . $config['folder']['sys']);
+    define('LESS', sys . '/templating/lessphp/lessc.inc.php');
+
     require_once sys . '/requerid.php';
 
     req($config, '/class/class_templating.php');
@@ -99,7 +101,7 @@ try{
 
         case 'twig':
 
-            require_once $config['folder']['sys'] . '/templating/twig/Autoloader.php';
+            require_once $config['folder']['sys'] . '/templating/Twig/Autoloader.php';
             Twig_Autoloader::register();
 
             $loader = new Twig_Loader_Filesystem(root . '/template/');
@@ -131,7 +133,6 @@ try{
             break;
 
         case 'tpl':
-
             require_once $config['folder']['sys'] . '/templating/' . $templating . '/' . $templating . '.php';
             $tpl = new TPL($db);
 

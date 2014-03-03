@@ -10,6 +10,7 @@
 
     require_once root . '/config.php';
     define('sys', root . '/' . $config['folder']['sys']);
+    define('LESS', sys . '/templating/lessphp/lessc.inc.php');
 
     require_once sys . '/requerid.php';
 

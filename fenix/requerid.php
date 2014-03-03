@@ -1,5 +1,4 @@
 <?
-
     require_once sys.'/manifest.php';
     // Alias var
     $GLOB = array();
@@ -37,10 +36,14 @@
         $Extension = new Extension($GLOB['namespace'], $config, $db, $io, $static);
     }
 
-
-
     //->Static
     if(system_static){
+
+        if(defined('LESS') && file_exists(LESS)){
+            require_once LESS;
+            $less = new lessc;
+        }
+
         $static->addFile(sys.'/template/js/lib.js');
         $static->addFile(sys.'/template/js/datepicker.js');
         $static->addFile(sys.'/template/js/main.js');

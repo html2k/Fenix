@@ -75,6 +75,7 @@ class Base extends ConvertSchem{
         $i = 0;
         while($item = mysql_fetch_assoc($query)){
             if(is_callable($callback)){
+                if(!$this->cursor) $this->cursor = $this;
                 $res[$i] = $callback($item, $this->cursor);
             }else{
                 foreach($item as $k => $v){
@@ -95,7 +96,6 @@ class Base extends ConvertSchem{
         return $this->extract($this->query(parent::find($from, $option)), $callback);
     }
     public function findOne($from, $option = array()){
-        //debug(parent::find($from, $option));
         return mysql_fetch_assoc($this->query(parent::find($from, $option)));
     }
     
@@ -135,7 +135,6 @@ class Base extends ConvertSchem{
     }
     
     public function editCollection($param){
-//        debug(parent::alterTable($param));
         return $this->query(parent::alterTable($param));
     }
     
@@ -156,5 +155,9 @@ class Base extends ConvertSchem{
 		
 		return $value;
 	}
+
+    public function getInfo(){
+        return 'MySQL ' . mysql_get_server_info() . ' ';
+    }
     
 }
