@@ -71,12 +71,13 @@ class Templating extends Base{
         $path = array();
 
         $url = rawurldecode($url);
-        if($url[0] == '/') $url = substr($url, 1);
-        if(substr($url, -1) == '/') $url = substr ($url, 0, -1);
 
         if(strpos($url, '?') !== false){
             $url = substr($url, 0, strpos($url, '?'));
         }
+
+        if($url[0] == '/') $url = substr($url, 1);
+        if(substr($url, -1) == '/') $url = substr ($url, 0, -1);
 
         if($url !== false && strlen($url)){
             $path = $this->loadRealPath(explode('/', $url));
