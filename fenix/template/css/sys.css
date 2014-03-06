@@ -80,7 +80,7 @@ h3{ font-size: 14px; }
     border-right: 1px solid #ccc;
 }
 
-.dubl_box{ margin-top: -15px; }
+.dubl_box{ margin-top: -15px; margin-bottom: 0; }
 .dubl_box .box-cell { padding-top: 15px; }
 .box-table{
     display: table;

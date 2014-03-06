@@ -49,13 +49,27 @@ class Templating extends Base{
         }
 
         if(is_array($param)){
-            if(!isset($param['hide'])) $param['hide'] = 0;
-            $result = $this->extract($this->go(array(
+
+            $find = array(
                 'event' => 'find',
                 'from' => $this->namespace['construct_db'],
-                'where' => $param,
+                'where' => array(),
                 'order' => 'num'
-            )), $callback);
+            );
+
+            if(!isset($param['hide'])) $param['hide'] = 0;
+            if(isset($param['order'])){
+                $find['order'] = $param['order'];
+                unset($param['order']);
+            }
+            if(isset($param['limit'])){
+                $find['limit'] = $param['limit'];
+                unset($param['limit']);
+            }
+
+            $find['where'] = $param;
+
+            $result = $this->extract($this->go($find), $callback);
 
         }
 

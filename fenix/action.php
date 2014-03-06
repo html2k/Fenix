@@ -58,6 +58,7 @@ class Action {
                 }
             }
         }
+        exit();
     }
 
     public function connect($post){
