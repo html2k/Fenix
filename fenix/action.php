@@ -220,7 +220,7 @@ class Action {
                     'code' => $v['name'],
                     'num' => $k,
                     'type' => $v['base_type'],
-                    'param' => isset($v['param']) && is_array($v['param']) ? json_encode($v['param']) : '',
+                    'param' => isset($v['param']) && is_array($v['param']) ? serialize($v['param']) : '',
                     'size' => $v['size']
                 ));
             }
@@ -240,7 +240,7 @@ class Action {
 
             foreach($SAVE_OBJECT['row']['add'] as $v){
                 $v['type'] = isset($v['base_type']) ? $v['base_type'] : isset($v['type']) ? $v['type'] : 'string';
-                $v['param'] = isset($v['param']) && is_array($v['param']) ? json_encode($v['param']) : '';
+                $v['param'] = isset($v['param']) && is_array($v['param']) ? serialize($v['param']) : '';
                 Fx::db()->insert(Fx::app()->namespace['struct_td'], array(
                     'parent' => $TABLE_ID,
                     'name' => isset($v['base_name']) ? $v['base_name'] : 'undefined',
@@ -254,7 +254,7 @@ class Action {
 
             foreach($SAVE_OBJECT['row']['change'] as $v){
                 $v['type'] = isset($v['base_type']) ? $v['base_type'] : isset($v['type']) ? $v['type'] : 'string';
-                $v['param'] = isset($v['param']) && is_array($v['param']) ? json_encode($v['param']) : '';
+                $v['param'] = isset($v['param']) && is_array($v['param']) ? serialize($v['param']) : '';
 
                 Fx::db()->update(Fx::app()->namespace['struct_td'], array(
                     'parent' => $TABLE_ID,
@@ -329,7 +329,7 @@ class Action {
                 }
 
                 if(!isset($row['size'])){
-                    if(isset($row['param']) && $row['param']['size']){
+                    if(isset($row['param']) && isset($row['param']['size'])){
                         $row['size'] = $row['param']['size'];
                     }else{
                         $row['size'] = '';
@@ -736,7 +736,6 @@ class Action {
         $file = isset($FILES['form']) ? $FILES['form'] : array();
         $form = isset($post['form']) ? $post['form'] : array();
 
-
         $activePath = (isset($post['active_path']) && $post['active_path'] != '') ? 1 : 0;
 
         $updateId = (isset($post['id']) && $post['id'] != '') ? (int) $post['id'] : false;
@@ -792,6 +791,12 @@ class Action {
         foreach($form as $k => $v){
             if(is_string($v)){
                 $form[$k] = Fx::db()->esc($v);
+            }
+        }
+
+        foreach($rows as $k => $v){
+            if(!isset($form[$k])){
+                $form[$k] = '';
             }
         }
 
@@ -906,6 +911,12 @@ class Action {
                         $form[$k] = '';
                     }
                 }
+            }
+        }
+
+        foreach($form as $k => $v){
+            if(is_array($v)){
+                $form[$k] = serialize($v);
             }
         }
 

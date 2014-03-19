@@ -2,11 +2,15 @@
     $value = '';
     $list = '';
 
+    //debug(json_decode($param['gist']['list']));
+
     if(isset($param['gist']['list']) && $param['gist']['list'] !== ''){
-        $value = json_encode($param['gist']['list']);
-        foreach($param['gist']['list'] as $v){
+        $value = json_decode($param['gist']['list']);
+
+        foreach($value as $v){
             $list .= '<li>'.$v.'</li>';
         }
+
     }
     
 ?>
@@ -14,5 +18,5 @@
     <label class="inp-name">Параметры списка</label>
     <div class="inp w-normal" contenteditable="true"></div>
     <ul class="param-list-item w-normal"><?= $list; ?></ul>
-    <input type="hidden" name="row[<?= @$param['key']?>][param][list]" value='<?= $value; ?>' class="inp w_normal"/>
+    <input type="hidden" name="row[<?= @$param['key']?>][param][list]" value='<?= @$param["gist"]["list"]; ?>' class="inp w_normal"/>
 </div>

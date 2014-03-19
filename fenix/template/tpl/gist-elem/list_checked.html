@@ -1,12 +1,20 @@
 <span class="inp-name"><?= @$paramObjectItem['row']['name']?></span>
-<?
-    $param = json_decode($paramObjectItem['row']['param'], true);
-    
-    if($param['list']){
-        foreach($param['list'] as $k => $v){
-            echo '<label class="inp_name"><input type="checkbox" name="form['.@$paramObjectItem['row']['code'].'][]" value="'.$k.'"/>'.$v.'</label>';
+<div>
+    <?
+        $param = unserialize($paramObjectItem['row']['param']);
+        $param = json_decode($param['list'], true);
+
+        $val = $paramObjectItem['value'] == '' ? array() : unserialize($paramObjectItem['value']);
+
+        if($param){
+            foreach($param as $k => $v){
+                $checked = (in_array($k, $val)) ? 'checked="true"' : '';
+                echo '<div class="ctrl-box">';
+                echo '<label class="inp-name"><input type="checkbox" name="form['.@$paramObjectItem['row']['code'].'][]" value="'.$k.'" '.$checked.'/>'.$v.'</label>';
+                echo '</div>';
+            }
+        }else{
+            echo 'Небыло задано ни одно значение';
         }
-    }else{
-        echo 'Небыло задано ни одно значение';
-    }
-?>
+    ?>
+</div>

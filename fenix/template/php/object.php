@@ -22,8 +22,8 @@
             $paramObject = array();
             foreach ($td as $k => $v){
 
+
                 $paramObject[] = Fx::io()->buffer(sys . '/template/tpl/template/object_item.html', array(
-                    'io' => $io,
                     'key' => $k,
                     'value' => $v,
                     'zIndex' => $len - $k,

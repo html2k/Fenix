@@ -53,16 +53,15 @@
             if(isset($param['value'])){
                 $gist = (isset($param['value']['type'])) ? $param['manifest']['gist'][$param['value']['type']] : $param['manifest']['gist']['string'];
 
-
-
                 foreach($gist['param'] as $v){
 
                     $paramGIST = array();
                     if(isset($param['value']) && isset($param['value']['param'])){
-                        $paramGIST = json_decode($param['value']['param'], true);
+                        $paramGIST = unserialize($param['value']['param']);
                     }
 
                     echo Fx::io()->buffer(sys . '/template/tpl/gist-param/' . $v . '.html', array(
+                        'value' => $param['value'],
                         'key' => $param['key'],
                         'gist' => $paramGIST,
                         'manifest' => $param['manifest']

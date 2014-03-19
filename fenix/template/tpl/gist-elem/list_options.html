@@ -1,11 +1,15 @@
 <span class="inp-name"><?= @$paramObjectItem['row']['name']?></span>
 <select name="form[<?= @$paramObjectItem['row']['code']?>]">
 <?
-    $param = json_decode($paramObjectItem['row']['param'], true);
-    
-    if($param['list']){
-        foreach($param['list'] as $k => $v){
-            echo '<option value="'.$k.'"/>'.$v.'</option>';
+    $param = unserialize($paramObjectItem['row']['param']);
+    $param = json_decode($param['list'], true);
+
+    $val = $paramObjectItem['value'];
+
+    if($param){
+        foreach($param as $k => $v){
+            $selected = ($k == $val) ? 'selected="true"' : '';
+            echo '<option value="'.$k.'" '.$selected.'/>'.$v.'</option>';
         }
     }else{
         echo 'Небыло задано ни одно значение';

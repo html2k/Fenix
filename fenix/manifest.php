@@ -107,8 +107,8 @@ $manifest = array(
         ),
         'list_checked' => array( // Чекбоксы
             'name' => 'Чекбоксы',
-            'type' => 'int',
-            'size' => 11,
+            'type' => 'string',
+            'size' => 128,
             'param' => array( 'list' )
         ),
         'list_options' => array( // Выподающий список
