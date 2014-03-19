@@ -1,8 +1,8 @@
 <?
-    $GLOB['self_id'] = (isset($_GET['id'])) ? (int) $_GET['id'] : false;
-    $GLOB['parent_object'] = isset($_GET['parent']) ? $_GET['parent'] : '';
+    Fx::app()->selfId = (isset($_GET['id'])) ? (int) $_GET['id'] : false;
+    Fx::app()->parent_object = isset($_GET['parent']) ? $_GET['parent'] : '';
     
-    if($GLOB['self_id'] == false && $GLOB['parent_object'] != '') $GLOB['self_id'] = $GLOB['parent_object'];
+    if(Fx::app()->selfId == false && Fx::app()->parent_object != '') Fx::app()->selfId = Fx::app()->parent_object;
     
     
     $pathGist = sys.'/template/tpl/gist-elem/';
@@ -12,17 +12,17 @@
     $objectValue = array();
     
     if(isset($_GET['id']) && (int) $_GET['id'] > 0){
-        $selfObject = $db->find($GLOB['namespace']['construct_db'], array( 'id' => (int) $_GET['id']));
+        $selfObject = Fx::db()->find(Fx::app()->namespace['construct_db'], array( 'id' => (int) $_GET['id']));
         if(count($selfObject)){
             $tableName = $selfObject[0]['object'];
             
-            $objectValue = $db->find($tableName, array('id' => $selfObject[0]['id']));
+            $objectValue = Fx::db()->find($tableName, array('id' => $selfObject[0]['id']));
             $objectValue = $objectValue[0];
         }
     }
     
     if($tableName != ''){
-        $tabl = $db->find($GLOB['namespace']['struct_db'], array( 'code' => $tableName));
+        $tabl = Fx::db()->find(Fx::app()->namespace['struct_db'], array( 'code' => $tableName));
         $tablParam = $tabl[0];
 
     }else{
@@ -30,7 +30,7 @@
         load_url();
     }
     
-    $row = $db->find($GLOB['namespace']['struct_td'], array( 'parent' => $tablParam['id']));
+    $row = Fx::db()->find(Fx::app()->namespace['struct_td'], array( 'parent' => $tablParam['id']));
 
     $result = array();
     foreach($row as $key => $v){
@@ -41,7 +41,7 @@
     }
     
     // Шаблоны
-    $template = $db->find($GLOB['namespace']['marker']);
+    $template = Fx::db()->find(Fx::app()->namespace['marker']);
     
     // Левое меню
     require_once sys . '/template/php/project-menu.php';

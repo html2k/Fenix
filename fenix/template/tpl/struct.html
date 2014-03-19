@@ -5,7 +5,7 @@
         <div class="m-box">
             <h3>Обьекты</h3>
             <ul class="setting-tebles">
-                <?= $io->buffer(sys . '/template/tpl/blocks/list__object.html', $db->find($GLOB['namespace']['struct_db'])); ?>
+                <?= Fx::io()->buffer(sys . '/template/tpl/blocks/list__object.html', Fx::db()->find(Fx::app()->namespace['struct_db'])); ?>
             </ul>
 
 
@@ -27,7 +27,7 @@
                 </form>
             <? $form = ob_get_clean(); ?>
 
-            <?= $io->buffer(sys . '/template/tpl/blocks/dropdown.html', array(
+            <?= Fx::io()->buffer(sys . '/template/tpl/blocks/dropdown.html', array(
                 'name' => '<span class="false-link">Добавить</span>',
                 'block' => $form
             )); ?>
@@ -40,7 +40,7 @@
             <h3>Маркеры</h3>
 
             <ul class="setting-tebles">
-                <?= $io->buffer(sys . '/template/tpl/blocks/list__marker.html', array(
+                <?= Fx::io()->buffer(sys . '/template/tpl/blocks/list__marker.html', array(
                     'markerList' => $markerList,
                     'templateList' => $templateList,
                     'io' => $io
@@ -64,7 +64,7 @@
                 </form>
             <? $form = ob_get_clean(); ?>
 
-            <?= $io->buffer(sys . '/template/tpl/blocks/dropdown.html', array(
+            <?= Fx::io()->buffer(sys . '/template/tpl/blocks/dropdown.html', array(
                 'name' => '<span class="false-link">Добавить</span>',
                 'block' => $form
             )); ?>
@@ -75,7 +75,7 @@
         <div class="m-box">
             <h3>Шаблоны</h3>
             <ul class="setting-tebles">
-                <?= $io->buffer(sys . '/template/tpl/blocks/list__template.html', array(
+                <?= Fx::io()->buffer(sys . '/template/tpl/blocks/list__template.html', array(
                     'list' => $templateList
                 )); ?>
             </ul>
@@ -97,7 +97,7 @@
                 </form>
             <? $form = ob_get_clean(); ?>
 
-            <?= $io->buffer(sys . '/template/tpl/blocks/dropdown.html', array(
+            <?= Fx::io()->buffer(sys . '/template/tpl/blocks/dropdown.html', array(
                 'name' => '<span class="false-link">Добавить</span>',
                 'block' => $form
             )); ?>
@@ -108,5 +108,5 @@
 
 <hr class="mt-big mb-big" />
 
-<?= $io->buffer(sys . '/template/tpl/blocks/table/table.html', $tableInfo); ?>
+<?= Fx::io()->buffer(sys . '/template/tpl/blocks/table/table.html', $tableInfo); ?>
 

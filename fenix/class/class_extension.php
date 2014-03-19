@@ -1,74 +1,109 @@
 <?
-    class Extension extends IO {
+class Fx_Extension {
 
-        private $global = array(); // Изменяемый массив с глобальными переменными для передачи в callback функции
-        private $extensions = array(); // Скомпелированные расширения
-        private $config = array(); // Конфиг системы
-        private $namespace = array();
-        private $db = false;
-        private $io = false;
-        private $static = false;
-        private $extFolder = '';
-        private $isCompile = false; // если true будет пересобран массив
+    private $extensions = array();
 
-        function __construct($namespace, $config, $db, $io, $static){
-            $this->db = $db;
-            $this->io = $io;
-            $this->static = $static;
-            $this->namespace = $namespace;
-            $this->config = $config;
+    public function compile (){
+        $folderExtension =  root . '/' . Fx::app()->config['folder']['extension'] . '/';
+        $fileExtensionSave = $folderExtension . 'extension.php';
+        $listExtension = Fx::io()->read_dir($folderExtension, 'dir');
+
+        $ext = array();
+        if(file_exists($fileExtensionSave)){
+            ob_start();
+                $ext = include $fileExtensionSave;
+            ob_clean();
         }
 
-        public function compile(){
+        $Extensions = array(
+            'list' => array()
+        );
+        if(count($listExtension)){
+            foreach($listExtension as $k => $v){
+                if($k === 'list') continue;
 
-            $extensionFolder = root.'/'.$this->config['folder']['extension'] . '/';
-            $extensionList = $this->read_dir($extensionFolder, 'dir');
+                $fileInit = $v . 'init.php';
+                if(file_exists($fileInit)){
+                    $sha = sha1_file($fileInit);
 
-            if(count($extensionList)){
-                foreach ($extensionList as $value) {
-                    $files = $this->read_dir($value, 'file');
-                    foreach ($files as $file) {
-                        if(strpos($file, 'init.php') > -1){
-                            $this->extFolder = $value;
-                            $this->loadExtension($file, $this->namespace, $this, $this->db, $this->io, array(
-                                'url' => $value
-                            ));
+                    if(isset($ext[$v]) && $ext[$v]['sha'] === $sha){
+                        $Extensions[$v] = $ext[$v];
+
+                    }else{
+                        $Extensions[$v] = array(
+                            'sha' => $sha,
+                            'ext' => $this->compileExtension($v)
+                        );
+                    }
+
+                    foreach($Extensions[$v]['ext'] as $event){
+                        if(!isset($Extensions['list'][$event['use']])){
+                            $Extensions['list'][$event['use']] = array();
                         }
+                        $event['url'] = $v;
+                        $Extensions['list'][$event['use']][] = $event;
                     }
                 }
             }
-
         }
 
-        public function set ($extensionName, $extansionOption){
-            if(!isset($this->extensions[$extensionName])){
-                $this->extensions[$extensionName] = array();
-            }
-
-            $this->extensions[$extensionName][] = array(
-                'name' => $extensionName,
-                'url' => $this->extFolder,
-                'option' => $extansionOption
-            );
+        if(file_exists($fileExtensionSave)){
+            Fx::io()->del($fileExtensionSave);
         }
 
-        public function get ($extensionName){
-            if(isset($this->extensions[$extensionName])){
-                return $this->extensions[$extensionName];
-            }
-        }
+        Fx::io()->create_file($fileExtensionSave);
+        Fx::io()->write($fileExtensionSave,
+            '<? return $Extension = '. Fx::io()->arrayToString($Extensions) . '; ?>'
+        );
 
-        public function loadExtension($file, $namespace, $Extension, $db, $io, $option){
-            if(file_exists($file)){
-                ob_start();
-                    require $file;
-                ob_end_clean();
-            }
-        }
+        $this->extensions = $Extensions;
+        return $Extensions;
+    }
 
-        public function setStatic($url){
-            $this->static->addFile($this->extFolder . $url);
+    public function get($name){
+        $result = array();
+        if(isset($this->extensions['list'][$name])){
+            $result = $this->extensions['list'][$name];
         }
+        return $result;
+    }
 
+
+    public function compileExtension($url){
+        $ext = new _Extension($url);
+        $this->loadExtension($ext);
+
+        foreach($ext->event as $v){
+            $v['static'] = $ext->st;
+            $v['url'] = $url;
+        }
+        return $ext->event;
 
     }
+
+    public function loadExtension(&$Extension){
+        ob_start();
+            require $Extension->url . 'init.php';
+        ob_clean();
+    }
+
+}
+
+class _Extension {
+    public  $event = array();
+    public function __construct($url){
+        $this->url = $url;
+    }
+    public function set($use, $param) {
+        $this->event[] = array(
+            'use' => $use,
+            'param' => $param
+        );
+    }
+
+    public $st = array();
+    public function setStatic($url){
+        $this->st[] = $url;
+    }
+
+}

@@ -62,7 +62,7 @@
     <? endforeach; ?>
 <? $icon = ob_get_clean(); ?>
 
-<?= $io->buffer(sys.'/template/tpl/blocks/popup.html', array(
+<?= Fx::io()->buffer(sys.'/template/tpl/blocks/popup.html', array(
     'name' => 'Выберите иконку',
     'role' => 'icons',
     'class' => 'js-object-icon-list',

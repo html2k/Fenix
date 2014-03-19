@@ -1,21 +1,20 @@
 <?
 
-    $GLOB['self_id'] = (isset($_GET['id'])) ? (int) $_GET['id'] : false;
-    $GLOB['project_name'] = $config['project_name'];
+    Fx::app()->selfId = (isset($_GET['id'])) ? (int) $_GET['id'] : false;
 
-    if($GLOB['self_id'] && !count($db->find($GLOB['namespace']['construct_db'], array('id' => $GLOB['self_id'])))){
+    if(Fx::app()->selfId && !count(Fx::db()->find(Fx::app()->namespace['construct_db'], array('id' => Fx::app()->selfId)))){
         throw new Exception('not found', 404);
     }
 
     // Левое меню
     require_once sys . '/template/php/project-menu.php';
     
-    $tables = $db->find($GLOB['namespace']['struct_db']);
-    $rowslist = $db->find($GLOB['namespace']['struct_td']);
-    $selfItem = $db->extract($db->go(array(
+    $tables = Fx::db()->find(Fx::app()->namespace['struct_db']);
+    $rowslist = Fx::db()->find(Fx::app()->namespace['struct_td']);
+    $selfItem = Fx::db()->extract(Fx::db()->go(array(
         'event' => 'find',
-        'from' => $GLOB['namespace']['construct_db'],
-        'where' => array('parent' => $GLOB['self_id']),
+        'from' => Fx::app()->namespace['construct_db'],
+        'where' => array('parent' => Fx::app()->selfId),
         'order' => 'num'
     )));
 
@@ -41,11 +40,10 @@
     foreach ($selfItem as $k => $j){
         $id = ($j['ref'] > 0) ? $j['ref'] : $j['id'];
 
-        $item = $db->findOne($j['object'], array('id' => $id));
+        $item = Fx::db()->findOne($j['object'], array('id' => $id));
 
-        //debug($item);
         if(is_array($item)){
-            $selfList[] = $io->buffer(sys . '/template/tpl/blocks/project-list-item.html', array(
+            $selfList[] = Fx::io()->buffer(sys . '/template/tpl/blocks/project-list-item.html', array(
                 'index' => $k + 1,
                 'id' => $id,
                 'ref' => $j['ref'],

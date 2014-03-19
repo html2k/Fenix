@@ -6,8 +6,8 @@
 	'/Users/mac/project/Fenix/fenix/template/css/style.css' => '219672b2f5085cfd760fc4e600270d1cc5754ca2',
 	'/Users/mac/project/Fenix/fenix/template/css/sys.css' => 'de4c3d2485164e778ec3e8b10f416f7510542d1d',
 	'/Users/mac/project/Fenix/fenix/template/tpl/blocks/struct/struct.css' => '91ddc068b7a4cabd7f1baba3cfdd50b3f3ac18a9',
-	'version' => 1394139254,
-	'/Users/mac/project/Fenix/fenix/template/js/lib.js' => '5116ece0f4721d7a8b11cb05825c16f9bb37b794',
+	'version' => 1394473159,
+	'/Users/mac/project/Fenix/fenix/template/js/lib.js' => '8b31606dadab5d9dc135ea08dd67dd3fd9dd297c',
 	'/Users/mac/project/Fenix/fenix/template/js/datepicker.js' => 'ea5ecf5bd76b96f2ccb3c78eb67e6668b032e9da',
 	'/Users/mac/project/Fenix/fenix/template/js/main.js' => '48d4207dbbf462a12583064b13e3da7f825db52b',
 	'/Users/mac/project/Fenix/fenix/template/js/search.js' => 'ea12b4ffae29a267f08a7609ba0da79059fcd9c8',
@@ -19,6 +19,9 @@
 	'/Users/mac/project/Fenix/ext//backup/buckup.js' => 'b55878220f2b83cc54db0c5a2f60d17eb174a8ee',
 	'/Users/mac/project/Fenix/ext//li/li.js' => '2767ac2d9f57b166950102b09b9cfadc571cdfcc',
 	'/Users/mac/project/Fenix/fenix/template/tpl/blocks/object/object.css' => '7bbd309876eaac31cba4791c23668b368b1ba7ab',
-	'/Users/mac/project/Fenix/fenix/template/tpl/blocks/object/object.js' => '5ba2186334a2aa280baae5dc12777b1713824958',
-	'/Users/mac/project/Fenix/fenix/template/js/setting.js' => 'e883fd0cc62222c9a3c3b01385cad2ef66a8930d'
+	'/Users/mac/project/Fenix/fenix/template/tpl/blocks/object/object.js' => '030b3aa712752cedea16617af5220b7d45dba3f3',
+	'/Users/mac/project/Fenix/fenix/template/js/setting.js' => 'e883fd0cc62222c9a3c3b01385cad2ef66a8930d',
+	'/Users/mac/project/Fenix/ext/publisher/init.js' => '6acd4957c0e8d1299347264de3fed4e2f7ed3359',
+	'/Users/mac/project/Fenix/ext/note/init.js' => 'ff27ded74c05216b7e34c982135e135b654b113d',
+	'/Users/mac/project/Fenix/ext/note/main.css' => 'fa8f465cbbc68f7662d6e1c7313f1c31ade1babb'
 	); ?>

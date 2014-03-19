@@ -1,2 +1,2 @@
 <span class="inp-name"><?= @$paramObjectItem['row']['name']?></span>
-<input type="text" name="form[<?= @$paramObjectItem['row']['code']?>]" value="<?= @$paramObjectItem['value']?>" class="inp w-full"/>
+<input type="text" name="form[<?= @$paramObjectItem['row']['code']?>]" value="<?= @str_replace('"', '&#34;', $paramObjectItem['value']); ?>" class="inp w-full"/>

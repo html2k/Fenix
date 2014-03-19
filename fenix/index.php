@@ -27,27 +27,29 @@
     
     // Template
     $mode = isset($_GET['mode']) ? $_GET['mode'] : 'home';
-    $GLOB['mode'] = $mode;
+    Fx::app()->mode = $mode;
 
     $php = 'template/php/' . $mode . '.php';
     $tpl = 'template/tpl/' . $mode . '.html';
 
+    Fx::ext()->compile();
     require_once 'template/main.php';
-    $Extension->compile();
+
 
     if(isset($_GET['extension']) && $_GET['extension'] !== ''){
         $mode = $_GET['extension'];
     }
 
-    $extensions = $Extension->get('page');
     $extUrl = '';
-    $GLOB['extension-menu'] = array();
 
-    if(count($extensions)){
-        foreach ($extensions as $ext) {
-            $GLOB['extension-menu'][$ext['option']['code']] = $ext['option']['name'];
-            if($mode === $ext['option']['code']){
-                $extUrl = $ext['url'] . $ext['option']['page'];
+    $ext = Fx::ext()->get('page');
+    Fx::app()->extensionMenu = array();
+
+    if(count($ext)){
+        foreach ($ext as $v) {
+            Fx::app()->extensionMenu[$v['param']['code']] = $v['param']['name'];
+            if($mode === $v['param']['code']){
+                $extUrl = $v['url'] . $v['param']['page'];
             }
         }
     }
@@ -64,11 +66,11 @@
         if(file_exists($php)) require_once $php;
         ob_start();
             if(file_exists($tpl)) require_once $tpl;
-            $GLOB['content'] = ob_get_contents();
+            Fx::app()->content = ob_get_contents();
         ob_end_clean();
         require_once 'template/main.html';
     }catch (Exception $e){
-        $GLOB['leftMenu'] = '';
+        Fx::app()->leftMenu = '';
 
         $param = array(
             'code' => $e->getCode(),
@@ -77,7 +79,6 @@
             'line' => $e->getLine()
         );
 
-
         if($e->getCode() === 403){
             $param['text'] = 'Доступ запрещен';
         }
@@ -85,7 +86,7 @@
             $param['text'] = 'Такая страница не существует';
         }
 
-        $GLOB['content'] = $io->buffer(sys.'/template/error.html', $param);
+        Fx::app()->content = $io->buffer(sys.'/template/error.html', $param);
         require_once 'template/main.html';
     }
     

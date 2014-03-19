@@ -13,14 +13,14 @@
         <script src="plugin/ckeditor/ckeditor.js"></script>
         <script src="plugin/ckeditor/config.js"></script>
         <script src="plugin/ckeditor/adapters/jquery.js"></script>
-        <?= staticLoad($static); ?>
+        <?= staticLoad($static, true); ?>
     </head>
     <body>
         
         <div class="header box">
             <div class="col3">
                 <div class="m-box">
-                    <a class="header-logo" href="<?=$GLOB['url']['home'];?>">FenixCMS</a>
+                    <a class="header-logo" href="<?=Fx::app()->url['home'];?>">FenixCMS</a>
                 </div>
             </div>
             <div class="col5">
@@ -31,11 +31,11 @@
                             <li<?=$current?>><a href="?mode=<?=$k?>"><?=$v?></a></li>
                         <? endforeach; ?>
 
-                        <? if(count($GLOB['extension-menu'])): ?>
+                        <? if(count(Fx::app()->extensionMenu)): ?>
                             <li>
                                 <i class="icon-menu"></i>
                                 <ul>
-                                    <? foreach($GLOB['extension-menu'] as $k => $v): ?>
+                                    <? foreach(Fx::app()->extensionMenu as $k => $v): ?>
                                         <? $current = (mode == $k) ? ' class="current"' : ''; ?>
 
                                         <li<?=$current?>><a href="?extension=<?=$k?>"><?=$v?></a></li>
@@ -62,23 +62,23 @@
             </div>
         </div>
         
-        <? if($GLOB['leftMenu'] != ''): ?>
+        <? if(Fx::app()->leftMenu != ''): ?>
         <div class="box box-table dubl_box">
             <div class="col3 box-cell left_menu">
                 <div class="m-box">
-                    <?= $GLOB['leftMenu']; ?>
+                    <?= Fx::app()->leftMenu ?>
                 </div>
             </div>
             <div class="col9 box-cell">
                 <div class="m-box">
-                    <?= $GLOB['content']; ?>
+                    <?= Fx::app()->content ?>
                 </div>
             </div>
         </div>
         <? else: ?>
         <div class="box">
             <div class="m-box">
-                <?= $GLOB['content']; ?>
+                <?= Fx::app()->content ?>
             </div>
         </div>
         <? endif;?>
@@ -108,26 +108,6 @@
         <div class="alpha">
             <div class="alpha-message"></div>
         </div>
-
-        <div class="popup" role="xcode">
-            <div class="popup-header">
-                <h3>xCode</h3>
-                <i class="popup-close icon-cancel" popup-close></i>
-            </div>
-            <div class="popup-block">
-
-                <textarea class="inp w-full h-gigant"></textarea>
-
-                <span class="btn btn__success">
-                    <span class="btn-in">Сохранить</span>
-                </span>
-
-                <span class="btn" popup-close>
-                    <span class="btn-in">Отмена</span>
-                </span>
-            </div>
-        </div>
-
 
     </body>
 </html>

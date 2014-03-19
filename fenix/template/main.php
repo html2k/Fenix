@@ -6,16 +6,19 @@ $GLOB['menu'] = array(
 );
 
 
-$GLOB['url'] = array(
+Fx::app()->url = array(
     'home' => '/' . $config['folder']['sys'] . '/index.php'
 );
 
 //-> leftMenu
-$GLOB['leftMenu'] = '';
+Fx::app()->leftMenu = '';
 
 
 $script_config = implode('', array(
     '<script>',
-    'window.CONFIG_CKEDITOR = ' . json_encode($config['ckeditor_config']),
+        'window.CONFIG_CKEDITOR = ' . json_encode($config['ckeditor_config']),
     '</script>'
 ));
+
+
+

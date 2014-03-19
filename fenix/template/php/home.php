@@ -1,12 +1,7 @@
 <?
-    $extWidget = $Extension->get('home.widget');
-
-    $extApp = $Extension->get('home.app');
-
-
-    $lastChange = $db->extract($db->go(array(
+    $lastChange = Fx::db()->extract(Fx::db()->go(array(
         'event' => 'find',
-        'from' => $GLOB['namespace']['construct_db'],
+        'from' => Fx::app()->namespace['construct_db'],
         'order' => '`date` DESC',
         'limit' => 15
     )), function($item, $db){
@@ -21,5 +16,7 @@
         );
 
     });
+
+    $dbInfo = Fx::db()->tables_info();
 
 

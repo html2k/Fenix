@@ -19,6 +19,10 @@
             <h3>Данные по системе</h3>
             <table class="table">
                 <tr>
+                    <td>Версия системы</td>
+                    <td><?= $manifest['v'] ?></td>
+                </tr>
+                <tr>
                     <td>Свободное место на диске</td>
                     <td><?= byteConvert(disk_free_space(root)); ?></td>
                 </tr>
@@ -33,33 +37,17 @@
                 </tr>
                 <tr>
                     <td>База данных</td>
-                    <td><?= $db->getInfo(); ?></td>
+                    <td><?= Fx::db()->getInfo(); ?></td>
+                </tr>
+                <tr>
+                    <td>Записей в базе данных</td>
+                    <td><?= $dbInfo['full_count']; ?></td>
+                </tr>
+                <tr>
+                    <td>Размер базы данных</td>
+                    <td><?= byteConvert($dbInfo['full_size']); ?></td>
                 </tr>
             </table>
         </div>
     </div>
 </div>
-
-
-<? if(count($extWidget)): ?>
-<div class="box">
-    <? foreach ($extWidget as $ext): ?>
-        <div class="col4">
-            <div class="m-box">
-                <h3><?= @$ext['option']['name']; ?></h3>
-                <?= @$ext['option']['body']; ?>
-            </div>
-        </div>
-    <? endforeach; ?>
-</div>
-<? endif; ?>
-
-
-
-<? if(count($extApp)): ?>
-<div class="box">
-    <? foreach ($extApp as $ext): ?>
-        <?= @$ext['option']['block']; ?>
-    <? endforeach; ?>
-</div>
-<? endif; ?>

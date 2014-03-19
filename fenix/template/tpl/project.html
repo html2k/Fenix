@@ -13,11 +13,11 @@
 <div class="box">
     <ul class="project-event pull-right">
         <li>
-            <?= $GLOB['create-element-button']; ?>
+            <?= Fx::app()->create_element_button; ?>
         </li>
-        <? if($GLOB['self_id']): ?>
+        <? if(Fx::app()->selfId): ?>
             <li>
-                <a href="?mode=elem&id=<?= @$GLOB['self_id']?>">Редактировать</a>
+                <a href="?mode=elem&id=<?= Fx::app()->selfId ?>">Редактировать</a>
             </li>
         <? else: ?>
             <li>
@@ -39,10 +39,10 @@
         
         <? if(isset($_SESSION['copyItem']) && count($_SESSION['copyItem']) || isset($_SESSION['moveItem']) && count($_SESSION['moveItem'])): ?>
             <li>
-                <a href="?action=pasteItem&id=<?= @$GLOB['self_id']?>">Вставить</a>
+                <a href="?action=pasteItem&id=<?= @Fx::app()->selfId ?>">Вставить</a>
             </li>
             <li>
-                <a href="?action=pasteItemLink&id=<?= @$GLOB['self_id']?>">Вставить ссылку</a>
+                <a href="?action=pasteItemLink&id=<?= @Fx::app()->selfId ?>">Вставить ссылку</a>
             </li>
         <? else: ?>
             <li>
@@ -59,7 +59,7 @@
     </ul>
 
     <div class="project-name">
-        <h1><?= @$GLOB['project_name']?></h1>
+        <h1><?= @Fx::app()->config['project_name'] ?></h1>
     </div>
 </div>
 

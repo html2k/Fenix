@@ -1,7 +1,7 @@
 <h3 class="tab-btn <?= $param['class']; ?>">Пользователи</h3>
 <div class="tab-block <?= $param['class']; ?>">
     <table class="table">
-        <? foreach($param['GLOB']['users'] as $item): ?>
+        <? foreach(Fx::app()->users as $item): ?>
         <tr>
             <td width="100%"><?= $item['login']; ?></td>
 
@@ -49,7 +49,7 @@
     <? $form = ob_get_clean(); ?>
 
 
-    <?= $param['io']->buffer(sys . '/template/tpl/blocks/dropdown.html', array(
+    <?= Fx::io()->buffer(sys . '/template/tpl/blocks/dropdown.html', array(
         'name' => '<span class="btn"><span class="btn-in">Добавить</span></span>',
         'block' => $form
     )); ?>

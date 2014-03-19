@@ -14,49 +14,45 @@ try{
     define('connect_to_db', false);
     require_once 'config.php';
     define('sys', root . '/' . $config['folder']['sys']);
-    define('LESS', sys . '/templating/lessphp/lessc.inc.php');
 
     require_once sys . '/requerid.php';
 
-    req($config, '/class/class_templating.php');
-    $db = new Templating($config['db'], $GLOB['namespace']);
-
     //Path
-    $GLOB['path'] = $db->path($_SERVER['REQUEST_URI']);
-    if($GLOB['path'] === false) throw new Exception('Not found', 404);
+    Fx::app()->path = Fx::db()->path($_SERVER['REQUEST_URI']);
+    if(Fx::app()->path === false) throw new Exception('Not found', 404);
 
     //Self object and Template list
-    $GLOB['template'] = array();
-    if(count($GLOB['path']) > 0){
-        $GLOB['self_object'] = end($GLOB['path']);
-        if((int) $GLOB['self_object']['marker'] !== 0){
-            $marker = $db->find($GLOB['namespace']['marker'], array('id' => $GLOB['self_object']['marker']));
+    Fx::app()->template = array();
+    if(count(Fx::app()->path) > 0){
+        Fx::app()->self_object = end(Fx::app()->path);
+        if((int) Fx::app()->self_object['marker'] !== 0){
+            $marker = Fx::db()->find(Fx::app()->namespace['marker'], array('id' => Fx::app()->self_object['marker']));
             $marker = explode(',', $marker[0]['template_id']);
             foreach($marker as $v){
-                $template = $db->find($GLOB['namespace']['template'], array('id' => $v));
-                $GLOB['template'][] = $template[0]['name'];
+                $template = Fx::db()->find(Fx::app()->namespace['template'], array('id' => $v));
+                Fx::app()->template[] = $template[0]['name'];
             }
         }else{
             throw new Exception('not found', 404);
         }
     }else{
-        $GLOB['template'][] = 'home';
+        Fx::app()->template[] = 'home';
     }
 
     // Templating
-    $templating = trim(strtolower($config['templating']));
+    $templating = trim(strtolower(Fx::app()->config['templating']));
     switch ($templating){
         case 'scooby':
-            require_once $config['folder']['sys'] . '/templating/' . $templating . '/' . $templating . '.php';
+            require_once Fx::app()->config['folder']['sys'] . '/templating/' . $templating . '/' . $templating . '.php';
             $scooby = new Scooby(array(
-                'folder' => $config['folder']['template'],
+                'folder' => Fx::app()->config['folder']['template'],
                 'cache' => ''
             ));
 
             $render = array();
 
 
-            foreach($GLOB['path'] as $v){
+            foreach(Fx::app()->path as $v){
                 $item = $scooby->append(false, 'path');
                 $scooby->append($item, 'id', $v['id']);
                 $scooby->append($item, 'url', $db->getId($v));
@@ -68,12 +64,12 @@ try{
             $GLOB['head'] = $scooby->append(false, 'head');
             $GLOB['body'] = $scooby->append(false, 'body');
 
-            $mainPHP = $config['folder']['template'] . '/main.php';
+            $mainPHP = Fx::app()->config['folder']['template'] . '/main.php';
             if(file_exists($mainPHP))
                 require_once $mainPHP;
 
             foreach($GLOB['template'] as $v){
-                $filePHP = $config['folder']['template'] . '/php/'.$v . '.php';
+                $filePHP = Fx::app()->config['folder']['template'] . '/php/'.$v . '.php';
                 if(file_exists($filePHP))
                     require_once $filePHP;
                 $GLOB[$v] = $scooby->append($GLOB['body'], $v);
@@ -101,23 +97,26 @@ try{
 
         case 'twig':
 
-            require_once $config['folder']['sys'] . '/templating/Twig/Autoloader.php';
+            require_once Fx::app()->config['folder']['sys'] . '/templating/Twig/Autoloader.php';
             Twig_Autoloader::register();
 
             $loader = new Twig_Loader_Filesystem(root . '/template/');
             $twig = new Twig_Environment($loader, array(
-                //'cache' => $config['cache']
-            ));
 
-            require_once $config['folder']['template'] . '/main.php';
+                'debug' => true
+            ));
+            $twig->addExtension(new Twig_Extension_Debug());
+
+            require_once Fx::app()->config['folder']['template'] . '/main.php';
             $render = '';
-            foreach($GLOB['template'] as $v){
-                $filePHP = $config['folder']['template'] . '/php/'.$v . '.php';
+            foreach(Fx::app()->template as $v){
+                $filePHP = Fx::app()->config['folder']['template'] . '/php/'.$v . '.php';
                 $fileHTML = 'twig/' . $v . '.twig';
 
                 if(file_exists($filePHP)){
                     require_once $filePHP;
-                    $render .= $twig->render($fileHTML, $GLOB);
+
+                    $render .= $twig->render($fileHTML, (array) Fx::app());
                 }else{
                     throw new Exception("Error Processing Request", 404);
 
@@ -125,27 +124,12 @@ try{
             }
             if(isset($_GET['show']) && $_GET['show'] == 'glob'){
                 header('Content-Type: text/html');
-                debug($GLOB);
+                debug(Fx::app());
             }else{
                 echo $render;
             }
 
-            break;
-
-        case 'tpl':
-            require_once $config['folder']['sys'] . '/templating/' . $templating . '/' . $templating . '.php';
-            $tpl = new TPL($db);
-
-            require_once $config['folder']['template'] . '/main.php';
-
-            foreach($GLOB['template'] as $v){
-                $filePHP = $config['folder']['template'] . '/php/'.$v . '.php';
-                if(file_exists($filePHP))
-                    require_once $filePHP;
-            }
-
-            require_once $config['folder']['template'] . '/main.html';
-            break;
+        break;
     }
 
 }catch (Exception $e){

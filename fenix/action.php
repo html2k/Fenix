@@ -1,31 +1,11 @@
 <?
-
-$Extension->compile();
-$extAction = $Extension->get('action');
-if(count($extAction)){
-    foreach ($extAction as $ext) {
-        if($ext['option']['name'] === $_REQUEST['action']){
-            $fileInit = $ext['url'] . $ext['option']['init'];
-            if(file_exists($fileInit)){
-                require_once $fileInit;
-            }
-            break;
-        }
-    }
-}
-
-
-$Action = new Action($db, $io, $GLOB, $config, $manifest);
+$Action = new Action($manifest);
 
 $Action->test($_REQUEST, $_POST, $_GET, $_FILES);
 
 
 class Action {
-    function __construct($db, $io, $GLOB, $config, $manifest){
-        $this->db = $db;
-        $this->io = $io;
-        $this->GLOB = $GLOB;
-        $this->config = $config;
+    function __construct($manifest){
         $this->manifest = $manifest;
     }
 
@@ -55,6 +35,7 @@ class Action {
                     $this->{$request['action']}($post, $get, $files);
                 } catch (Exception $e){
                     setSystemMessage('error', $e);
+                    load_url();
                 }
             }
         }
@@ -62,13 +43,13 @@ class Action {
     }
 
     public function connect($post){
-        $find = $this->db->findOne($this->GLOB['namespace']['user'], array(
-            'login' => $this->db->esc(trim($post['login'])),
-            'pass' => hashGenerate(strtolower(trim($this->db->esc($post['password']))))
+        $find = Fx::db()->findOne(Fx::app()->namespace['user'], array(
+            'login' => Fx::db()->esc(trim($post['login'])),
+            'pass' => hashGenerate(strtolower(trim(Fx::db()->esc($post['password']))))
         ));
 
         if(is_array($find) && isset($find['login'])){
-            $this->db->update($this->GLOB['namespace']['user'], array(
+            Fx::db()->update(Fx::app()->namespace['user'], array(
                 'last_date' => time()
             ), array( 'id' => $find['id'] ));
 
@@ -88,7 +69,7 @@ class Action {
 
     public function disconnect(){
         session_destroy();
-        load_url('/' . $this->config['folder']['sys'] . '/index.php');
+        load_url('/' . Fx::app()->config['folder']['sys'] . '/index.php');
     }
 
     public function addUser($post){
@@ -99,11 +80,11 @@ class Action {
         );
 
 
-        $find = $this->db->find($this->GLOB['namespace']['user'], array('login' => $query['login']));
+        $find = Fx::db()->find(Fx::app()->namespace['user'], array('login' => $query['login']));
         if(count($find) > 0){
             throw new Exception('Такой пользователь уже существует');
         }
-        $this->db->insert($this->GLOB['namespace']['user'], $query);
+        Fx::db()->insert(Fx::app()->namespace['user'], $query);
         $name = $query['login'];
 
 
@@ -126,7 +107,7 @@ class Action {
             if($post['pass'] !== '')
                 $query['pass'] = hashGenerate(strtolower(trim($_POST['pass'])));
 
-            $this->db->update($this->GLOB['namespace']['user'], $query, array('id' => $id));
+            Fx::db()->update(Fx::app()->namespace['user'], $query, array('id' => $id));
             $name = $query['login'];
 
 
@@ -141,9 +122,9 @@ class Action {
     public function removeUser (){
         $get = func_get_arg(1);
         $id = (int) $get['id'];
-        $user = $this->db->findOne($this->GLOB['namespace']['user'], array('id' => $id));
+        $user = Fx::db()->findOne(Fx::app()->namespace['user'], array('id' => $id));
         if($user !== false){
-            $this->db->remove($this->GLOB['namespace']['user'], array('id' => $id));
+            Fx::db()->remove(Fx::app()->namespace['user'], array('id' => $id));
             setSystemMessage('good', 'Пользователь - <b>'.$user['login'].'</b> был удален');
         }else{
             setSystemMessage('error', 'В момент удаления произошла ошибка, такого пользователя не существует');
@@ -211,10 +192,10 @@ class Action {
         $SAVE_OBJECT['show_sistem'] = isset($post['show_sistem']) ? $post['show_sistem'] : '';
         $SAVE_OBJECT['show_wood'] = isset($post['show_wood']) ? $post['show_wood'] : '';
 
-        $find = $this->db->findOne($this->GLOB['namespace']['struct_db'], array('code' => $SAVE_OBJECT['code']));
+        $find = Fx::db()->findOne(Fx::app()->namespace['struct_db'], array('code' => $SAVE_OBJECT['code']));
         if($find === false){
 
-             $this->db->insert($this->GLOB['namespace']['struct_db'], array(
+             Fx::db()->insert(Fx::app()->namespace['struct_db'], array(
                 'name' => $SAVE_OBJECT['name'],
                 'code' => $SAVE_OBJECT['code'],
                 'icon' => $SAVE_OBJECT['icon'],
@@ -222,7 +203,7 @@ class Action {
                 'show_sistem' => $SAVE_OBJECT['show_sistem']
             ));
 
-            $TABLE_ID = $this->db->lastID();
+            $TABLE_ID = Fx::db()->lastID();
 
             $ROWS = array_merge(array(), $SAVE_OBJECT['row']['add'], $SAVE_OBJECT['row']['change']);
 
@@ -233,7 +214,7 @@ class Action {
                 }
 
                 $v['type'] = $v['base_type'];
-                $this->db->insert($this->GLOB['namespace']['struct_td'], array(
+                Fx::db()->insert(Fx::app()->namespace['struct_td'], array(
                     'parent' => $TABLE_ID,
                     'name' => $v['base_name'],
                     'code' => $v['name'],
@@ -247,7 +228,7 @@ class Action {
             $TABLE_ID = $find['id'];
 
 
-            $this->db->update($this->GLOB['namespace']['struct_db'], array(
+            Fx::db()->update(Fx::app()->namespace['struct_db'], array(
                 'name' => $SAVE_OBJECT['name'],
                 'code' => $SAVE_OBJECT['code'],
                 'icon' => $SAVE_OBJECT['icon'],
@@ -260,7 +241,7 @@ class Action {
             foreach($SAVE_OBJECT['row']['add'] as $v){
                 $v['type'] = isset($v['base_type']) ? $v['base_type'] : isset($v['type']) ? $v['type'] : 'string';
                 $v['param'] = isset($v['param']) && is_array($v['param']) ? json_encode($v['param']) : '';
-                $this->db->insert($this->GLOB['namespace']['struct_td'], array(
+                Fx::db()->insert(Fx::app()->namespace['struct_td'], array(
                     'parent' => $TABLE_ID,
                     'name' => isset($v['base_name']) ? $v['base_name'] : 'undefined',
                     'code' => $v['name'],
@@ -275,7 +256,7 @@ class Action {
                 $v['type'] = isset($v['base_type']) ? $v['base_type'] : isset($v['type']) ? $v['type'] : 'string';
                 $v['param'] = isset($v['param']) && is_array($v['param']) ? json_encode($v['param']) : '';
 
-                $this->db->update($this->GLOB['namespace']['struct_td'], array(
+                Fx::db()->update(Fx::app()->namespace['struct_td'], array(
                     'parent' => $TABLE_ID,
                     'name' => $v['base_name'],
                     'code' => $v['name'],
@@ -289,7 +270,7 @@ class Action {
             }
 
             foreach($SAVE_OBJECT['row']['drop'] as $v){
-                $this->db->remove($this->GLOB['namespace']['struct_td'], array('code' => $v, 'parent' => $TABLE_ID));
+                Fx::db()->remove(Fx::app()->namespace['struct_td'], array('code' => $v, 'parent' => $TABLE_ID));
             }
         }
 
@@ -315,7 +296,7 @@ class Action {
 
         if(empty($post['name'])) throw new Exception('Пустое значение имени таблици');
 
-        $tables = $this->db->tables_info();
+        $tables = Fx::db()->tables_info();
         $tables = $tables['table'];
         $manifestGist = $this->manifest['gist'];
 
@@ -363,12 +344,12 @@ class Action {
         if(isset($tables[$CREATE_TABLE['name']])){ // Если уже есть такая таблица изменяем ее;
             $CREATE_TABLE['row'] = $this->rowInArray($CREATE_TABLE['name'], $CREATE_TABLE['row']);
 
-            if($this->db->editCollection($CREATE_TABLE) === false){
+            if(Fx::db()->editCollection($CREATE_TABLE) === false){
                 throw new Exception('Невозможно изменить таблицу');
             }
 
         }else{ // Если нет, создаем
-            if($this->db->createCollection($CREATE_TABLE) === false){
+            if(Fx::db()->createCollection($CREATE_TABLE) === false){
                 throw new Exception('Невозможно создать таблицу');
             }
 
@@ -383,9 +364,9 @@ class Action {
         $id = (int) $get['id'];
         $name = $get['name'];
 
-        $this->db->remove($this->GLOB['namespace']['struct_db'], array('id' => $id));
-        $this->db->remove($this->GLOB['namespace']['struct_td'], array('parent' => $id));
-        $this->db->remove_table($name);
+        Fx::db()->remove(Fx::app()->namespace['struct_db'], array('id' => $id));
+        Fx::db()->remove(Fx::app()->namespace['struct_td'], array('parent' => $id));
+        Fx::db()->remove_table($name);
 
         if($this->isSelfMethod()){
             load_url();
@@ -406,7 +387,7 @@ class Action {
 
 
         // Полсучаем список столбцов
-        $tableRows = $this->db->show_column($tableName);
+        $tableRows = Fx::db()->show_column($tableName);
 
         foreach($row as $k => $v){
             $row[$v['name']] = $v;
@@ -446,13 +427,13 @@ class Action {
 
     public function ckparam($post){
 
-        $this->config['ckeditor_config'] = $post['param'];
-        $this->io->write(root.'/config.php', '<? return $config = ' . $this->io->arrayToString($this->config) . '; ?>');
+        Fx::app()->config['ckeditor_config'] = $post['param'];
+        Fx::io()->write(root.'/config.php', '<? return $config = ' . Fx::io()->arrayToString(Fx::app()->config) . '; ?>');
 
         if($this->isSelfMethod()){
             load_url();
         }else{
-            return $this->config;
+            return Fx::app()->config;
         }
     }
 
@@ -471,15 +452,15 @@ class Action {
 
 
         if(is_numeric($val)){
-            $this->db->search($this->GLOB['namespace']['construct_db'], array(
+            Fx::db()->search(Fx::app()->namespace['construct_db'], array(
                 'id' => (int) $val,
                 'chpu' => $val
             ));
         }
-        foreach($this->db->find($this->GLOB['namespace']['struct_db']) as $v){
+        foreach(Fx::db()->find(Fx::app()->namespace['struct_db']) as $v){
             $table = $v['code'];
 
-            $row = $this->db->extract($this->db->go(array(
+            $row = Fx::db()->extract(Fx::db()->go(array(
                 'event' => 'find',
                 'from' => $table,
                 'limit' => 1
@@ -494,7 +475,7 @@ class Action {
                 $where[$row] = $val;
             }
 
-            $find = $this->db->search($table, $where);
+            $find = Fx::db()->search($table, $where);
             if(count($find) > 0){
                 $result[] = array(
                     'name' => $v['name'],
@@ -516,16 +497,16 @@ class Action {
 
     public function addTemplate($post){
         $name = trim($post['name']);
-        $find = $this->db->find($this->GLOB['namespace']['template'], array('name' => $name));
+        $find = Fx::db()->find(Fx::app()->namespace['template'], array('name' => $name));
 
         if(count($find) > 0) throw new Exception('Шаблон с таким именем уже существует');
 
         if(isset($post['id'])){
-            $find = $this->db->find($this->GLOB['namespace']['template'], array('id' => (int) $post['id']));
+            $find = Fx::db()->find(Fx::app()->namespace['template'], array('id' => (int) $post['id']));
 
-            $this->db->update($this->GLOB['namespace']['template'], array( 'name' => $name ), array('id' => (int) $post['id']));
-            foreach($this->manifest['templating'][$this->config['templating']] as $v){
-                $folder = root . '/' . $this->config['folder']['template'] . '/' . $v . '/';
+            Fx::db()->update(Fx::app()->namespace['template'], array( 'name' => $name ), array('id' => (int) $post['id']));
+            foreach($this->manifest['templating'][Fx::app()->config['templating']] as $v){
+                $folder = root . '/' . Fx::app()->config['folder']['template'] . '/' . $v . '/';
                 $new_file =  $folder . $name . '.' . $v;
                 $file = $folder . $find[0]['name'] . '.' . $v;
 
@@ -533,55 +514,57 @@ class Action {
                     rename($file, $new_file);
             }
         }else{
-            $this->db->insert($this->GLOB['namespace']['template'], array( 'name' => $name ));
-            foreach($this->manifest['templating'][$this->config['templating']] as $v){
-                $folder = root . '/' . $this->config['folder']['template'] . '/' . $v . '/';
+            Fx::db()->insert(Fx::app()->namespace['template'], array( 'name' => $name ));
+            foreach($this->manifest['templating'][Fx::app()->config['templating']] as $v){
+                $folder = root . '/' . Fx::app()->config['folder']['template'] . '/' . $v . '/';
                 $file =  $folder . $name . '.' . $v;
 
                 if(!file_exists ($folder))
-                    $this->io->create_dir($folder);
+                    Fx::io()->create_dir($folder);
                 if(!file_exists ($file))
-                    $this->io->create_file($file);
+                    Fx::io()->create_file($file);
             }
         }
+        load_url();
     }
 
 
     public function removeTemplate($post, $get){
         $id = (int) $get['id'];
-        $this->db->remove($this->GLOB['namespace']['template'], array('id' => $id));
+        Fx::db()->remove(Fx::app()->namespace['template'], array('id' => $id));
+        load_url();
     }
 
 
     public function addMarker($post){
         $name = trim($post['name']);
-        $find = $this->db->find($this->GLOB['namespace']['marker'], array('name' => $name));
+        $find = Fx::db()->find(Fx::app()->namespace['marker'], array('name' => $name));
         if(count($find) > 0) throw new Exception('Макер с таким именем уже существует');
 
         if(isset($_POST['id'])){
-            $this->db->update($this->GLOB['namespace']['marker'], array( 'name' => $name ), array('id' => (int) $post['id']));
+            Fx::db()->update(Fx::app()->namespace['marker'], array( 'name' => $name ), array('id' => (int) $post['id']));
         }else{
-            $this->db->insert($this->GLOB['namespace']['marker'], array( 'name' => $name ));
+            Fx::db()->insert(Fx::app()->namespace['marker'], array( 'name' => $name ));
         }
+        load_url();
     }
 
     public function markerAddTemplate ($post) {
         $marker = $post['marker'];
         $id = isset($post['id']) ? implode(',', $post['id']) : '';
-        $this->db->update($this->GLOB['namespace']['marker'], array('template_id' => $id), array('id' => $marker));
+        Fx::db()->update(Fx::app()->namespace['marker'], array('template_id' => $id), array('id' => $marker));
         load_url();
     }
 
     public function removeMarker($post, $get) {
         $id = (int) $get['id'];
-        $this->db->remove($this->GLOB['namespace']['marker'], array('id' => $id));
+        Fx::db()->remove(Fx::app()->namespace['marker'], array('id' => $id));
         load_url();
     }
 
     public function getItemObject($post) {
         $key = (int) $post['index'];
-        echo $this->io->buffer(sys . '/template/tpl/template/object_item.html', array(
-            'io' => $this->io,
+        echo Fx::io()->buffer(sys . '/template/tpl/template/object_item.html', array(
             'key' => $key,
             'value' => array(),
             'manifest' => $this->manifest
@@ -597,7 +580,7 @@ class Action {
             foreach($this->manifest['gist'][$type]['param'] as $v){
                 $file = $path . $v . '.html';
                 if(file_exists($file))
-                    $res[] = $this->io->buffer($file, array(
+                    $res[] = Fx::io()->buffer($file, array(
                         'key' => $key,
                         'manifest' => $this->manifest
                     ));
@@ -607,7 +590,7 @@ class Action {
     }
 
     public function removeElem($post, $get){
-        removeElem($this->db, $this->io, $this->GLOB, $this->config, (int) $get['id']);
+        removeElem((int) $get['id']);
 
         if(isset($_SESSION['back_param']['id']) && $_SESSION['back_param']['id'] == $get['id']){
             load_url (rtrim(dirname($_SERVER['PHP_SELF']), '/\\') . '/?mode=project');
@@ -620,16 +603,16 @@ class Action {
 
     public function removeItem($post){
         foreach($post['id'] as $v){
-            removeElem($this->db, $this->io, $this->GLOB, $this->config, (int) $v);
+            removeElem((int) $v);
         }
     }
 
     public function dubleItem($post){
         $parent = (int) $post['parent'];
         foreach($post['id'] as $v){
-            copyElem($this->db, $this->io, $this->GLOB, $this-> config, (int) $v, $parent);
+            copyElem((int) $v, $parent);
         }
-
+        
         setSystemMessage('good', 'Элемент успешно скопирован в текущую деррикторию');
     }
 
@@ -660,10 +643,10 @@ class Action {
 
         foreach($id as $v){
             if($event == 'move'){
-                $num = count($this->db->find($this->GLOB['namespace']['construct_db'], array('parent' => $parent)));
-                $this->db->update($this->GLOB['namespace']['construct_db'], array('parent' => $parent, 'num' => $num, 'date' => time()), array('id' => (int) $v));
+                $num = count(Fx::db()->find(Fx::app()->namespace['construct_db'], array('parent' => $parent)));
+                Fx::db()->update(Fx::app()->namespace['construct_db'], array('parent' => $parent, 'num' => $num, 'date' => time()), array('id' => (int) $v));
             }else{
-                copyElem($this->db, $this->io, $this->GLOB, $this->config, (int) $v, $parent);
+                copyElem((int) $v, $parent);
             }
         }
         load_url();
@@ -681,10 +664,10 @@ class Action {
             throw new Exception();
         }
 
-        $num = count($this->db->find($this->GLOB['namespace']['construct_db'], array('parent' => $parent)));
+        $num = count(Fx::db()->find(Fx::app()->namespace['construct_db'], array('parent' => $parent)));
 
         foreach($id as $v){
-            $object = $this->db->find($this->GLOB['namespace']['construct_db'], array('id' => $v));
+            $object = Fx::db()->find(Fx::app()->namespace['construct_db'], array('id' => $v));
             $object = $object[0];
 
             // Ссылки нельзя копировать
@@ -695,7 +678,7 @@ class Action {
             $object['ref'] = $v;
             $object['num'] = $num;
             $object['date'] = time();
-            $this->db->insert($this->GLOB['namespace']['construct_db'], $object);
+            Fx::db()->insert(Fx::app()->namespace['construct_db'], $object);
         }
         load_url();
     }
@@ -704,13 +687,13 @@ class Action {
         $id = $post['id'];
 
         foreach($id as $k => $v){
-            $this->db->update($this->GLOB['namespace']['construct_db'], array('num' => $k), array('id' => $v));
+            Fx::db()->update(Fx::app()->namespace['construct_db'], array('num' => $k), array('id' => $v));
         }
     }
 
     public function hideElement($post, $get){
         $id = $get['id'];
-        $this->db->update($this->GLOB['namespace']['construct_db'], array('hide' => (int) $get['hide']), array('id' => $id));
+        Fx::db()->update(Fx::app()->namespace['construct_db'], array('hide' => (int) $get['hide']), array('id' => $id));
         load_url();
     }
 
@@ -718,7 +701,7 @@ class Action {
         $count = (int) $post['count'];
         $table = $post['table'];
 
-        $result = $this->db->extract($this->db->go(array(
+        $result = Fx::db()->extract(Fx::db()->go(array(
             'event' => 'find',
             'from' => $table,
             'limit' => ('' . $count . ', 50')
@@ -742,7 +725,7 @@ class Action {
             $update[$v['name']] = $v['newValue'];
         }
 
-        $this->db->update($post['table'], $update, $where);
+        Fx::db()->update($post['table'], $update, $where);
 
         echo 'Строка изменена';
     }
@@ -758,7 +741,7 @@ class Action {
 
         $updateId = (isset($post['id']) && $post['id'] != '') ? (int) $post['id'] : false;
         if($updateId !== false){
-            $this->db->update($this->GLOB['namespace']['construct_db'], array(
+            Fx::db()->update(Fx::app()->namespace['construct_db'], array(
                 'chpu' => $post['chpu'],
                 'active_path' => $activePath,
                 'marker' => $post['marker'],
@@ -766,9 +749,9 @@ class Action {
             ), array('id' => $updateId));
 
 
-            $ref = $this->db->find($this->GLOB['namespace']['construct_db'], array('ref' => $updateId));
+            $ref = Fx::db()->find(Fx::app()->namespace['construct_db'], array('ref' => $updateId));
             foreach($ref as $v){
-                $this->db->update($this->GLOB['namespace']['construct_db'], array(
+                Fx::db()->update(Fx::app()->namespace['construct_db'], array(
                     'chpu' => $post['chpu'],
                     'active_path' => $post['active_path'],
                     'marker' => $post['marker'],
@@ -778,8 +761,8 @@ class Action {
 
             $lastId = $updateId;
         }else{
-            $num = count($this->db->find($this->GLOB['namespace']['construct_db'], array( 'parent' => (int) $post['parent'] )));
-            $this->db->insert($this->GLOB['namespace']['construct_db'], array(
+            $num = count(Fx::db()->find(Fx::app()->namespace['construct_db'], array( 'parent' => (int) $post['parent'] )));
+            Fx::db()->insert(Fx::app()->namespace['construct_db'], array(
                 'parent' => (int) $post['parent'],
                 'ref' => '',
                 'object' => $post['object'],
@@ -789,13 +772,13 @@ class Action {
                 'marker' => $post['marker'],
                 'date' => time()
             ));
-            $form['id'] = $lastId = $this->db->lastID();
+            $form['id'] = $lastId = Fx::db()->lastID();
         }
 
-        $table = $this->db->find($this->GLOB['namespace']['struct_db'], array('code' => $post['object']));
+        $table = Fx::db()->find(Fx::app()->namespace['struct_db'], array('code' => $post['object']));
         $table = $table[0];
 
-        $row = $this->db->find($this->GLOB['namespace']['struct_td'], array( 'parent' => $table['id'] ));
+        $row = Fx::db()->find(Fx::app()->namespace['struct_td'], array( 'parent' => $table['id'] ));
         $rows = array();
         foreach($row as $v){
             $rows[$v['code']] = array(
@@ -808,23 +791,23 @@ class Action {
 
         foreach($form as $k => $v){
             if(is_string($v)){
-                $form[$k] = $this->db->esc($v);
+                $form[$k] = Fx::db()->esc($v);
             }
         }
 
-        $path = root . '/' . $this->config['folder']['files'] . '/' . $lastId . '/';
+        $path = root . '/' . Fx::app()->config['folder']['files'] . '/' . $lastId . '/';
         if(isset($file['tmp_name'])){
             foreach ($file['tmp_name'] as $k => $v){
-                $savePath = '/' . $this->config['folder']['files'] . '/' . $lastId . '/';
+                $savePath = '/' . Fx::app()->config['folder']['files'] . '/' . $lastId . '/';
                 $fileName = (isset($form[$k]['name']) && $form[$k]['name'] != '') ? trim($form[$k]['name']) : $k;
                 $gist = $rows[$k];
 
                 $fn = (isset($form[$k]['url']) && $form[$k]['url'] != '') ? $form[$k]['url'] : $v['file'];
-                $mime = $this->io->mime($file['name'][$k]['file'] != '' ? $file['name'][$k]['file'] : $form[$k]['url']);
+                $mime = Fx::io()->mime($file['name'][$k]['file'] != '' ? $file['name'][$k]['file'] : $form[$k]['url']);
 
                 if(isset($form[$k]['url']) && $form[$k]['url'] !== ''){
-                    $this->io->create_file(root. '/' . 'temporary.tmp');
-                    $this->io->in_file(root. '/' . 'temporary.tmp', file_get_contents($fn));
+                    Fx::io()->create_file(root. '/' . 'temporary.tmp');
+                    Fx::io()->in_file(root. '/' . 'temporary.tmp', file_get_contents($fn));
                     $fn = root. '/' . 'temporary.tmp';
                 }
                 if($fn != ''){
@@ -927,9 +910,9 @@ class Action {
         }
 
         if($updateId !== false){
-            $this->db->update($post['object'], $form, array('id' => $updateId));
+            Fx::db()->update($post['object'], $form, array('id' => $updateId));
         }else{
-            $this->db->insert($post['object'], $form);
+            Fx::db()->insert($post['object'], $form);
         }
         load_url();
     }

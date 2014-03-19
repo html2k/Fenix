@@ -2,14 +2,14 @@
 
 
 <div class="tab-box tab-box__vertical">
-    <?= $io->buffer(sys.'/template/tpl/setting/user.html', array(
+    <?= Fx::io()->buffer(sys.'/template/tpl/setting/user.html', array(
         'manifest' => $manifest,
         'GLOB' => $GLOB,
         'io' => $io,
         'class' => 'active'
     )) ?>
 
-    <?= $io->buffer(sys.'/template/tpl/setting/ckeditor.html', array(
+    <?= Fx::io()->buffer(sys.'/template/tpl/setting/ckeditor.html', array(
         'config' => $config
     )) ?>
 

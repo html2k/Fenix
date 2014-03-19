@@ -1,22 +1,14 @@
 <?
-    require_once sys.'/manifest.php';
-    // Alias var
-    $GLOB = array();
-    $GLOB['namespace'] = array();
-    foreach($manifest['baseCollection'] as $k => $v){
-        $GLOB['namespace'][$k] = $config['db']['sys_namespace'] . $k;
-    }
 
-    // Function
+    require_once sys.'/manifest.php';
     require_once root . '/' . $config['folder']['sys'] . '/function.php';
 
-    // Lang
     if(file_exists('lang/'.$config['lang'].'.php'))
         require_once 'lang/'.$config['lang'].'.php';
     else
         require_once 'lang/ru.php';
 
-    // Class
+    req($config, '/class/class_fx.php');
     req($config, '/class/compress/cssmin.php');
     req($config, '/class/compress/jsmin.php');
     req($config, '/class/class_io.php');
@@ -24,17 +16,30 @@
     req($config, '/class/class_extension.php');
     req($config, '/class/class_translate.php');
     req($config, '/class/class_convert_schem.php');
-
+    req($config, '/templating/lessphp/lessc.inc.php');
+    req($config, '/class/class_less.php');
+    req($config, '/class/class_glob.php');
     if(!req($config, '/class/db/' . $config['db']['type'] . '.php'))
         req($config, '/class/db/mysql.php');
+    req($config, '/class/class_templating.php');
+
+
+
+
+    Fx::app()->config = $config;
+
+    // Alias var
+    Fx::app()->namespace = array();
+    foreach($manifest['baseCollection'] as $k => $v){
+        Fx::app()->namespace[$k] = Fx::app()->config['db']['sys_namespace'] . $k;
+    }
 
     $io = new IO();
     $static = new CompressStatic(sys.'/template/compress_static/', 'app', sys.'/');
 
-    if(connect_to_db){
-        $db = new Base($config['db']);
-        $Extension = new Extension($GLOB['namespace'], $config, $db, $io, $static);
-    }
+    $LESS = new Less($io);
+
+
 
     //->Static
     if(system_static){

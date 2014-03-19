@@ -1,13 +1,13 @@
 <?
 class Base extends ConvertSchem{
-    
+
     private $connect = false;
     protected $cursor = false;
-            
+
     function __construct($param) {
         $this->init($param);
     }
-    
+
     function init($param){
         $param['pass'] = (isset($param['pass'])) ? $param['pass'] : '';
         $this->curcor = $this;
@@ -34,7 +34,7 @@ class Base extends ConvertSchem{
         }
         return false;
     }
-    
+
     function isConnect(){ return !!$this->connect; }
 
 
@@ -91,22 +91,22 @@ class Base extends ConvertSchem{
     public function go($param){
         return $this->query(parent::go($param));
     }
-    
+
     public function find($from, $option = array(), $callback = null){
         return $this->extract($this->query(parent::find($from, $option)), $callback);
     }
     public function findOne($from, $option = array()){
         return mysql_fetch_assoc($this->query(parent::find($from, $option)));
     }
-    
+
     public function insert($from, $insert){
         return $this->query(parent::insert($from, $insert));
     }
-    
+
     public function update($from, $update, $where){
         return $this->query(parent::update($from, $update, $where));
     }
-    
+
     public function remove($from, $where) {
         return $this->query(parent::remove($from, $where));
     }
@@ -134,31 +134,31 @@ class Base extends ConvertSchem{
     public function createCollection($param){
         return $this->query(parent::createTable($param));
     }
-    
+
     public function editCollection($param){
         return $this->query(parent::alterTable($param));
     }
-    
+
     public function lastID (){
         return mysql_insert_id();
     }
-    
+
     public function esc($value){
         $value = addslashes($value);
         $value = htmlspecialchars($value);
-        
+
         return $value;
     }
-	
+
 	public function resc($value){
 		$value = stripslashes($value);
 		$value = htmlspecialchars_decode($value);
-		
+
 		return $value;
 	}
 
     public function getInfo(){
         return 'MySQL ' . mysql_get_server_info() . ' ';
     }
-    
+
 }

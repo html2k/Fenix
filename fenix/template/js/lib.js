@@ -583,7 +583,7 @@ function dump(list){
 
                 $popup.show();
                 $popup.find('[popup-close]').on('mouseup.popup-close', close);
-                $wrap.find('[autofocus]').focus();
+                $popup.find('[autofocus]').focus();
                 return $popup;
             }
         }else{
@@ -596,6 +596,7 @@ function dump(list){
     });
     $(document).on('mouseup.popup', '[popup]', function (event) {
         LIB.popup(this.getAttribute('popup'));
+        return false;
     }).on('mouseup.popup-close', function (event) {
         var el = $(event.target);
         if (event.target.tagName) {

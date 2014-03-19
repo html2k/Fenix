@@ -62,7 +62,7 @@
                         $paramGIST = json_decode($param['value']['param'], true);
                     }
 
-                    echo $param['io']->buffer(sys . '/template/tpl/gist-param/' . $v . '.html', array(
+                    echo Fx::io()->buffer(sys . '/template/tpl/gist-param/' . $v . '.html', array(
                         'key' => $param['key'],
                         'gist' => $paramGIST,
                         'manifest' => $param['manifest']

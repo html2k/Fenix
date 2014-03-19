@@ -1,4 +1,4 @@
 <?
 access(0); // Root
 
-$GLOB['users'] = $db->find($GLOB['namespace']['user']);
+Fx::app()->users = Fx::db()->find(Fx::app()->namespace['user']);

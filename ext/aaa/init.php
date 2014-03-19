@@ -3,7 +3,7 @@
     $Extension->set('project.menu', array(
 
         'name' => 'asdsadas',
-        'block' => $io->buffer($option['url'] . 'block.html')
+        'block' => Fx::io()->buffer(Fx::app()->option['url'] . 'block.html')
 
     ));
 
