@@ -1,0 +1,24 @@
+.board-tables .board-tables__item.board-tables__item_active{
+    position: relative;
+    color: #fff;
+    background: #00a2c4;
+}
+
+.board-tables__item_active:before{
+    content: '';
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    margin-top: -8px;
+    border: 8px solid transparent;
+    border-left-color: #00a2c4;
+}
+
+.board-tables .board-tables__item.board-tables__item_active .false-link{
+    color: #fff;
+    border-bottom-color: transparent;
+}
+
+.board-tables__remove-item{
+    cursor: pointer;
+}

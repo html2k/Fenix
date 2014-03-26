@@ -3,39 +3,39 @@
     <form action="" method="post">
         <div class="box">
             <label class="inp-check col2" help="Выделение цитат внутри документа">
-                <input type="checkbox" name="param[]" value="blockquote" <? if(in_array('blockquote', Fx::app()->config['ckeditor_config'])) { ?>checked="checked"<? } ?> /> blockquote
+                <input type="checkbox" name="param[]" value="blockquote" <? if(in_array('blockquote', Fx::context()->config['ckeditor_config'])) { ?>checked="checked"<? } ?> /> blockquote
             </label>
 
             <label class="inp-check col2" help="Небольшой плагин для работы с документами google">
-                <input type="checkbox" name="param[]" value="googledocs" <? if(in_array('googledocs', Fx::app()->config['ckeditor_config'])) { ?>checked="checked"<? } ?> /> googledocs
+                <input type="checkbox" name="param[]" value="googledocs" <? if(in_array('googledocs', Fx::context()->config['ckeditor_config'])) { ?>checked="checked"<? } ?> /> googledocs
             </label>
 
             <label class="inp-check col2" help="Делает скриншоты заданного урл">
-                <input type="checkbox" name="param[]" value="page2images" <? if(in_array('page2images', Fx::app()->config['ckeditor_config'])) { ?>checked="checked"<? } ?>/> page2images
+                <input type="checkbox" name="param[]" value="page2images" <? if(in_array('page2images', Fx::context()->config['ckeditor_config'])) { ?>checked="checked"<? } ?>/> page2images
             </label>
 
             <label class="inp-check col2" help="Плагин для работы с youtube роликами">
-                <input type="checkbox" name="param[]" value="tliyoutube" <? if(in_array('tliyoutube', Fx::app()->config['ckeditor_config'])) { ?>checked="checked"<? } ?>/> tliyoutube
+                <input type="checkbox" name="param[]" value="tliyoutube" <? if(in_array('tliyoutube', Fx::context()->config['ckeditor_config'])) { ?>checked="checked"<? } ?>/> tliyoutube
             </label>
 
             <label class="inp-check col2" help="Перевод текста при помощи разных сервисов">
-                <input type="checkbox" name="param[]" value="xdsoft_translater" <? if(in_array('xdsoft_translater', Fx::app()->config['ckeditor_config'])) { ?>checked="checked"<? } ?>/> xdsoft_translater
+                <input type="checkbox" name="param[]" value="xdsoft_translater" <? if(in_array('xdsoft_translater', Fx::context()->config['ckeditor_config'])) { ?>checked="checked"<? } ?>/> xdsoft_translater
             </label>
 
             <label class="inp-check col2" help="Запоминает состояние редактора при сохранении формы">
-                <input type="checkbox" name="param[]" value="backup" <? if(in_array('backup', Fx::app()->config['ckeditor_config'])) { ?>checked="checked"<? } ?>/> backup
+                <input type="checkbox" name="param[]" value="backup" <? if(in_array('backup', Fx::context()->config['ckeditor_config'])) { ?>checked="checked"<? } ?>/> backup
             </label>
 
             <label class="inp-check col2" help="Количество слов, символов в тексте">
-                <input type="checkbox" name="param[]" value="stat" <? if(in_array('stat', Fx::app()->config['ckeditor_config'])) { ?>checked="checked"<? } ?>/> stat
+                <input type="checkbox" name="param[]" value="stat" <? if(in_array('stat', Fx::context()->config['ckeditor_config'])) { ?>checked="checked"<? } ?>/> stat
             </label>
 
             <label class="inp-check col2" help="Работы с кодом">
-                <input type="checkbox" name="param[]" value="insertpre" <? if(in_array('insertpre', Fx::app()->config['ckeditor_config'])) { ?>checked="checked"<? } ?>/> insertpre
+                <input type="checkbox" name="param[]" value="insertpre" <? if(in_array('insertpre', Fx::context()->config['ckeditor_config'])) { ?>checked="checked"<? } ?>/> insertpre
             </label>
 
             <label class="inp-check col2" help="Автоматическое проставление nofollow на внешних ссылках">
-                <input type="checkbox" name="param[]" value="nofollow" <? if(in_array('nofollow', Fx::app()->config['ckeditor_config'])) { ?>checked="checked"<? } ?>/> nofollow
+                <input type="checkbox" name="param[]" value="nofollow" <? if(in_array('nofollow', Fx::context()->config['ckeditor_config'])) { ?>checked="checked"<? } ?>/> nofollow
             </label>
         </div>
 

@@ -1,7 +1,7 @@
 <?
     $lastChange = Fx::db()->extract(Fx::db()->go(array(
         'event' => 'find',
-        'from' => Fx::app()->namespace['construct_db'],
+        'from' => Fx::context()->namespace['construct_db'],
         'order' => '`date` DESC',
         'limit' => 15
     )), function($item, $db){

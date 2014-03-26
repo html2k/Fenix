@@ -1,8 +1,8 @@
 <?
-    Fx::app()->path = loadPath(Fx::app()->selfId);
+    Fx::context()->path = loadPath(Fx::context()->selfId);
     
     // Левое меню
-    Fx::app()->leftMenu = '';
+    Fx::context()->leftMenu = '';
     // Формируем левое меню
     class Path extends Base{
         public $result = array();
@@ -10,7 +10,7 @@
 
         function __construct(){
 
-                $t = Fx::db()->find(Fx::app()->namespace['struct_db']);
+                $t = Fx::db()->find(Fx::context()->namespace['struct_db']);
                 foreach($t as $v){
                         $this->struct[$v['code']] = $v;
                 }
@@ -37,7 +37,7 @@
         }
 
         private function rec($id){
-            $find = $this->perform(Fx::app()->namespace['construct_db'], array('parent' => $id));
+            $find = $this->perform(Fx::context()->namespace['construct_db'], array('parent' => $id));
             foreach($find as $v){
                 $active = (isset($this->path[0]) && $this->path[0]['id'] == $v['id']) ? ' class="active"' : '';
 
@@ -68,29 +68,29 @@
         }
     }
 
-    $leftMenu = new Path(Fx::app()->path);
+    $leftMenu = new Path(Fx::context()->path);
 
-    $objectList = Fx::db()->find(Fx::app()->namespace['struct_db']);
+    $objectList = Fx::db()->find(Fx::context()->namespace['struct_db']);
     $elemId = isset($_GET['id']) ? '&parent='.$_GET['id'] : '';
 
-    Fx::app()->create_element_button = Fx::io()->buffer(sys.'/template/tpl/blocks/project/create-element-button.html', array(
+    Fx::context()->create_element_button = Fx::io()->buffer(sys.'/template/tpl/blocks/project/create-element-button.html', array(
         'object' => $objectList,
         'elemID' => $elemId
     ));
 
-    Fx::app()->left_menu_items = array();
-    Fx::app()->left_menu_items[] = array(
+    Fx::context()->left_menu_items = array();
+    Fx::context()->left_menu_items[] = array(
         'name' => 'Структура проекта',
-        'block' => '<ul class="project-menu-list">' . $leftMenu->result . '</ul>' . Fx::app()->create_element_button,
+        'block' => '<ul class="project-menu-list">' . $leftMenu->result . '</ul>' . Fx::context()->create_element_button,
     );
 
-    Fx::app()->leftMenu .= Fx::io()->buffer(sys.'/template/tpl/blocks/project/project-menu.html', Fx::app()->left_menu_items);
+    Fx::context()->leftMenu .= Fx::io()->buffer(sys.'/template/tpl/blocks/project/project-menu.html', Fx::context()->left_menu_items);
 
     
 
     // Формируем хлебные крошки
     $crumbs = array();
-    foreach(Fx::app()->path as $v){
+    foreach(Fx::context()->path as $v){
         $find = Fx::db()->find($v['object'], array('id' => $v['id']));
         $crumbs[$v['id']] = isset($find[0]['name']) &&  $find[0]['name'] != '' ? $find[0]['name'] : 'undefiend-'.$v['id'];
     }

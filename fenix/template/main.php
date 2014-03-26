@@ -1,4 +1,5 @@
 <?
+
 $GLOB['menu'] = array(
     'project' => $lang['menu.project'],
     'struct' => $lang['menu.struct'],
@@ -6,12 +7,12 @@ $GLOB['menu'] = array(
 );
 
 
-Fx::app()->url = array(
+Fx::context()->url = array(
     'home' => '/' . $config['folder']['sys'] . '/index.php'
 );
 
 //-> leftMenu
-Fx::app()->leftMenu = '';
+Fx::context()->leftMenu = '';
 
 
 $script_config = implode('', array(
@@ -19,6 +20,5 @@ $script_config = implode('', array(
         'window.CONFIG_CKEDITOR = ' . json_encode($config['ckeditor_config']),
     '</script>'
 ));
-
 
 

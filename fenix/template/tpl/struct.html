@@ -5,7 +5,7 @@
         <div class="m-box">
             <h3>Обьекты</h3>
             <ul class="setting-tebles">
-                <?= Fx::io()->buffer(sys . '/template/tpl/blocks/list__object.html', Fx::db()->find(Fx::app()->namespace['struct_db'])); ?>
+                <?= Fx::io()->buffer(sys . '/template/tpl/blocks/list__object.html', Fx::db()->find(Fx::context()->namespace['struct_db'])); ?>
             </ul>
 
 
@@ -43,7 +43,7 @@
                 <?= Fx::io()->buffer(sys . '/template/tpl/blocks/list__marker.html', array(
                     'markerList' => $markerList,
                     'templateList' => $templateList,
-                    'io' => $io
+                    'io' => Fx::io()
                 )); ?>
             </ul>
 
@@ -108,5 +108,5 @@
 
 <hr class="mt-big mb-big" />
 
-<?= Fx::io()->buffer(sys . '/template/tpl/blocks/table/table.html', $tableInfo); ?>
+<div class="board-tables"></div>
 
