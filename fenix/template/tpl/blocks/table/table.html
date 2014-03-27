@@ -1,13 +1,11 @@
-<? Fx::cStatic()->set('template/blocks/board-tables/board-tables.css') ?>
-
-<div class="box board-tables">
+<div class="box js-structTables">
     <div class="col3">
         <h3>Таблици</h3>
         <ul class="list list__struct">
         <? foreach($param['table'] as $k => $v): ?>
-            <li class="box board-tables__item" data-table="<?= $k?>">
+            <li class="box" data-table="<?= $k?>">
                 <span class="false-link"><?= $k ?></span>
-
+                
                 <span class="pull-right">
                     <span class="ml-normal" help="Количество записей в таблице"><?= $v['count'] ?></span>
                     <span class="ml-normal" help="Количество занимаемой памяти"><?= byteConvert($v['size']) ?></span>
@@ -17,7 +15,7 @@
         <ul>
     </div>
     <div class="col9">
-        <div class="m-box board-tables__box">
+        <div class="m-box">
 
             <span class="btn">
                 <span class="btn-in">Сформировать правило</span>
@@ -29,11 +27,10 @@
                 <span class="btn-in">Удалить</span>
             </span>
 
-            <input type="text" name="" value="" class="inp board-tables__input" placeholder="Найти"/>
-            <span class="board-tables__count-search"></span>
+            <input type="text" name="" value="" class="inp" placeholder="Найти"/>
 
             <? foreach ($param['data'] as $key => $value): ?>
-                <div class="dn js-structTable board-tables__block">
+                <div class="dn js-structTable">
                     <table class="table">
 
                         <? if(isset($value[0])): ?>

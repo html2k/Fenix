@@ -1,7 +1,7 @@
 <h3 class="tab-btn <?= $param['class']; ?>">Пользователи</h3>
 <div class="tab-block <?= $param['class']; ?>">
     <table class="table">
-        <? foreach(Fx::context()->users as $item): ?>
+        <? foreach(Fx::app()->users as $item): ?>
         <tr>
             <td width="100%"><?= $item['login']; ?></td>
 

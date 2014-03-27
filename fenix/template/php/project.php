@@ -1,20 +1,20 @@
 <?
 
-    Fx::context()->selfId = (isset($_GET['id'])) ? (int) $_GET['id'] : false;
+    Fx::app()->selfId = (isset($_GET['id'])) ? (int) $_GET['id'] : false;
 
-    if(Fx::context()->selfId && !count(Fx::db()->find(Fx::context()->namespace['construct_db'], array('id' => Fx::context()->selfId)))){
+    if(Fx::app()->selfId && !count(Fx::db()->find(Fx::app()->namespace['construct_db'], array('id' => Fx::app()->selfId)))){
         throw new Exception('not found', 404);
     }
 
     // Левое меню
     require_once sys . '/template/php/project-menu.php';
     
-    $tables = Fx::db()->find(Fx::context()->namespace['struct_db']);
-    $rowslist = Fx::db()->find(Fx::context()->namespace['struct_td']);
+    $tables = Fx::db()->find(Fx::app()->namespace['struct_db']);
+    $rowslist = Fx::db()->find(Fx::app()->namespace['struct_td']);
     $selfItem = Fx::db()->extract(Fx::db()->go(array(
         'event' => 'find',
-        'from' => Fx::context()->namespace['construct_db'],
-        'where' => array('parent' => Fx::context()->selfId),
+        'from' => Fx::app()->namespace['construct_db'],
+        'where' => array('parent' => Fx::app()->selfId),
         'order' => 'num'
     )));
 

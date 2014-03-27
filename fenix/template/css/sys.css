@@ -14,6 +14,64 @@ sup{
     padding: 0 15px;
 }
 
+.header-search{
+    position: relative;
+}
+.header-search i{
+    position: absolute;
+    z-index: 2;
+    top: 9px;
+    left: 4px;
+    color: #fff;
+}
+.header-search input{
+    position: relative;
+    z-index: 1;
+    margin: 7px 0 0 0;
+    padding: 0 10px 0 26px;
+    height: 20px;
+    font-size: 12px;
+    opacity: 0.4;
+    border-radius: 20px;
+}
+.header-search input.active,
+.header-search input:focus{ opacity: 1; }
+.header-search input.active + i,
+.header-search input:focus + i{ color: #000; }
+.header-search-result-block{
+    position: absolute;
+    top: 17px;
+    height: 600px;
+    left: 0;
+    right: 0;
+    display: none;
+    margin: 0;
+    padding: 30px 15px 10px 15px;
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 0 5px 0 rgba(0,0,0,0.9);
+}
+.header-search-result-block ul{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+.header-search-result-block li a{
+    position: relative;
+    display: block;
+    line-height: 20px;
+}
+.header-search-result-block li div{
+    position: absolute;
+    display: none;
+    background: #fff;
+    right: 100%;
+    top: 0;
+}
+.header-search-result-block a:hover div{ display: block; }
+
+
+
 h3{ font-size: 14px; }
 .left_menu{
     padding-top: 15px;

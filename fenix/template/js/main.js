@@ -1,59 +1,3 @@
-_.byteConvert = function(bytes){
-    if      (bytes>=1000000000) {bytes=(bytes/1000000000).toFixed(2)+' GB';}
-    else if (bytes>=1000000)    {bytes=(bytes/1000000).toFixed(2)+' MB';}
-    else if (bytes>=1000)       {bytes=(bytes/1000).toFixed(2)+' KB';}
-    else if (bytes>1)           {bytes=bytes+' bytes';}
-    else if (bytes==1)          {bytes=bytes+' byte';}
-    else                        {bytes='0 byte';}
-    return bytes;
-}
-_.cutLine = function(string, size){
-    var len = string.length;
-
-    string = string.substr(0, size);
-    if(len > size){
-        string += '...';
-    }
-
-    return document.createTextNode(string).textContent;
-}
-_.storage = (function(){
-    if('localStorage' in window && window['localStorage'] !== null){
-        var s = localStorage;
-        return {
-            set : function(name, val){
-                if(!name || !val) return false;
-
-                var val = JSON.stringify(val);
-                try {
-                    s.setItem(name, val);
-                    return true;
-                } catch (e) {
-                    return false;
-                }
-            },
-
-            get : function(name){
-                if(s[name])
-                    return JSON.parse(s[name]);
-                else
-                    return false;
-            },
-
-            clear : function(){
-                return s.clear();
-            }
-        };
-    }else{
-        return {
-            set: function(){},
-            get: function(){},
-            clear: function(){}
-        }
-    }
-}());
-
-
 $(function(){
     'use strict';
 
@@ -63,17 +7,6 @@ $(function(){
         $('.editor').ckeditor();
 
     }
-
-
-
-    if($('.board-tables').length){
-        $.getScript('template/blocks/board-tables/board-tables.js');
-    }
-    if($('.header-search').length){
-        $.getScript('template/blocks/header-search/header-search.js');
-    }
-
-
 });
 
     GLOBAL.watch('notification', function(message){

@@ -11,7 +11,6 @@
     req($config, '/class/class_fx.php');
     req($config, '/class/compress/cssmin.php');
     req($config, '/class/compress/jsmin.php');
-    req($config, '/class/class_controller_loader.php');
     req($config, '/class/class_io.php');
     req($config, '/class/class_compress_static.php');
     req($config, '/class/class_extension.php');
@@ -25,49 +24,50 @@
     req($config, '/class/class_templating.php');
 
 
-    /** Устанлвка базового пути для контроллеров */
-    Fx::cLoader()->setPath(sys . '/template/controller/');
 
-    /** Устанлвка базового пути для статики */
-    Fx::cStatic()->root(sys);
 
-    /** Добавляем конфиги в контекст приложения */
-    Fx::context()->config = $config;
+    Fx::app()->config = $config;
 
-    /** Добавляем манифест в контекст приложения */
-    Fx::context()->manifest = $manifest;
-
-    /** Алиасы имен бд */
-    Fx::context()->namespace = array();
+    // Alias var
+    Fx::app()->namespace = array();
     foreach($manifest['baseCollection'] as $k => $v){
-        Fx::context()->namespace[$k] = Fx::context()->config['db']['sys_namespace'] . $k;
+        Fx::app()->namespace[$k] = Fx::app()->config['db']['sys_namespace'] . $k;
     }
 
+    $io = new IO();
+    $static = new CompressStatic(sys.'/template/compress_static/', 'app', sys.'/');
+
+    $LESS = new Less($io);
+
+
+
+    //->Static
     if(system_static){
 
-        Fx::cStatic()->set('template/js/jq.js');
-        Fx::cStatic()->set('template/js/underscore.js');
-        Fx::cStatic()->set('plugin/ckeditor/ckeditor.js');
-        Fx::cStatic()->set('plugin/ckeditor/config.js');
-        Fx::cStatic()->set('plugin/ckeditor/adapters/jquery.js');
+        if(defined('LESS') && file_exists(LESS)){
+            require_once LESS;
+            $less = new lessc;
+        }
 
-        Fx::cStatic()->set('template/js/lib.js');
-        Fx::cStatic()->set('template/js/datepicker.js');
-        Fx::cStatic()->set('template/js/main.js');
-        Fx::cStatic()->set('template/js/struct.js');
+        $static->addFile(sys.'/template/js/lib.js');
+        $static->addFile(sys.'/template/js/datepicker.js');
+        $static->addFile(sys.'/template/js/main.js');
+        $static->addFile(sys.'/template/js/search.js');
+        $static->addFile(sys.'/template/js/struct.js');
 
-        Fx::cStatic()->set('template/tpl/blocks/table/table.js');
-        Fx::cStatic()->set('template/tpl/blocks/project/project.js');
-        Fx::cStatic()->set('template/tpl/blocks/object/object.js');
-        Fx::cStatic()->set('template/js/setting.js');
+        $static->addFile(sys.'/template/css/reset.css');
+        $static->addFile(sys.'/template/font/fontello.css', false);
+        $static->addFile(sys.'/template/font/animation.css', false);
+        $static->addFile(sys.'/template/css/responsive-style.css');
+        $static->addFile(sys.'/template/css/style.css');
+        $static->addFile(sys.'/template/css/sys.css');
 
-        Fx::cStatic()->set('template/css/reset.css');
-        Fx::cStatic()->set('template/font/fontello.css');
-        Fx::cStatic()->set('template/font/animation.css');
-        Fx::cStatic()->set('template/css/responsive-style.css');
-        Fx::cStatic()->set('template/css/style.css');
-        Fx::cStatic()->set('template/css/sys.css');
-        Fx::cStatic()->set('template/tpl/blocks/struct/struct.css');
-        Fx::cStatic()->set('template/tpl/blocks/object/object.css');
+        //->Static Bloks
+        $static->addFile(sys.'/template/tpl/blocks/table/table.js');
+        $static->addFile(sys.'/template/tpl/blocks/project/project.js');
+        $static->addFile(sys.'/template/tpl/blocks/object/object.js');
+        $static->addFile(sys.'/template/js/setting.js');
 
+        $static->addFile(sys.'/template/tpl/blocks/struct/struct.css');
+        $static->addFile(sys.'/template/tpl/blocks/object/object.css');
     }

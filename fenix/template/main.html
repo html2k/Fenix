@@ -7,18 +7,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <meta name="author" content="LegGnom" />
 
-        <?= implode('', Fx::cStatic()->getStyle()) ?>
-        <?= implode('', Fx::cStatic()->getScript()) ?>
-
         <?= $script_config; ?>
 
-
+        <script src="template/js/jq.js" type="text/javascript"></script>
+        <script src="plugin/ckeditor/ckeditor.js"></script>
+        <script src="plugin/ckeditor/config.js"></script>
+        <script src="plugin/ckeditor/adapters/jquery.js"></script>
+        <?= staticLoad($static, true); ?>
     </head>
     <body>
+        
         <div class="header box">
             <div class="col3">
                 <div class="m-box">
-                    <a class="header-logo" href="<?=Fx::context()->url['home'];?>">FenixCMS</a>
+                    <a class="header-logo" href="<?=Fx::app()->url['home'];?>">FenixCMS</a>
                 </div>
             </div>
             <div class="col5">
@@ -29,11 +31,11 @@
                             <li<?=$current?>><a href="?mode=<?=$k?>"><?=$v?></a></li>
                         <? endforeach; ?>
 
-                        <? if(count(Fx::context()->extensionMenu)): ?>
+                        <? if(count(Fx::app()->extensionMenu)): ?>
                             <li>
                                 <i class="icon-menu"></i>
                                 <ul>
-                                    <? foreach(Fx::context()->extensionMenu as $k => $v): ?>
+                                    <? foreach(Fx::app()->extensionMenu as $k => $v): ?>
                                         <? $current = (mode == $k) ? ' class="current"' : ''; ?>
 
                                         <li<?=$current?>><a href="?extension=<?=$k?>"><?=$v?></a></li>
@@ -45,7 +47,11 @@
                     </ul>
                 </div>
             </div>
-            <div class="col2 header-search"></div>
+            <div class="col2 header-search">
+                <input type="text" name="" value="" class="inp w-full"/>
+                <i class="icon-search"></i>
+                <div class="header-search-result-block"></div>
+            </div>
             <div class="col2">
                 <div class="m-box">
                     <div class="pull-right header-panel">
@@ -56,23 +62,23 @@
             </div>
         </div>
         
-        <? if(Fx::context()->leftMenu != ''): ?>
+        <? if(Fx::app()->leftMenu != ''): ?>
         <div class="box box-table dubl_box">
             <div class="col3 box-cell left_menu">
                 <div class="m-box">
-                    <?= Fx::context()->leftMenu ?>
+                    <?= Fx::app()->leftMenu ?>
                 </div>
             </div>
             <div class="col9 box-cell">
                 <div class="m-box">
-                    <?= Fx::context()->content ?>
+                    <?= Fx::app()->content ?>
                 </div>
             </div>
         </div>
         <? else: ?>
         <div class="box">
             <div class="m-box">
-                <?= Fx::context()->content ?>
+                <?= Fx::app()->content ?>
             </div>
         </div>
         <? endif;?>
