@@ -1,4 +1,64 @@
 <?
+class StaticCompressor {
+
+    private $paths = array();
+    private $root = '';
+
+    /**
+     * @param $path
+     * @throws Exception
+     */
+    public function set($path, $isRoot = true){
+        $file = $isRoot ? $this->root . '/' . $path : $path;
+        if(file_exists($file)){
+            $this->paths[] = $path;
+        }else{
+            throw new Exception('Такой путь не существует', 404);
+        }
+    }
+
+
+    /**
+     * @param $path
+     */
+    public function root($path){
+        $this->root = $path;
+    }
+
+
+    /**
+     * @param string $prefix
+     * @return array
+     */
+    public function getStyle($prefix = ''){
+        $result = array();
+        foreach($this->paths as $v){
+            $mime = Fx::io()->mime($v);
+            if(in_array($mime, array('css', 'sass', 'scss', 'less'))){
+                $result[] = '<link rel="stylesheet" type="text/css" href="'. $prefix . $v . '">';
+            }
+        }
+        return $result;
+    }
+
+
+    /**
+     * @param string $prefix
+     * @return array
+     */
+    public function getScript($prefix = ''){
+        $result = array();
+        foreach($this->paths as $v){
+            $mime = Fx::io()->mime($v);
+            if(in_array($mime, array('js'))){
+                $result[] = '<script src="'. $prefix . $v .'" type="text/javascript"></script>';
+            }
+        }
+        return $result;
+    }
+}
+
+/*
 class CompressStatic extends IO{
 
 	private $static = array();
@@ -27,9 +87,6 @@ class CompressStatic extends IO{
 
 	public function get($type){
 		$path = str_replace($this->cut_path, '', $this->getCompress($type));
-		// if (stripos($_SERVER['HTTP_ACCEPT_ENCODING'],'GZIP')!==false) {
-		// 	return $path.'.gz';	
-		// }
 		return $path;
 	}
 
@@ -129,3 +186,4 @@ class CompressStatic extends IO{
 	}
 
 }
+*/

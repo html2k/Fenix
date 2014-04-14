@@ -1,3 +1,26 @@
+;function Fx (){
+}
+
+Fx.prototype._requireds = {};
+Fx.prototype.required = function(blockName){
+    if(this._requireds[blockName]){
+        return;
+    }
+    $.getScript('template/blocks/' +blockName+ '/' + blockName + '.js');
+    this._requireds[blockName] = 1;
+};
+
+Fx.prototype.getStyle = function(link){
+    $('<link>')
+        .appendTo($('head'))
+        .attr({type : 'text/css', rel : 'stylesheet'})
+        .attr('href', link +'?v='+ (new Date).getTime());
+};
+
+window.Fx = new Fx;
+
+
+
 /* ================================================================== Global variables class === */
 var GLOBAL = function(){
     var issetCallstack = function(name, lib){
@@ -472,7 +495,7 @@ function dump(list){
                 leftPosition = 'dropdown__right';
 
 
-            var isTop = (dropdownPosition.top + blockHeight > documentHeight) || (dropdownPosition.top - blockHeight - 10 < 0);
+            var isTop = !(dropdownPosition.top + blockHeight > documentHeight) || !(dropdownPosition.top + blockHeight > $window.height());
 
             var isLeft = false;
             if(dropdownPosition.left + blockWidth > windowWidth){
@@ -483,8 +506,7 @@ function dump(list){
                 }
             }
 
-
-            if(isTop){
+            if(isTop || (dropdownPosition.top - blockHeight - 10 < 0)){
                 $dropdown.addClass(topPosition);
             }else{
                 $dropdown.removeClass(topPosition);
@@ -549,9 +571,9 @@ function dump(list){
                 if ($(this).parent('.box-popup')) {
                     $(this).hide().unwrap();
                     eventCallStack('close', $(this), this.getAttribute('role'));
+                    $('body').css('overflow', 'auto');
                 }
             });
-            $('body').css('overflow', 'auto');
         };
 
 

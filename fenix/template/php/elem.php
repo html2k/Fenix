@@ -1,8 +1,8 @@
 <?
-    Fx::app()->selfId = (isset($_GET['id'])) ? (int) $_GET['id'] : false;
-    Fx::app()->parent_object = isset($_GET['parent']) ? $_GET['parent'] : '';
+    Fx::context()->selfId = (isset($_GET['id'])) ? (int) $_GET['id'] : false;
+    Fx::context()->parent_object = isset($_GET['parent']) ? $_GET['parent'] : '';
     
-    if(Fx::app()->selfId == false && Fx::app()->parent_object != '') Fx::app()->selfId = Fx::app()->parent_object;
+    if(Fx::context()->selfId == false && Fx::context()->parent_object != '') Fx::context()->selfId = Fx::context()->parent_object;
     
     
     $pathGist = sys.'/template/tpl/gist-elem/';
@@ -12,7 +12,7 @@
     $objectValue = array();
     
     if(isset($_GET['id']) && (int) $_GET['id'] > 0){
-        $selfObject = Fx::db()->find(Fx::app()->namespace['construct_db'], array( 'id' => (int) $_GET['id']));
+        $selfObject = Fx::db()->find(Fx::context()->namespace['construct_db'], array( 'id' => (int) $_GET['id']));
         if(count($selfObject)){
             $tableName = $selfObject[0]['object'];
             
@@ -22,7 +22,7 @@
     }
     
     if($tableName != ''){
-        $tabl = Fx::db()->find(Fx::app()->namespace['struct_db'], array( 'code' => $tableName));
+        $tabl = Fx::db()->find(Fx::context()->namespace['struct_db'], array( 'code' => $tableName));
         $tablParam = $tabl[0];
 
     }else{
@@ -30,7 +30,7 @@
         load_url();
     }
     
-    $row = Fx::db()->find(Fx::app()->namespace['struct_td'], array( 'parent' => $tablParam['id']));
+    $row = Fx::db()->find(Fx::context()->namespace['struct_td'], array( 'parent' => $tablParam['id']));
 
     $result = array();
     foreach($row as $key => $v){
@@ -41,7 +41,7 @@
     }
     
     // Шаблоны
-    $template = Fx::db()->find(Fx::app()->namespace['marker']);
+    $template = Fx::db()->find(Fx::context()->namespace['marker']);
     
     // Левое меню
     require_once sys . '/template/php/project-menu.php';

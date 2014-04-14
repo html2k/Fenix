@@ -1,0 +1,23 @@
+<div class="b-popup">
+    <div class="b-popup__box">
+
+        <% if(name) { %>
+            <div class="b-popup__name">
+                <%= name %>
+                <i class="b-popup__cancel icon-cancel"></i>
+            </div>
+        <% } %>
+
+        <div class="b-popup__block">
+
+            <%= block %>
+
+            <% if(control){ %>
+                <span class="btn pull-right b-popup__cancel">
+                    <span class="btn-in">Закрыть</span>
+                </span>
+            <% } %>
+        </div>
+
+    </div>
+</div>

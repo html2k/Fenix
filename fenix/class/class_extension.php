@@ -4,8 +4,12 @@ class Fx_Extension {
     private $extensions = array();
 
     public function compile (){
-        $folderExtension =  root . '/' . Fx::app()->config['folder']['extension'] . '/';
+        $folderExtension =  root . '/' . Fx::context()->config['folder']['extension'] . '/';
         $fileExtensionSave = $folderExtension . 'extension.php';
+
+        if(!file_exists($fileExtensionSave))
+            Fx::io()->create_file($fileExtensionSave);
+            //return;
         $listExtension = Fx::io()->read_dir($folderExtension, 'dir');
 
         $ext = array();
@@ -57,6 +61,7 @@ class Fx_Extension {
         );
 
         $this->extensions = $Extensions;
+
         return $Extensions;
     }
 

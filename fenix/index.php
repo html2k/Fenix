@@ -8,6 +8,7 @@
     define('connect_to_db', true);
     define('root', $_SERVER['DOCUMENT_ROOT']);
 
+    /** Настройки системы */
     require_once root . '/config.php';
     define('sys', root . '/' . $config['folder']['sys']);
     define('LESS', sys . '/templating/lessphp/lessc.inc.php');
@@ -27,7 +28,7 @@
     
     // Template
     $mode = isset($_GET['mode']) ? $_GET['mode'] : 'home';
-    Fx::app()->mode = $mode;
+    Fx::context()->mode = $mode;
 
     $php = 'template/php/' . $mode . '.php';
     $tpl = 'template/tpl/' . $mode . '.html';
@@ -35,42 +36,62 @@
     Fx::ext()->compile();
     require_once 'template/main.php';
 
-
     if(isset($_GET['extension']) && $_GET['extension'] !== ''){
         $mode = $_GET['extension'];
     }
 
-    $extUrl = '';
+    define('mode', $mode);
 
+    $extView = '';
+    $extController = '';
+
+    /** Загружаем расширения для страниц */
     $ext = Fx::ext()->get('page');
-    Fx::app()->extensionMenu = array();
-
+    Fx::context()->extensionMenu = array();
     if(count($ext)){
         foreach ($ext as $v) {
-            Fx::app()->extensionMenu[$v['param']['code']] = $v['param']['name'];
+            if(isset($v['param']['name'])){
+                Fx::context()->extensionMenu[$v['param']['code']] = $v['param']['name'];
+            }
             if($mode === $v['param']['code']){
-                $extUrl = $v['url'] . $v['param']['page'];
+
+                if(isset($v['param']['view'])){
+                    $extView = $v['url'] . $v['param']['view'];
+                }
+
+                if(isset($v['param']['controller'])){
+                    $extController = $v['url'] . $v['param']['controller'];
+                }
+
+                if(isset($v['param']['static']) && is_array($v['param']['static'])){
+                    $extPath = str_replace(root, '', $v['url']);
+                    foreach($v['param']['static'] as $e){
+                        Fx::cStatic()->set('..' . $extPath . $e, false);
+                    }
+                }
             }
         }
     }
-
-    if(isset($_GET['extension']) && $_GET['extension'] !== '' && $extUrl !== ''){
-        $php = $extUrl . '.php';
-        $tpl = $extUrl . '.html';
+    if(isset($_GET['extension']) && $_GET['extension'] !== '' && $extView !== ''){
+        $php = $extController;
+        $tpl = $extView;
     }
 
-    define('mode', $mode);
-
-
+    /** Рендерим страници */
     try{
+
         if(file_exists($php)) require_once $php;
         ob_start();
-            if(file_exists($tpl)) require_once $tpl;
-            Fx::app()->content = ob_get_contents();
+
+            require_once $tpl;
+            Fx::context()->content = ob_get_contents();
+
         ob_end_clean();
+
+
         require_once 'template/main.html';
     }catch (Exception $e){
-        Fx::app()->leftMenu = '';
+        Fx::context()->leftMenu = '';
 
         $param = array(
             'code' => $e->getCode(),
@@ -86,7 +107,7 @@
             $param['text'] = 'Такая страница не существует';
         }
 
-        Fx::app()->content = $io->buffer(sys.'/template/error.html', $param);
+        Fx::context()->content = $io->buffer(sys.'/template/error.html', $param);
         require_once 'template/main.html';
     }
     

@@ -14,10 +14,10 @@
 
 
     if(isset($_POST['addDBConfig'])){
-        $config = $_POST['db'];
-        $db = new Base($config);
-        if($db->isConnect()){
-            $_SESSION['dbConfig'] = $config;
+        Fx::context()->config = array();
+        Fx::context()->config['db'] = $_POST['db'];
+        if(Fx::db()->isConnect()){
+            $_SESSION['dbConfig'] = $_POST['db'];
             echo 1;
         }else{
             echo 0;
@@ -27,62 +27,54 @@
 
     if(isset($_POST['saveConfig'])){
 
-        $def = $manifest['defConfig'];
-        $dbConfig = $_SESSION['dbConfig'];
+        $dbConfig = array(
+            'db' => $_SESSION['dbConfig'],
+            'project_name' => $_POST['project_name'],
+            'templating' => $_POST['templating']
+        );
 
-        $config = $def;
-        $config['db'] = array();
-        foreach($def['db'] as $k => $v){
-            if(isset($dbConfig[$k]) && $dbConfig[$k] !== ''){
-                $config['db'][$k] = $dbConfig[$k];
-            }else{
-                $config['db'][$k] = $v;
-            }
-        }
+        Fx::context()->config = array_merge(Fx::context()->config, array(
+            'db' => array_merge(Fx::context()->config['db'], $_SESSION['dbConfig']),
+            'project_name' => $_POST['project_name'],
+            'templating' => $_POST['templating']
+        ));
 
-        $config['project_name'] = $_POST['project_name'];
-        $config['templating'] = $_POST['templating'];
-        $config['lang'] = $def['lang'];
-        $config['folder'] = $def['folder'];
-
-        $db = new Base($config['db']);
-
-        if($db->isConnect()){
+        if(Fx::db()->isConnect()){
 
             $login = trim($_POST['user']['login']);
             $pass = hashGenerate(strtolower(trim($_POST['user']['pass'])));
 
             foreach($manifest['baseCollection'] as $k => $v){
-                $db->createCollection(array(
-                    'name' => $GLOB['namespace'][$k],
+                Fx::db()->createCollection(array(
+                    'name' => Fx::context()->namespace[$k],
                     'row' => $v
                 ));
             }
 
-            $find = $db->find($GLOB['namespace']['user'], array('login' => $login, 'pass' => $pass));
+            $find = Fx::db()->find(Fx::context()->namespace['user'], array('login' => $login, 'pass' => $pass));
             if(count($find)){
-                $db->update($GLOB['namespace']['user'], array('access' => 0), array('id' => $find[0]['id']));
+                Fx::db()->update(Fx::context()->namespace['user'], array('access' => 0), array('id' => $find[0]['id']));
             }else{
-                $db->insert($GLOB['namespace']['user'], array('login' => $login, 'pass' => $pass, 'access' => 0));
+                Fx::db()->insert(Fx::context()->namespace['user'], array('login' => $login, 'pass' => $pass, 'access' => 0));
             }
 
-            $io->create_file(root.'/config.php');
-            $io->write(root.'/config.php', '<? return $config = ' . $io->arrayToString($config) .'; ?>');
+            Fx::io()->create_file(root.'/config.php');
+            Fx::io()->write(root.'/config.php', '<? return $config = ' . Fx::io()->arrayToString(Fx::context()->config) .'; ?>');
 
-            $folderFrom = root.'/install/templating/'.$config['templating'] . '/';
-            $folderTo = root . '/' . $config['folder']['template'] . '/';
+            $folderFrom = root.'/install/templating/'.Fx::context()->config['templating'] . '/';
+            $folderTo = root . '/' . Fx::context()->config['folder']['template'] . '/';
 
             if(!is_dir($folderTo))
-                $io->create_dir($folderTo);
+                Fx::io()->create_dir($folderTo);
 
-            $dir = $io->tree($folderFrom);
+            $dir = Fx::io()->tree($folderFrom);
 
 
             foreach($dir['dir'] as $v){
                 $folder = str_replace($folderFrom, '', $v);
 
                 if(!is_dir($folderTo . $folder))
-                    $io->create_dir($folderTo . $folder);
+                    Fx::io()->create_dir($folderTo . $folder);
             }
 
             foreach($dir['file'] as $v){
@@ -91,7 +83,7 @@
                 $file = str_replace($folderFrom, '', $v);
 
                 if(!file_exists($folderTo . $file)){
-                    $io->copy($v, $folderTo . $file);
+                    Fx::io()->copy($v, $folderTo . $file);
                 }
             }
 

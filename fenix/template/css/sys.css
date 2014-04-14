@@ -14,64 +14,6 @@ sup{
     padding: 0 15px;
 }
 
-.header-search{
-    position: relative;
-}
-.header-search i{
-    position: absolute;
-    z-index: 2;
-    top: 9px;
-    left: 4px;
-    color: #fff;
-}
-.header-search input{
-    position: relative;
-    z-index: 1;
-    margin: 7px 0 0 0;
-    padding: 0 10px 0 26px;
-    height: 20px;
-    font-size: 12px;
-    opacity: 0.4;
-    border-radius: 20px;
-}
-.header-search input.active,
-.header-search input:focus{ opacity: 1; }
-.header-search input.active + i,
-.header-search input:focus + i{ color: #000; }
-.header-search-result-block{
-    position: absolute;
-    top: 17px;
-    height: 600px;
-    left: 0;
-    right: 0;
-    display: none;
-    margin: 0;
-    padding: 30px 15px 10px 15px;
-    background: #fff;
-    border-radius: 3px;
-    box-shadow: 0 0 5px 0 rgba(0,0,0,0.9);
-}
-.header-search-result-block ul{
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-}
-.header-search-result-block li a{
-    position: relative;
-    display: block;
-    line-height: 20px;
-}
-.header-search-result-block li div{
-    position: absolute;
-    display: none;
-    background: #fff;
-    right: 100%;
-    top: 0;
-}
-.header-search-result-block a:hover div{ display: block; }
-
-
-
 h3{ font-size: 14px; }
 .left_menu{
     padding-top: 15px;
@@ -389,3 +331,20 @@ a.disable,
 .error-page .text{
     font-size: 16px;
 }
+
+.z1{ position: relative; z-index: 1; }
+.z2{ position: relative; z-index: 2; }
+.z3{ position: relative; z-index: 3; }
+.z4{ position: relative; z-index: 4; }
+.z5{ position: relative; z-index: 5; }
+.z6{ position: relative; z-index: 6; }
+.z7{ position: relative; z-index: 7; }
+.z8{ position: relative; z-index: 8; }
+.z9{ position: relative; z-index: 9; }
+.z10{ position: relative; z-index: 10; }
+.z11{ position: relative; z-index: 11; }
+.z12{ position: relative; z-index: 12; }
+.z13{ position: relative; z-index: 13; }
+.z14{ position: relative; z-index: 14; }
+.z15{ position: relative; z-index: 15; }
+.z16{ position: relative; z-index: 16; }

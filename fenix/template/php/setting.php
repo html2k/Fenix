@@ -1,4 +1,4 @@
 <?
 access(0); // Root
 
-Fx::app()->users = Fx::db()->find(Fx::app()->namespace['user']);
+Fx::context()->users = Fx::db()->find(Fx::context()->namespace['user']);

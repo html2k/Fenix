@@ -1,0 +1,19 @@
+<span class="b-select btn" data-name="<%= name %>">
+    <span class="b-select__block">
+        <span class="b-select__box">
+            <% _.each(option, function(item, key){ %>
+                <span class="b-select__item <%= key == selectdOption ? 'b-select__item_active' : '' %>" data-value="<%= item.value %>">
+                    <%= item.text %>
+                </span>
+            <% }) %>
+        </span>
+    </span>
+
+
+    <span class="b-select__name btn-in btn-in__first"><%= option[selectdOption].text %></span>
+    <span class="btn-in btn-in__last">
+        <i class="icon-down-dir"></i>
+    </span>
+
+    <input type="hidden" class="b-select__input" name="<%= name %>" value="<%= option[selectdOption].value %>" />
+</span>

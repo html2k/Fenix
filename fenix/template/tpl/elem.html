@@ -47,8 +47,8 @@
 <? endforeach;?>
 
 <input type="hidden" name="action" value="elem"/>
-<input type="hidden" name="parent" value="<?= @$GLOB['parent_object']; ?>"/>
-<input type="hidden" name="id" value="<?= @$_GET['id']; ?>"/>
+<input type="hidden" name="parent" value="<?= @Fx::context()->parent_object; ?>"/>
+<input type="hidden" name="id" value="<?= @Fx::context()->selfId; ?>"/>
 <input type="hidden" name="object" value="<?= @$tableName; ?>"/>
 
 

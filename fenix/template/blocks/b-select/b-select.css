@@ -1,0 +1,40 @@
+.b-select{
+    position: static;
+}
+.b-select__name{
+    margin-right: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.b-select__block{
+    display: none;
+    position: absolute;
+    overflow: auto;
+    max-width: 400px;
+    max-height: 200px;
+    margin-left: -1px;
+    margin-top: -1px;
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 3px;
+}
+
+.b-select__box{
+    display: block;
+    padding: 5px 0;
+}
+
+.b-select__item{
+    display: block;
+    font-size: 13px;
+    line-height: 26px;
+    padding: 0 15px;
+}
+
+.b-select__item:hover{
+    background: #BCE6EE;
+}
+.b-select__item_active{
+    background: #82E0F9;
+}

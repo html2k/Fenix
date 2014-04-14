@@ -1,35 +1,68 @@
 <?
 class IO {
+    function __construct(){}
 
-	function __construct(){}
-	
-	//-> Чтение файла
-	public function read($name, $method = 'string'){
-		if($method == 'string')
+
+    /**
+     * Чтение файла
+     * @param $name
+     * @param string $method
+     * @return array|string
+     */
+    public function read($name, $method = 'string'){
+		if($method == 'string'){
 			return implode('', file($name));
-		else
+        }else{
 			return file($name);
-	}	
-		//-> Методы псевдонимы для read()
-		public function to_array($name){ return $this->read($name, 'array'); }
-		public function to_string($name){ return $this->read($name, 'string'); }
-	
-	
-	//-> Получение хеша файла
-	public function get_hash($name, $method = 'sha1'){
+        }
+	}
+
+
+    /**
+     * Чтение файла в массив
+     * @param $name
+     * @return array|string
+     */
+    public function to_array($name){
+        return $this->read($name, 'array');
+    }
+
+
+    /**
+     * Чтение файла в строку
+     * @param $name
+     * @return array|string
+     */
+    public function to_string($name){
+        return $this->read($name, 'string');
+    }
+
+
+    /**
+     * Получение хеша файла
+     * @param $name
+     * @param string $method
+     * @return string
+     */
+    public function get_hash($name, $method = 'sha1'){
 		if($method == 'sha1')
 			return sha1_file($name);
 		else
 			return md5_file($name);
 	}
-	
-	//-> Чтение дерриктории
-	public function read_dir($name, $res = false){
+
+
+    /**
+     * Чтение дерриктории
+     * @param string $name
+     * @param bool $res
+     * @return array
+     */
+    public function read_dir($name, $res = false){
 		$result = array('file' => array(), 'dir' => array());
         $name .= ($name{strlen($name)-1} !== '/') ? '/' : '';
 
         if(!is_dir($name)) return array();
-
 
 		if($handle = opendir($name)){
 			while(false !== ($entry = readdir($handle))){
@@ -49,10 +82,20 @@ class IO {
 
 		return  $result;
 	}
-	
-	//-> Рекурсивное чтение дерриктории
-	private $tree = array('file' => array(), 'dir' => array());
-	public function tree($name){
+
+
+    /**
+     * @var array
+     */
+    private $tree = array('file' => array(), 'dir' => array());
+
+
+    /**
+     * Рекурсивное чтение дерриктории
+     * @param string $name
+     * @return array
+     */
+    public function tree($name){
 		$dir = $this->read_dir($name);
 		
 		$this->tree['dir'] = $dir['dir'];
@@ -61,22 +104,44 @@ class IO {
 
 		return $this->tree;
 	}
-		private function tree__init($list){
-			foreach($list as $v){
-				$dir = $this->read_dir($v);
-				$this->tree['dir'] = array_merge($this->tree['dir'], $dir['dir']);
-				$this->tree['file'] = array_merge($this->tree['file'], $dir['file']);
-				$this->tree__init($dir['dir']);
-			}
-		}
-		
-	//-> Создание файла
-	public function create_file($name, $mod = 0777){ fclose(fopen($name, 'w+')); chmod($name, $mod); }
-	public function create_dir($name, $mod = 0777){ mkdir($name, $mod, true); chmod($name, $mod); }
+    private function tree__init($list){
+        foreach($list as $v){
+            $dir = $this->read_dir($v);
+            $this->tree['dir'] = array_merge($this->tree['dir'], $dir['dir']);
+            $this->tree['file'] = array_merge($this->tree['file'], $dir['file']);
+            $this->tree__init($dir['dir']);
+        }
+    }
 
-	
-	//-> Запись в файл
-	public function in_file($name, $string, $to = true, $chmod = 0777){
+
+    /**
+     * Создание файла
+     * @param string $name
+     * @param int $mod
+     */
+    public function create_file($name, $mod = 0777){
+        fclose(fopen($name, 'w+')); chmod($name, $mod);
+    }
+
+
+    /**
+     * Создание директории
+     * @param string $name
+     * @param int $mod
+     */
+    public function create_dir($name, $mod = 0777){
+        mkdir($name, $mod, true); chmod($name, $mod);
+    }
+
+
+    /**
+     * Запись в файл
+     * @param string $name
+     * @param string $string
+     * @param bool $to
+     * @param int $chmod
+     */
+    public function in_file($name, $string, $to = true, $chmod = 0777){
 		if(!file_exists($name)){
             $this->create_file($name);
             chmod($name, $chmod);
@@ -88,53 +153,71 @@ class IO {
 		}
 		file_put_contents($name, $string);
 	}
-	public function write($name, $string){
-            if(file_exists($name) && ($handle = fopen($name, 'w'))){
-                $result = fwrite($handle, $string);
-                fclose($handle);
-                
-                return $result;
-            }else{
-                return false;
-            }
-	}
-	
-	//-> Копирование файла
-	public function copy($from, $to = false){
-            try {
-                if(is_dir($from)){
-                    $this->recurse_copy($from, $to);
-                    return true;
-                }else{
-                    if(copy($from, $to)){
-                        chmod($to, 0777);
-                        return true;
-                    }
-                }
-            } catch (Exception $exc) {
-                setSystemMessage('error', $e);
-            }
-            return false;
-	}
-        
-        private function recurse_copy($src,$dst) { 
-            $dir = opendir($src); 
-            @mkdir($dst); 
-            while(false !== ( $file = readdir($dir)) ) { 
-                if (( $file != '.' ) && ( $file != '..' )) { 
-                    if ( is_dir($src . '/' . $file) ) { 
-                        recurse_copy($src . '/' . $file,$dst . '/' . $file); 
-                    } 
-                    else { 
-                        copy($src . '/' . $file,$dst . '/' . $file); 
-                    } 
-                } 
-            } 
-            closedir($dir); 
-        } 
 
-	//-> Удаление файла или деректории
-	public function del($name){
+
+    /**
+     * Запись в файл
+     * @param string $name
+     * @param string $string
+     * @return bool|int
+     */
+    public function write($name, $string){
+        if(file_exists($name) && ($handle = fopen($name, 'w'))){
+            $result = fwrite($handle, $string);
+            fclose($handle);
+
+            return $result;
+        }else{
+            return false;
+        }
+	}
+
+
+    /**
+     * Копирование файла
+     * @param string $from
+     * @param bool|string $to
+     * @return bool
+     */
+    public function copy($from, $to = false){
+        try {
+            if(is_dir($from)){
+                $this->recurse_copy($from, $to);
+                return true;
+            }else{
+                if(copy($from, $to)){
+                    chmod($to, 0777);
+                    return true;
+                }
+            }
+        } catch (Exception $exc) {
+            setSystemMessage('error', $e);
+        }
+        return false;
+	}
+    private function recurse_copy($src, $dst) {
+        $dir = opendir($src);
+        @mkdir($dst);
+        while(false !== ( $file = readdir($dir)) ) {
+            if (( $file != '.' ) && ( $file != '..' )) {
+                if ( is_dir($src . '/' . $file) ) {
+                    recurse_copy($src . '/' . $file,$dst . '/' . $file);
+                }
+                else {
+                    copy($src . '/' . $file,$dst . '/' . $file);
+                }
+            }
+        }
+        closedir($dir);
+    }
+
+
+    /**
+     * Удаление файла или деректории
+     * @param string $name
+     * @return bool|void
+     */
+    public function del($name){
 		if(is_dir($name)){
 			return $this->removeDir($name);
 		}else if(is_file($name)){
@@ -144,15 +227,29 @@ class IO {
 		}
 	}
 
-	//-> Удаление дерриктории целиком
-	public function removeDir($name){
-            if ($objs = glob($name."/*"))
-                foreach($objs as $obj) is_dir($obj) ? removeDirectory($obj) : unlink($obj);
-            rmdir($name);
+
+    /**
+     * Удаление дерриктории целиком
+     * @param string $name
+     */
+    public function removeDir($name){
+        if ($objs = glob($name."/*")){
+            foreach($objs as $obj){
+                is_dir($obj) ? removeDirectory($obj) : unlink($obj);
+            }
+        }
+        rmdir($name);
+
 	}
 
-	//-> Загрузка файла
-	public function load_file($file, $to){
+
+    /**
+     * Загрузка файла
+     * @param string $file
+     * @param string $to
+     * @return bool
+     */
+    public function load_file($file, $to){
 		if(move_uploaded_file($file['tmp_name'], $to)){
 			chmod($to, 0775);
 			return true;
@@ -161,15 +258,31 @@ class IO {
 		}
 	}
 
-	//-> Получение расширения файла
-	public function mime($file){
+
+    /**
+     * Получение расширения файла
+     * @param string $file
+     * @return mixed
+     */
+    public function mime($file){
 		$file = explode('.', $file);
 		return $file[count($file) - 1];
 	}
-	
-	//-> Массив в строку
-	private $arrayString = '';
-	public function arrayToString($arr, $delim = "\t"){
+
+
+    /**
+     * @var string
+     */
+    private $arrayString = '';
+
+
+    /**
+     * Преобразование массива в строку
+     * @param array $arr
+     * @param string $delim
+     * @return string
+     */
+    public function arrayToString($arr, $delim = "\t"){
 		$this->arrayString = "array(\n";
 		$this->arrayToStingREC($arr, $delim);
 		if(count($arr) > 0)
@@ -177,26 +290,31 @@ class IO {
 		$this->arrayString .= "\n".$delim.")";
 		return $this->arrayString;
 	}
-		private function arrayToStingREC($arr, $delim = ""){
-			foreach($arr as $k => $v) {
-				
-				if(!is_numeric($k))
-					$this->arrayString .= $delim . "'" .$k . "' => ";
-				else
-					$this->arrayString .= $delim;
-				
-				if(is_array($v)) {
-					$this->arrayString .= "array(\n";
-					$this->arrayToStingREC($v, $delim . "\t");
-					$this->arrayString .= $delim. "),\n";
-				}else if(is_numeric($v)){
-					$this->arrayString .= $v.",\n";
-				}else{
-					$this->arrayString .= "'".$v."',\n";
-				}
-			}
-		}
-	
+    private function arrayToStingREC($arr, $delim = ""){
+        foreach($arr as $k => $v) {
+
+            if(!is_numeric($k))
+                $this->arrayString .= $delim . "'" .$k . "' => ";
+            else
+                $this->arrayString .= $delim;
+
+            if(is_array($v)) {
+                $this->arrayString .= "array(\n";
+                $this->arrayToStingREC($v, $delim . "\t");
+                $this->arrayString .= $delim. "),\n";
+            }else if(is_numeric($v)){
+                $this->arrayString .= $v.",\n";
+            }else{
+                $this->arrayString .= "'".$v."',\n";
+            }
+        }
+    }
+
+
+    /**
+     * @param int $bytes
+     * @return string
+     */
     public function formatSizeUnits($bytes){
 		if ($bytes >= 1073741824){
 			$bytes = number_format($bytes / 1073741824, 2) . ' GB';
@@ -214,6 +332,13 @@ class IO {
 		return $bytes;
     }
 
+
+    /**
+     * @param $file
+     * @param array $param
+     * @param bool $callbackParam
+     * @return string
+     */
     public function buffer($file, $param = array(), $callbackParam = false){
         $result = '';
         if(file_exists($file)){
@@ -230,19 +355,27 @@ class IO {
         return $result;
     }
 
-    public function path($array = array()){
-        return implode(DIRECTORY_SEPARATOR, $array);
+
+    /**
+     * @param string $string
+     * @return string
+     */
+    public function path($string){
+        return implode(DIRECTORY_SEPARATOR, explode('.', $string));
     }
 
-    public function dirSize($dir){
 
+    /**
+     * @param $dir
+     * @return int
+     */
+    public function dirSize($dir){
         $fs = 0;
         $path = $this->tree($dir, 'file');
 
         foreach($path['file'] as $v){
             $fs += filesize($v);
         }
-
         return $fs;
     }
 }

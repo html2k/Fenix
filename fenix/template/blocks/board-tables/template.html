@@ -1,0 +1,37 @@
+<div class="dn board-tables__block">
+    <table class="table">
+        <% if(keys.length){ %>
+        <tr class="not">
+            <th width="18"><input type="checkbox" class="board-tables__select-all"/></th>
+
+            <% _.each(keys, function(rowName){ %>
+                <th><%= rowName %></th>
+            <% }); %>
+
+            <th width="18"></th>
+        </tr>
+        <% } %>
+
+        <% _.each(data, function(item, index){ %>
+        <tr>
+            <th><input type="checkbox" class="board-tables__select" data-index="<%= index %>" /></th>
+
+
+            <% _.each(item, function(val, key){ %>
+                <% if(type === 'search'){ %>
+                    <td><%- _.cutLine(val, 100) %></td>
+                <% }else{ %>
+                    <td><%= _.cutLine(val, 100) %></td>
+                <% } %>
+            <% }); %>
+
+
+            <th>
+                <!--<i class="icon-pencil "></i>-->
+                <i class="icon-cancel board-tables__remove-item" data-index="<%= index %>"></i>
+            </th>
+        </tr>
+        <% }); %>
+
+    </table>
+</div>

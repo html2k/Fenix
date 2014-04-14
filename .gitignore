@@ -18,14 +18,8 @@ atlassian-ide-plugin.xml
 
 favicon.ico
 
-template/main.php
-
-template/main.php
+template/*
 
 config.php
-
-ext/aaa/init.php
-
-ext/aaa/block.html
 
 .idea/workspace.xml
