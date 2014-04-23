@@ -6,11 +6,17 @@ class StaticCompressor {
 
     /**
      * @param $path
+     * @param bool $isRoot
      * @throws Exception
      */
     public function set($path, $isRoot = true){
         $file = $isRoot ? $this->root . '/' . $path : $path;
+
         if(file_exists($file)){
+            if(in_array($path, $this->paths)){
+                return;
+            }
+
             $this->paths[] = $path;
         }else{
             throw new Exception('Такой путь не существует', 404);

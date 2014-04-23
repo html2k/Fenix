@@ -143,6 +143,7 @@ $manifest = array(
             'sys' => 'fenix',
             'template' => 'template',
             'files' => 'files',
+            'file_manager' => 'user_files',
             'extension' => 'ext'
         ),
         'ckeditor_config' => array()

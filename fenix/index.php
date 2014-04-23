@@ -107,7 +107,7 @@
             $param['text'] = 'Такая страница не существует';
         }
 
-        Fx::context()->content = $io->buffer(sys.'/template/error.html', $param);
+        Fx::context()->content = Fx::io()->buffer(sys.'/template/error.html', $param);
         require_once 'template/main.html';
     }
     

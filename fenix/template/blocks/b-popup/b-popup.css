@@ -5,7 +5,7 @@
     right: 0;
     bottom: 0;
     padding: 25px 25px;
-    z-index: 99;
+    z-index: 9999;
     overflow: auto;
     background: rgba(0,0,0,0.8);
 }

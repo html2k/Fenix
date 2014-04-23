@@ -1,7 +1,7 @@
 AddDefaultCharset UTF-8
 php_flag display_errors on
 #php_value error_reporting 204
-#php_value upload_max_filesize 4M
+php_value upload_max_filesize 20M
 
 ErrorDocument 401 /index.php
 ErrorDocument 403 /index.php

@@ -12,6 +12,8 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 
+    window.CONFIG_CKEDITOR.push('filemanager');
+
     config.extraPlugins = window.CONFIG_CKEDITOR.join(',');
 
         config.toolbarGroups = [
@@ -29,7 +31,8 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'colors' },
 	];
 
-	// Remove some buttons, provided by the standard plugins, which we don't
+
+// Remove some buttons, provided by the standard plugins, which we don't
 	// need to have in the Standard(s) toolbar.
 	config.removeButtons = 'Underline,Subscript,Superscript';
 

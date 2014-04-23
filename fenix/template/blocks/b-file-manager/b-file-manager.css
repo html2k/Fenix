@@ -1,0 +1,111 @@
+.b-file-manager__input-upload{
+    display: none;
+}
+
+.b-file-manager__folder{
+    display: inline-block;
+    width: 100px;
+    margin: 0 10px 10px 0;
+    text-align: center;
+    cursor: pointer;
+}
+.b-file-manager__folder:hover{
+    opacity: 0.7;
+}
+.b-file-manager__folder__name{
+    font-size: 12px;
+}
+
+.b-file-manager__image:after,
+.b-file-manager__body-list:after{
+    content: '';
+    clear: both;
+    display: block;
+}
+
+.b-file-manager__body-previews{
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+}
+
+.b-file-manager__image{
+    position: relative;
+    display: inline-block;
+    width: 275px;
+    cursor: pointer;
+    margin-right: 16px;
+    margin-bottom: 16px;
+}
+.b-file-manager__image:hover{
+    box-shadow: 0 0 3px 0 rgba(0,0,0,0.8);
+}
+
+.b-file-manager__image:nth-child(3n){
+    margin-right: 0;
+}
+
+.b-file-manager__image-name{
+    font-size: 13px;
+    font-weight: normal;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.b-file-manager__image-preview{
+    width: 110px;
+    height: 110px;
+    float: left;
+    overflow: hidden;
+    position: relative;
+}
+.b-file-manager__image-preview img{
+    max-width: 100%;
+    height: auto;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.b-file-manager__image-preview__show-preview{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+    font-size: 16px;
+}
+
+.b-file-manager__image-option{
+    margin-left: 120px;
+    padding: 30px 0 10px 0;
+}
+.b-file-manager__image-option h3{
+    font-size: 12px;
+}
+.b-file-manager__image-option p{
+    font-size: 10px;
+    line-height: 13px;
+    margin: 0;
+}
+
+.b-file-manager__image-remove{
+    position: absolute;
+    display: none;
+    top: 5px;
+    right: 5px;
+}
+
+.b-file-manager__image:hover .b-file-manager__image-remove{
+    display: block;
+}
+
+.b-dropdown{
+    z-index: 2;
+}

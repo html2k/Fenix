@@ -74,7 +74,9 @@ bDropdown.prototype.bind = function(){
 bDropdown.prototype.show = function(event){
     var self = $(event.target);
 
-    self.parent().children('.b-dropdown__block').show();
+    self.parents('.b-dropdown:first')
+        .children('.b-dropdown__block').show()
+        .find('.inp:first').focus();
 };
 
 
@@ -100,7 +102,11 @@ bDropdown.prototype.globalHide = function(event){
  * @param element
  */
 bDropdown.prototype.hide = function(element){
-    $(element).children('.b-dropdown__block').hide();
+    if(element){
+        $(element).children('.b-dropdown__block').hide();
+    }else{
+        $('.b-dropdown__block').hide();
+    }
 };
 
 

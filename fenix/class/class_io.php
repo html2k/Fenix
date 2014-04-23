@@ -250,7 +250,7 @@ class IO {
      * @return bool
      */
     public function load_file($file, $to){
-		if(move_uploaded_file($file['tmp_name'], $to)){
+		if(move_uploaded_file($file, $to)){
 			chmod($to, 0775);
 			return true;
 		}else{
@@ -357,11 +357,10 @@ class IO {
 
 
     /**
-     * @param string $string
      * @return string
      */
-    public function path($string){
-        return implode(DIRECTORY_SEPARATOR, explode('.', $string));
+    public function path(){
+        return implode(DIRECTORY_SEPARATOR, func_get_args());
     }
 
 

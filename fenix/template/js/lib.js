@@ -2,12 +2,15 @@
 }
 
 Fx.prototype._requireds = {};
-Fx.prototype.required = function(blockName){
+Fx.prototype.required = function(blockName, callback){
     if(this._requireds[blockName]){
+        if(_.isFunction(callback)){
+            callback();
+        }
         return;
     }
-    $.getScript('template/blocks/' +blockName+ '/' + blockName + '.js');
     this._requireds[blockName] = 1;
+    $.getScript('template/blocks/' +blockName+ '/' + blockName + '.js', callback);
 };
 
 Fx.prototype.getStyle = function(link){

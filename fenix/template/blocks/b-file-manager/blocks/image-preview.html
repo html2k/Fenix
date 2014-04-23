@@ -1,0 +1,39 @@
+
+<% if(selfFolder != '/') { %>
+    <div class="b-file-manager__folder" data-path="<%= bFileManager.backUrl(selfFolder) %>">
+        <img src="template/blocks/b-file-manager/image/undo.png"/>
+        <h3 class="b-file-manager__folder__name">Назад</h3>
+    </div>
+<% } %>
+
+
+<% _.each(dir, function(item){ %>
+    <div class="b-file-manager__folder" data-path="<%= item.path %>">
+        <img src="template/blocks/b-file-manager/image/folder.png"/>
+        <h3 class="b-file-manager__folder__name"><%= _.cutLine(item.name, 10) %></h3>
+    </div>
+<% })%>
+
+<hr/>
+
+<% _.each(files, function(item){ %>
+    <div class="b-file-manager__image" data-path="<%= item.path%>" data-name="<%= item.name %>" data-size="<%= _.byteConvert(item.size) %>">
+        <div class="b-file-manager__image-preview">
+            <img src="<%= bFileManager.getSrc(item) %>"/>
+        </div>
+        <div class="b-file-manager__image-option">
+            <h3><%= _.cutLine(item.name, 18) %></h3>
+            <p><%= item.path %></p>
+
+            <% if(item.system_type === 'image'){ %>
+                <p><%= item.width %>x<%= item.height %></p>
+            <% } %>
+
+            <p><%= _.byteConvert(item.size) %></p>
+        </div>
+
+        <i
+            data-path="<%= item.path%>"
+            class="b-file-manager__image-remove icon-cancel"></i>
+    </div>
+<% })%>

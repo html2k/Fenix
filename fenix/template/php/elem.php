@@ -1,7 +1,17 @@
 <?
+    //--> Lib
+    Fx::cStatic()->set('plugin/fileupload/vendor/jquery.ui.widget.js');
+    Fx::cStatic()->set('plugin/fileupload/jquery.iframe-transport.js');
+    Fx::cStatic()->set('plugin/fileupload/jquery.fileupload.js');
+
+    Fx::cStatic()->set('template/blocks/b-file-manager/b-file-manager.css');
+    Fx::cStatic()->set('template/blocks/b-file-manager/b-file-manager.js');
+
+
     Fx::context()->selfId = (isset($_GET['id'])) ? (int) $_GET['id'] : false;
     Fx::context()->parent_object = isset($_GET['parent']) ? $_GET['parent'] : '';
-    
+
+
     if(Fx::context()->selfId == false && Fx::context()->parent_object != '') Fx::context()->selfId = Fx::context()->parent_object;
     
     
