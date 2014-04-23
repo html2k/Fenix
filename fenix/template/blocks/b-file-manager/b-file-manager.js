@@ -32,7 +32,6 @@ bFileManager.prototype.init = function(){
         },
         async: false,
         success: function(result){
-            console.log(result)
             that.storage = result;
         }
     });
@@ -86,6 +85,7 @@ bFileManager.prototype.showPrewiev = function(is){
         });
     }
     var template = _.template(that.storage.template['b-file-manager/blocks/image-preview.html']);
+
     that.storage.preview.html(template({
         files: that.storage.file,
         dir: that.storage.dir,
@@ -130,6 +130,8 @@ bFileManager.prototype.change = function(callback){
 
 bFileManager.prototype.initUploadInput = function(){
     var that = this,
+        classLoad = 'btn__load',
+        btn = $('.b-file-manager__btn-upload'),
         result = $('.b-file-manager__input-upload-result');
 
     this.option.bPopup.find('.b-file-manager__input-upload')
@@ -155,10 +157,14 @@ bFileManager.prototype.initUploadInput = function(){
             }
         ],
         dataType: 'json',
+        start: function(){
+            btn.addClass(classLoad);
+        },
         done: function(e, data){
 
         },
         stop: function(){
+            btn.removeClass(classLoad);
             that.showPrewiev();
         }
     });
@@ -175,7 +181,8 @@ bFileManager.prototype.removeItem = function(event){
                 action: 'loadTemplate',
                 controller: 'bFileManager',
                 removeItem: true,
-                path: element.getAttribute('data-path')
+                path: element.getAttribute('data-path'),
+                pathTo: that.option.selfFolder
             },
             async: false,
             success: function(result){
@@ -240,8 +247,6 @@ bFileManager.prototype.showFolder = function(event){
         success: function(result){
             that.storage.file = result.file;
             that.storage.dir = result.dir;
-
-            console.log(that.storage.dir);
 
             that.showPrewiev(true);
             that.initUploadInput();

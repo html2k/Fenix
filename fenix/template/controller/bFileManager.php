@@ -29,57 +29,57 @@ class bFileManager {
     }
 
     protected function userFileList($to = ''){
-        if(isset(Fx::context()->config['folder']['file_manager'])){
+        $path = Fx::io()->path(
+            root,
+            Fx::context()->config['folder']['file_manager']
+        );
+        if(strlen($to) > 1){
+
+            if($to{0} === '/'){
+                $to = substr($to, 1);
+            }
 
             $path = Fx::io()->path(
                 root,
-                Fx::context()->config['folder']['file_manager']
+                Fx::context()->config['folder']['file_manager'],
+                $to
             );
-            if(strlen($to) > 1){
-
-                if($to{0} === '/'){
-                    $to = substr($to, 1);
-                }
-
-                $path = Fx::io()->path(
-                    root,
-                    Fx::context()->config['folder']['file_manager'],
-                    $to
-                );
-            }
-
-            $io = Fx::io()->read_dir($path);
-
-            foreach($io['file'] as $k => $v){
-
-                $resultArray = array();
-
-                if($imageSize = getimagesize($v)){
-                    $resultArray['system_type'] = 'image';
-                    $resultArray['width'] = $imageSize[0];
-                    $resultArray['height'] = $imageSize[1];
-                }else{
-                    $resultArray['system_type'] = 'file';
-                }
-
-                $resultArray['type'] = strtolower(Fx::io()->mime($v));
-                $resultArray['size'] = filesize($v);
-                $resultArray['name'] = basename($v);
-                $resultArray['path'] = str_replace(root, '', $v);
-
-                $io['file'][$k] = $resultArray;
-            }
-
-            foreach($io['dir'] as $k => $v){
-                $io['dir'][$k] = array(
-                    'path' => str_replace(Fx::io()->path(root, Fx::context()->config['folder']['file_manager']), '', $v),
-                    'name' => $resultArray['name'] = basename($v)
-                );
-            }
-
-            return $io;
         }
-        return array();
+
+        if(!is_dir($path)){
+            Fx::io()->create_dir($path);
+        }
+
+        $io = Fx::io()->read_dir($path);
+
+        foreach($io['file'] as $k => $v){
+
+            $resultArray = array();
+
+            if($imageSize = getimagesize($v)){
+                $resultArray['system_type'] = 'image';
+                $resultArray['width'] = $imageSize[0];
+                $resultArray['height'] = $imageSize[1];
+            }else{
+                $resultArray['system_type'] = 'file';
+            }
+
+            $resultArray['type'] = strtolower(Fx::io()->mime($v));
+            $resultArray['size'] = filesize($v);
+            $resultArray['name'] = basename($v);
+            $resultArray['path'] = str_replace(root, '', $v);
+
+            $io['file'][$k] = $resultArray;
+        }
+
+        foreach($io['dir'] as $k => $v){
+            $io['dir'][$k] = array(
+                'path' => str_replace(Fx::io()->path(root, Fx::context()->config['folder']['file_manager']), '', $v),
+                'name' => $resultArray['name'] = basename($v)
+            );
+        }
+
+        return $io;
     }
 
     protected function saveFile($param){

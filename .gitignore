@@ -20,6 +20,8 @@ favicon.ico
 
 template/*
 
+user_files/*
+
 config.php
 
 .idea/workspace.xml
