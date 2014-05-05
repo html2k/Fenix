@@ -22,6 +22,12 @@ template/*
 
 user_files/*
 
+node_modules/*
+
+Gruntfile.js
+
+package.json
+
 config.php
 
 .idea/workspace.xml
