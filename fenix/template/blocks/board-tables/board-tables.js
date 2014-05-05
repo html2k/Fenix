@@ -1,5 +1,6 @@
 Fx.required('b-dropdown');
 Fx.required('b-popup');
+Fx.required('b-select');
 
 ;function BoardTables (){
     this.initStorage();
@@ -36,7 +37,12 @@ BoardTables.prototype.init = function(){
         action: 'loadTemplate',
         controller: that.WIDGET_NAME,
         method: 'getInfo',
-        templates: ['board-tables/template.html', 'board-tables/main.html']
+        templates: [
+            'board-tables/create-table-popup.html',
+            'board-tables/template.html',
+            'board-tables/col-item.html',
+            'board-tables/main.html'
+        ]
     }, function(result){
         var storage = _.storage.get(that.WIDGET_NAME);
 
@@ -99,6 +105,8 @@ BoardTables.prototype.bind = function () {
         .on('click', '.board-tables__remove', this.removeCell.bind(this))
         .on('change', '.board-tables__select', this.selectCell.bind(this))
         .on('click', '.board-tables__item', this.itemClick.bind(this))
+        .on('click', '.board-tables__create-table', this.showPopupCreateTable.bind(this))
+        .on('click', '.board-tables__col-add', this.addCol.bind(this))
         //.on('click', '.board-tables__block td', function(){ that.editRow(this); })
         .on('input', '.board-tables__input', this.search.bind(this));
 };
@@ -294,6 +302,33 @@ BoardTables.prototype.removeButton = function(event){
     this.buttonRemoveIsActive();
     $('.board-tables__remove').trigger('click');
 
+};
+
+
+BoardTables.prototype.showPopupCreateTable = function(event){
+    var that = this,
+        template = _.template(that.storage.template['board-tables/create-table-popup.html']),
+        col = _.template(that.storage.template['board-tables/col-item.html']);
+
+
+    that.storage.popup = bPopup.show({
+        name: 'Создание таблици',
+        block: template({ item: col }),
+        control: false
+    });
+
+    bSelect.initWidget();
+};
+
+BoardTables.prototype.addCol = function(){
+    var that = this,
+        template = _.template(that.storage.template['board-tables/col-item.html']);
+
+    $('.board-tables__col-list').append(
+        template({first: false})
+    );
+    bSelect.initWidget();
+    bPopup.center(that.storage.popup);
 };
 
 new BoardTables;

@@ -249,7 +249,7 @@ function dump(list){
             is = true;
 
 
-        if (isNumber && !/^[0-9]$/.test(value)) {
+        if (isNumber && isNaN(value)) {
             is = false;
         }
 
@@ -497,18 +497,18 @@ function dump(list){
     $(document).on('mouseover', '[help]', function () {
         var text, node, isInit = this.helpInit,
             pos = $(this).offset();
-        
+
         text = this.getAttribute('help');
         node = document.createElement('SPAN');
         node.className = 'help-block';
         document.body.appendChild(node);
         node.innerHTML = text;
         this.helpInit = node;
-       
+
 
         this.helpInit.style.top = (pos.top - (this.helpInit.offsetHeight + 7)) + 'px';
         this.helpInit.style.left = pos.left + 'px';
-        
+
     }).on('mouseout', '[help]', function () {
         var isInit = this.helpInit;
         if (isInit) {

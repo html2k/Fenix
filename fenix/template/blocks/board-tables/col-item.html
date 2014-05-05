@@ -1,0 +1,31 @@
+<div class="board-tables__col-list__item">
+    <span>
+        <i class="icon-cancel"></i>
+    </span>
+
+    <input
+        type="text"
+        name="table[row][][name]"
+        placeholder="Имя таблици"
+        help="Латинское имя столбца"
+        class="inp"
+        isEmpty isEn/>
+
+    <input
+        type="text"
+        name="table[row][][size]"
+        placeholder="Размер ячейки"
+        class="inp w-small"
+        isNumber/>
+
+    <select name="table[row][][type]" class="b-select">
+        <option value="string">Строка</option>
+        <option value="int">Число</option>
+        <option value="text">Текст</option>
+    </select>
+
+    <label class="inp-name">
+        <input type="radio" name="table[row][][auto]" <%= first ? 'checked="checked"' : '' %>/>
+        Автоинкримент
+    </label>
+</div>

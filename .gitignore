@@ -22,6 +22,8 @@ template/*
 
 user_files/*
 
+node_modules/*
+
 config.php
 
 .idea/workspace.xml

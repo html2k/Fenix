@@ -1,0 +1,31 @@
+<p class="f-small">При создании не привязанной к структуре таблици, данные внутри <b>нее не будут видны</b> в общем потоке</p>
+<form action="" method="post" watch="structForm" before-send="beforeSend">
+    <input
+        type="text"
+        name="table[name]"
+        value=""
+        placeholder="Имя таблици"
+        class="inp w-full"
+        help="Латинское имя таблици"
+        isEmpty isEn/>
+
+
+    <div class="board-tables__col-list">
+        <%= item({first: true}) %>
+    </div>
+
+
+    <div class="t-right">
+        <span class="btn board-tables__col-add mr-normal">
+            <span class="btn-in">Добавить ячейку</span>
+        </span>
+
+        <button type="button" class="btn btn__success btn__disable" disabled="disabled">
+            <span class="btn-in">Создать</span>
+        </button>
+        <span class="btn" onclick="bPopup.hide()">
+            <span class="btn-in">Отмена</span>
+        </span>
+    </div>
+
+</form>
