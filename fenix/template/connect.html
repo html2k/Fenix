@@ -7,6 +7,9 @@
         <link rel="stylesheet" type="text/css" href="template/css/reset.css"/>
         <link rel="stylesheet" type="text/css" href="template/css/style.css">
 
+        <script src="template/js/jq.js" type="text/javascript"></script>
+        <?= implode('', Fx::cStatic()->getStyle()) ?>
+        <?= implode('', Fx::cStatic()->getScript()) ?>
 
         <style>
             body{
@@ -48,5 +51,19 @@
                 <input type="hidden" name="action" value="connect"/>
             </form>
         </div>
+
+        <script>
+            $(function(){
+                Fx.cookie("testCookie", 1);
+                if(Fx.cookie('testCookie') !== "1"){
+                    Notification.set({
+                        message: 'У вас отключены cookie, для корректной работы системы необходимо включить cookie',
+                        flag: 'error'
+                    });
+                    Notification.show();
+                }
+                Fx.removeCookie('testCookie');
+            });
+        </script>
     </body>
 </html>

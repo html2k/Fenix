@@ -20,38 +20,42 @@ _.cutLine = function(string, size){
 }
 
 _.storage = (function(){
-    if('localStorage' in window && window['localStorage'] !== null){
-        var s = localStorage;
-        return {
-            set : function(name, val){
-                if(!name || !val) return false;
+    try {
+        if('localStorage' in window && window['localStorage'] !== null){
+            var s = localStorage;
+            return {
+                set : function(name, val){
+                    if(!name || !val) return false;
 
-                var val = JSON.stringify(val);
-                try {
-                    s.setItem(name, val);
-                    return true;
-                } catch (e) {
-                    return false;
+                    var val = JSON.stringify(val);
+                    try {
+                        s.setItem(name, val);
+                        return true;
+                    } catch (e) {
+                        return false;
+                    }
+                },
+
+                get : function(name){
+                    if(s[name])
+                        return JSON.parse(s[name]);
+                    else
+                        return false;
+                },
+
+                clear : function(){
+                    return s.clear();
                 }
-            },
-
-            get : function(name){
-                if(s[name])
-                    return JSON.parse(s[name]);
-                else
-                    return false;
-            },
-
-            clear : function(){
-                return s.clear();
+            };
+        }else{
+            return {
+                set: function(){},
+                get: function(){},
+                clear: function(){}
             }
-        };
-    }else{
-        return {
-            set: function(){},
-            get: function(){},
-            clear: function(){}
         }
+    } catch (e) {
+        return false;
     }
 }());
 

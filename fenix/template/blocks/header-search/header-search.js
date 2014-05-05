@@ -1,5 +1,6 @@
 Fx.required('b-popup');
 
+
 ;function HeaderSearch (){
 
     this.initStorage();
@@ -172,6 +173,7 @@ HeaderSearch.prototype.documentKeyDown = function(event){
  * Запуск поиска по нажатию на enter
  */
 HeaderSearch.prototype.eventEnter = function(){
+
     if(this.is_cursor){
         var a = this.is_cursor.find('a');
         window.location = a[0].href;
@@ -207,6 +209,7 @@ HeaderSearch.prototype.eventDown = function(event, isUp){
 
     if(!active.length){
         list.eq(isUp ? list.length -1 : 0).addClass(this.ACTIVE_ITEM_CLASS);
+        this.is_cursor = list.eq(isUp ? list.length -1 : 0);
         return;
     }
 

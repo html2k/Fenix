@@ -132,6 +132,18 @@
                 }
 
             });
+
+            $(function(){
+                Fx.cookie("testCookie", 1);
+                if(Fx.cookie('testCookie') !== "1"){
+                    Notification.set({
+                        message: 'У вас отключены cookie, для корректной работы системы необходимо включить cookie',
+                        flag: 'error'
+                    });
+                    Notification.show();
+                }
+                Fx.removeCookie('testCookie');
+            });
         </script>
     </body>
 </html>

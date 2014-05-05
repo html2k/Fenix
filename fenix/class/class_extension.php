@@ -7,6 +7,10 @@ class Fx_Extension {
         $folderExtension =  root . '/' . Fx::context()->config['folder']['extension'] . '/';
         $fileExtensionSave = $folderExtension . 'extension.php';
 
+        if(!is_dir($folderExtension)){
+            Fx::io()->create_dir($folderExtension);
+        }
+
         if(!file_exists($fileExtensionSave))
             Fx::io()->create_file($fileExtensionSave);
             //return;

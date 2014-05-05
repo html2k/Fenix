@@ -13,6 +13,60 @@ Fx.prototype.required = function(blockName, callback){
     $.getScript('template/blocks/' +blockName+ '/' + blockName + '.js', callback);
 };
 
+Fx.prototype.provide = function(string){
+    var string = string.split('.'),
+        i = 0, len = string.length, cursor = window;
+
+    for(; i < len; i++){
+        if(!cursor[string[i]]){
+            cursor[string[i]] = {};
+        }
+
+        cursor = cursor[string[i]];
+    }
+};
+
+
+Fx.prototype.cookie = function(){
+    if(arguments.length > 1){
+        var options = arguments[2] || {};
+
+        var expires = options.expires;
+
+        if (typeof expires == "number" && expires) {
+            var d = new Date();
+            d.setTime(d.getTime() + expires*1000);
+            expires = options.expires = d;
+        }
+        if (expires && expires.toUTCString) {
+            options.expires = expires.toUTCString();
+        }
+
+        var value = encodeURIComponent(arguments[1]),
+            updatedCookie = arguments[0] + "=" + value;
+
+        for(var propName in options) {
+            updatedCookie += "; " + propName;
+            var propValue = options[propName];
+            if (propValue !== true) {
+                updatedCookie += "=" + propValue;
+            }
+        }
+
+        document.cookie = updatedCookie;
+    }else{
+        var matches = document.cookie.match(
+            new RegExp("(?:^|; )" + arguments[0].replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)")
+        );
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    }
+};
+
+Fx.prototype.removeCookie = function(name){
+    this.cookie(name, "", { expires: -1 });
+};
+
+
 Fx.prototype.getStyle = function(link){
     $('<link>')
         .appendTo($('head'))
