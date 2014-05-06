@@ -249,7 +249,7 @@ function dump(list){
             is = true;
 
 
-        if (isNumber && !/^[0-9]$/.test(value)) {
+        if (isNumber && isNaN(value)) {
             is = false;
         }
 

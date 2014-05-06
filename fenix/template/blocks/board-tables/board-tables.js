@@ -1,4 +1,5 @@
 Fx.required('b-dropdown');
+Fx.required('b-select');
 Fx.required('b-popup');
 
 ;function BoardTables (){
@@ -36,7 +37,12 @@ BoardTables.prototype.init = function(){
         action: 'loadTemplate',
         controller: that.WIDGET_NAME,
         method: 'getInfo',
-        templates: ['board-tables/template.html', 'board-tables/main.html']
+        templates: [
+            'board-tables/popup-create-tables.html',
+            'board-tables/col-item.html',
+            'board-tables/template.html',
+            'board-tables/main.html'
+        ]
     }, function(result){
         var storage = _.storage.get(that.WIDGET_NAME);
 
@@ -59,15 +65,13 @@ BoardTables.prototype.template = function(){
         template = _.template(that.storage.template['board-tables/main.html']),
         tableTemplate = _.template(that.storage.template['board-tables/template.html']);
 
-    $('.board-tables').html(template({
-        tables: that.storage.tables,
-        tableInfo: that.storage.tableInfo
-    }));
+    $('.board-tables').html(template(that.storage));
 
     var box = $('.board-tables__box');
 
     that.storage.keys = [];
-    _.each(that.storage.tables, function(table, key){
+    var tables = _.extend(that.storage.tables, that.storage.sys_tables);
+    _.each(tables, function(table, key){
         that.storage.keys[key] = [];
         if(table.length){
             that.storage.keys[key] = _.keys(table[0]);
@@ -94,6 +98,9 @@ BoardTables.prototype.template = function(){
 BoardTables.prototype.bind = function () {
     var that = this;
     $(document)
+        .on('click', '.board-tables__create-table', this.showPopupCreateTable.bind(this))
+        .on('click', '.board-tables__add-col', this.addCol.bind(this))
+        .on('mouseup', '.board-tables__col-list__remove-item', this.removeCol.bind(this))
         .on('click', '.board-tables__remove-item', this.removeButton.bind(this))
         .on('change', '.board-tables__select-all', this.selectAllCell.bind(this))
         .on('click', '.board-tables__remove', this.removeCell.bind(this))
@@ -294,6 +301,55 @@ BoardTables.prototype.removeButton = function(event){
     this.buttonRemoveIsActive();
     $('.board-tables__remove').trigger('click');
 
+};
+
+
+/**
+ * Открытие попапа создания таблици
+ */
+BoardTables.prototype.showPopupCreateTable = function(){
+    var that = this,
+        template = _.template(that.storage.template['board-tables/popup-create-tables.html']),
+        col = _.template(that.storage.template['board-tables/col-item.html']);
+
+    that.storage.popup = bPopup.show({
+        name: 'Создание таблици',
+        block: template({ col: col }),
+        control: false
+    })
+
+    bSelect.initWidget();
+};
+
+
+/**
+ * Добавить строку в таблицу
+ */
+BoardTables.prototype.addCol = function(){
+    var that = this,
+        template = _.template(that.storage.template['board-tables/col-item.html']);
+
+    $('.board-tables__col-list').append(
+        template({first: false})
+    );
+    bPopup.center(that.storage.popup);
+
+    bSelect.initWidget();
+}
+
+BoardTables.prototype.removeCol = function(event){
+    var item = $(event.target).parents('.board-tables__col-list__item');
+
+    if($('.board-tables__col-list__item').length > 1){
+        item.remove();
+
+        //Если нет ни одно зачеканного автоинкримента
+        if(!$('.board-tables__col-list__item').find('.board-tables__col-list__ai:checked').length){
+            $('.board-tables__col-list__item:first').find('.board-tables__col-list__ai').attr('checked', true);
+        }
+    }
+
+    bPopup.center(this.storage.popup);
 };
 
 new BoardTables;

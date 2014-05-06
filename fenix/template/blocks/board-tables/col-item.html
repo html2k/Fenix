@@ -1,0 +1,43 @@
+<div class="board-tables__col-list__item">
+    <span class="f-big board-tables__col-list__remove-item">
+        <i class="icon-cancel"></i>
+    </span>
+
+    <input
+        type="text"
+        name="table[col][name][]"
+        value=""
+        placeholder="Латинское имя"
+        class="inp"
+        isEmpty isEn/>
+
+    <input
+        type="text"
+        name="table[col][size][]"
+        value=""
+        placeholder="Размер"
+        class="inp w-small"
+        isNumber/>
+
+    <select class="b-select" name="table[col][type][]">
+        <option selected="selected" value="string">Строка</option>
+        <option value="int">Число</option>
+        <option value="text">Текст</option>
+    </select>
+
+    <select class="b-select" name="table[col][index][]">
+        <option selected="selected" value="">Не индексный</option>
+        <option value="p">Первичный</option>
+        <option value="i">Индекс</option>
+        <option value="f">Полнотекстовый</option>
+    </select>
+
+    <label class="inp-name">
+        <input
+            type="checkbox"
+            name="table[col][ai][]"
+            value="1"
+            class="board-tables__col-list__ai">
+        Автоинкремент
+    </label>
+</div>

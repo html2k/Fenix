@@ -61,7 +61,7 @@ bSelect.prototype.initWidget = function(){
 
     $('select.b-select').each(function(){
         var self = $(this),
-            name = '',
+            name = self.attr('name'),
             option = [],
             selected = 0;
 

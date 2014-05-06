@@ -931,4 +931,27 @@ class Action {
         echo json_encode($result);
 
     }
+
+
+    public function createCustomTable($post){
+        $param = array(
+            'name' => $post['table']['name'],
+            'row' => array()
+        );
+
+        $col = $post['table']['col'];
+
+        foreach($col['name'] as $k => $v){
+            $param['row'][] = array(
+                'name' => $v,
+                'type' => $col['type'][$k],
+                'size' => $col['size'][$k],
+                'index' => strtoupper($col['index'][$k]) . (isset($col['ai'][$k]) ? 'A' : '')
+            );
+        }
+
+        Fx::db()->createCollection($param);
+
+        load_url();
+    }
 }

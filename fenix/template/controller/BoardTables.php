@@ -32,6 +32,10 @@ class BoardTables{
     public function getInfo($result = array()){
         $result['tableInfo'] = Fx::db()->tables_info();
         $result['tables'] = array();
+        $result['sys_tables'] = Fx::db()->find(Fx::context()->namespace['struct_db'], array(), function($item){
+            return $item['code'];
+        });
+
         foreach ($result['tableInfo']['table'] as $key => $value) {
             $result['tables'][$key] = Fx::db()->extract(Fx::db()->go(array(
                 'event' => 'find',
@@ -41,6 +45,23 @@ class BoardTables{
                 return $item;
             });
         }
+
+        foreach($result['sys_tables'] as $k => $v){
+            unset($result['sys_tables'][$k]);
+
+            $result['sys_tables'][$v] = $result['tables'][$v];
+
+            unset($result['tables'][$v]);
+        }
+
+        foreach(Fx::context()->manifest['baseCollection'] as $k => $v){
+            $name = Fx::context()->config['db']['sys_namespace'] . $k;
+            if(isset($result['tables'][$name])){
+                $result['sys_tables'][$name] = $result['tables'][$name];
+                unset($result['tables'][$name]);
+            }
+        }
+
         return $result;
     }
 

@@ -1,8 +1,26 @@
 <div class="box">
     <div class="col3">
-        <h3>Таблици</h3>
+        <span class="pull-right false-link board-tables__create-table">Создать</span>
+
+        <% if(tables){ %>
+            <h3>Несвязанные таблици</h3>
+            <ul class="list list__struct">
+                <% _.each(tables, function(item, key){ %>
+                <li class="box board-tables__item" data-table="<%= key %>">
+                    <span class="false-link"><%= key %></span>
+
+                    <span class="pull-right">
+                        <span class="ml-normal" help="Количество записей в таблице"><%= tableInfo['table'][key].count %></span>
+                        <span class="ml-normal" help="Количество занимаемой памяти"><%= _.byteConvert(tableInfo['table'][key].size) %></span>
+                    </span>
+                </li>
+                <% }); %>
+            </ul>
+        <% } %>
+
+        <h3>Системные таблици</h3>
         <ul class="list list__struct">
-            <% _.each(tables, function(item, key){ %>
+            <% _.each(sys_tables, function(item, key){ %>
             <li class="box board-tables__item" data-table="<%= key %>">
                 <span class="false-link"><%= key %></span>
 
@@ -22,9 +40,6 @@
                 <!--
                 <span class="btn">
                     <span class="btn-in">Сформировать правило</span>
-                </span>
-                <span class="btn">
-                    <span class="btn-in">Вставить</span>
                 </span>
                 <span class="btn">
                     <span class="btn-in">Очистить таблицу</span>

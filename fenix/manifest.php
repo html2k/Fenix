@@ -3,7 +3,7 @@
 $manifest_id = array('name' => 'id', 'type' => 'int', 'size' => 11, 'index' => 'AP');
 
 $manifest = array(
-    'v' => 'v1.1.3',
+    'v' => 'v1.1.4',
     'baseCollection' => array(
         'user' => array(
             $manifest_id,
