@@ -1,0 +1,35 @@
+<p class="f-small">Табли созданная без привязки не будет видна в общем списке</p>
+
+<form action="" method="post" watch="structForm" before-send="beforeSend">
+    <input
+        type="text"
+        name="table[name]"
+        value=""
+        placeholder="Имя таблици"
+        help="Латинское имя таблици"
+        class="inp w-full"
+        isEn isEmpty/>
+
+
+    <div class="board-tables__col-list z2">
+        <%= col({first: true}) %>
+    </div>
+
+    <div class="t-right z1 mt-big">
+
+        <span class="btn board-tables__add-col">
+            <span class="btn-in">Добавить строку</span>
+        </span>
+
+        <button type="submit" class="btn btn__disable btn__success" disabled="disabled">
+            <span class="btn-in">Сохранить</span>
+        </button>
+
+        <span class="btn" onclick="bPopup.hide()">
+            <span class="btn-in">Отмена</span>
+        </span>
+    </div>
+
+
+    <input type="hidden" name="action" value="createCustomTable"/>
+</form>

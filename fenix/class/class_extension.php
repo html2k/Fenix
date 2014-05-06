@@ -13,7 +13,7 @@ class Fx_Extension {
 
         if(!file_exists($fileExtensionSave))
             Fx::io()->create_file($fileExtensionSave);
-            //return;
+
         $listExtension = Fx::io()->read_dir($folderExtension, 'dir');
 
         $ext = array();
