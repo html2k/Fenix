@@ -1,0 +1,11 @@
+<?
+    $links = Fx::db()->find(Fx::service_context()->namespace['history-link']);
+?>
+
+<table class="table">
+    <? foreach($links as $v){ ?>
+        <tr>
+            <th><?= $v['link']?></th>
+        </tr>
+    <? } ?>
+</table>

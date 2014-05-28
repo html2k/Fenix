@@ -1,5 +1,5 @@
 <?
-    $leftMenu = Fx::db()->find(Fx::context()->namespace['struct_db']);
+    $leftMenu = Fx::db()->find(Fx::service_context()->namespace['struct_db']);
     $text = array('<h3>Объекты</h3><ul>');
     foreach($leftMenu as $v){
         $active = (isset($_GET['id']) && $_GET['id'] == $v['id']) ? ' class="active"' : '';
@@ -14,8 +14,8 @@
     $paramObject = '';
     if(isset($_GET['id']) && is_numeric($_GET['id'])){
         $id = $_GET['id'];
-        $objectParam = Fx::db()->find(Fx::context()->namespace['struct_db'], array('id' => $id));
-        $td = Fx::db()->find(Fx::context()->namespace['struct_td'], array( 'parent' => $id ));
+        $objectParam = Fx::db()->find(Fx::service_context()->namespace['struct_db'], array('id' => $id));
+        $td = Fx::db()->find(Fx::service_context()->namespace['struct_td'], array( 'parent' => $id ));
 
         if(is_array($objectParam) && is_array($td) && count($objectParam) && count($td)){
             $len = count($td);

@@ -22,7 +22,7 @@
     $objectValue = array();
     
     if(isset($_GET['id']) && (int) $_GET['id'] > 0){
-        $selfObject = Fx::db()->find(Fx::context()->namespace['construct_db'], array( 'id' => (int) $_GET['id']));
+        $selfObject = Fx::db()->find(Fx::service_context()->namespace['construct_db'], array( 'id' => (int) $_GET['id']));
         if(count($selfObject)){
             $tableName = $selfObject[0]['object'];
             
@@ -32,7 +32,7 @@
     }
     
     if($tableName != ''){
-        $tabl = Fx::db()->find(Fx::context()->namespace['struct_db'], array( 'code' => $tableName));
+        $tabl = Fx::db()->find(Fx::service_context()->namespace['struct_db'], array( 'code' => $tableName));
         $tablParam = $tabl[0];
 
     }else{
@@ -40,7 +40,7 @@
         load_url();
     }
     
-    $row = Fx::db()->find(Fx::context()->namespace['struct_td'], array( 'parent' => $tablParam['id']));
+    $row = Fx::db()->find(Fx::service_context()->namespace['struct_td'], array( 'parent' => $tablParam['id']));
 
     $result = array();
     foreach($row as $key => $v){
@@ -51,7 +51,9 @@
     }
     
     // Шаблоны
-    $template = Fx::db()->find(Fx::context()->namespace['marker']);
+    $template = Fx::db()->find(Fx::service_context()->namespace['marker']);
     
     // Левое меню
     require_once sys . '/template/php/project-menu.php';
+
+    $isShowSystem = Fx::context()->struct_db[$tableName]['show_sistem'] == '1';

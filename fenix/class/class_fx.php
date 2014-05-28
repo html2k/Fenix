@@ -7,7 +7,7 @@
 class Fx{
 
 
-    protected static  $_context;
+    protected static $_context;
 
     /**
      * @return object
@@ -20,6 +20,19 @@ class Fx{
     }
 
 
+    protected static $_service_context;
+
+    /**
+     * @return object
+     */
+    public static function service_context(){
+        if(null == self::$_service_context){
+            self::$_service_context = (object) array();
+        }
+        return self::$_service_context;
+    }
+
+
     protected static $_db;
 
     /**
@@ -27,9 +40,22 @@ class Fx{
      */
     public static function db(){
         if(null == self::$_db){
-            self::$_db = new Templating(self::context()->config['db'], self::context()->namespace);
+            self::$_db = new Templating(self::service_context()->config['db'], self::service_context()->namespace);
         }
         return self::$_db;
+    }
+
+
+    protected static $_lib;
+
+    /**
+     * @return Library
+     */
+    public static function lib(){
+        if(null == self::$_lib){
+            self::$_lib = new Lib();
+        }
+        return self::$_lib;
     }
 
 

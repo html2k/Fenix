@@ -66,6 +66,8 @@ _.inArray = function(value, array){
     return false;
 };
 
+window.fx = _;
+
 
 $(function(){
     'use strict';

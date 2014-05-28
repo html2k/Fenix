@@ -32,7 +32,7 @@ class Translate {
         ));
     }
     
-    public function remove($from, $where){
+    public function remove($from, $where = null){
         return self::go(array(
             'event' => 'delete',
             'from' => $from,
@@ -65,14 +65,18 @@ class Translate {
         if(isset($option['update']))
             $result[] = self::translate_update ($option['update']);
         
-        if(isset($option['where'])){
-            self::$translate_where_var = array();
-            
-            $tWvar = self::translate_where ($option['where']);
-            $last_elem = $tWvar[count($tWvar) -1];
-            if($last_elem === '||' || $last_elem === '&') array_pop ($tWvar);
-            
-            $result[] = 'WHERE ' . implode(' ', $tWvar);
+        if(isset($option['where']) && $option['where'] !== null){
+            if(is_array($option['where'])){
+                self::$translate_where_var = array();
+
+                $tWvar = self::translate_where ($option['where']);
+                $last_elem = $tWvar[count($tWvar) -1];
+                if($last_elem === '||' || $last_elem === '&') array_pop ($tWvar);
+
+                $result[] = 'WHERE ' . implode(' ', $tWvar);
+            }else{
+                $result[] = 'WHERE ' . $option['where'];
+            }
         }
         
         if(isset($option['order']))

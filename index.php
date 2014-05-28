@@ -2,6 +2,7 @@
 header("Content-Type: text/html; charset=utf-8");
 error_reporting(E_ALL);
 
+
 try{
     define('root', $_SERVER['DOCUMENT_ROOT']);
     if(!file_exists(root . '/config.php')){
@@ -15,6 +16,8 @@ try{
     define('sys', root . '/' . $config['folder']['sys']);
     require_once sys . '/requerid.php';
 
+    Fx::lib()->rewrite();
+
     Fx::context()->path = Fx::db()->path($_SERVER['REQUEST_URI']);
     if(Fx::context()->path === false) throw new Exception('Not found', 404);
 
@@ -22,10 +25,10 @@ try{
     if(count(Fx::context()->path) > 0){
         Fx::context()->self_object = end(Fx::context()->path);
         if((int) Fx::context()->self_object['marker'] !== 0){
-            $marker = Fx::db()->find(Fx::context()->namespace['marker'], array('id' => Fx::context()->self_object['marker']));
+            $marker = Fx::db()->find(Fx::service_context()->namespace['marker'], array('id' => Fx::context()->self_object['marker']));
             $marker = explode(',', $marker[0]['template_id']);
             foreach($marker as $v){
-                $template = Fx::db()->find(Fx::context()->namespace['template'], array('id' => $v));
+                $template = Fx::db()->find(Fx::service_context()->namespace['template'], array('id' => $v));
                 Fx::context()->template[] = $template[0]['name'];
             }
         }else{
@@ -35,10 +38,10 @@ try{
         Fx::context()->template[] = 'home';
     }
 
-    switch (trim(strtolower(Fx::context()->config['templating']))){
+    switch (trim(strtolower(Fx::service_context()->config['templating']))){
         case 'twig':
 
-            require_once Fx::context()->config['folder']['sys'] . '/templating/Twig/Autoloader.php';
+            require_once Fx::service_context()->config['folder']['sys'] . '/templating/Twig/Autoloader.php';
             Twig_Autoloader::register();
 
             $loader = new Twig_Loader_Filesystem(root . '/template/');
@@ -48,10 +51,10 @@ try{
             ));
             $twig->addExtension(new Twig_Extension_Debug());
 
-            require_once Fx::context()->config['folder']['template'] . '/main.php';
+            require_once Fx::service_context()->config['folder']['template'] . '/main.php';
             $render = '';
             foreach(Fx::context()->template as $v){
-                $filePHP = Fx::context()->config['folder']['template'] . '/php/'.$v . '.php';
+                $filePHP = Fx::service_context()->config['folder']['template'] . '/php/'.$v . '.php';
                 $fileHTML = 'twig/' . $v . '.twig';
 
                 if(file_exists($filePHP)){

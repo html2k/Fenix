@@ -13,6 +13,7 @@
     req($config, '/class/compress/jsmin.php');
     req($config, '/class/class_controller_loader.php');
     req($config, '/class/class_io.php');
+    req($config, '/class/class_lib.php');
     req($config, '/class/class_compress_static.php');
     req($config, '/class/class_extension.php');
     req($config, '/class/class_translate.php');
@@ -32,16 +33,18 @@
     Fx::cStatic()->root(sys);
 
     /** Добавляем конфиги в контекст приложения */
-    Fx::context()->config = $config;
+    Fx::service_context()->config = $config;
 
     /** Добавляем манифест в контекст приложения */
-    Fx::context()->manifest = $manifest;
+    Fx::service_context()->manifest = $manifest;
 
     /** Алиасы имен бд */
-    Fx::context()->namespace = array();
+    Fx::service_context()->namespace = array();
     foreach($manifest['baseCollection'] as $k => $v){
-        Fx::context()->namespace[$k] = Fx::context()->config['db']['sys_namespace'] . $k;
+        Fx::service_context()->namespace[$k] = Fx::service_context()->config['db']['sys_namespace'] . $k;
     }
+
+    Fx::service_context()->dict = $lang;
 
     if(system_static){
 

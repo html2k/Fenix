@@ -107,7 +107,7 @@ class Base extends ConvertSchem{
         return $this->query(parent::update($from, $update, $where));
     }
 
-    public function remove($from, $where) {
+    public function remove($from, $where = null) {
         return $this->query(parent::remove($from, $where));
     }
 

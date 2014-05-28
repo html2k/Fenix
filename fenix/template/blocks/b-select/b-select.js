@@ -59,6 +59,14 @@ bSelect.prototype.initWidget = function(){
     var that = this,
         template = _.template(that.storage.template['b-select/b-select.html']);
 
+
+    $('span.b-select').each(function(){
+        var self = $(this),
+            select = self.find('.b-select__block');
+
+        self.children('.b-select__name').width(select.innerWidth() - 15);
+    });
+
     $('select.b-select').each(function(){
         var self = $(this),
             name = self.attr('name'),

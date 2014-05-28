@@ -5,7 +5,7 @@
         <div class="m-box">
             <h3>Обьекты</h3>
             <ul class="setting-tebles">
-                <?= Fx::io()->buffer(sys . '/template/tpl/blocks/list__object.html', Fx::db()->find(Fx::context()->namespace['struct_db'])); ?>
+                <?= Fx::io()->buffer(sys . '/template/tpl/blocks/list__object.html', Fx::db()->find(Fx::service_context()->namespace['struct_db'])); ?>
             </ul>
 
 

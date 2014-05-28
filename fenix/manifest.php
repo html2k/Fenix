@@ -3,7 +3,7 @@
 $manifest_id = array('name' => 'id', 'type' => 'int', 'size' => 11, 'index' => 'AP');
 
 $manifest = array(
-    'v' => 'v1.1.4',
+    'v' => '1.1.5',
     'baseCollection' => array(
         'user' => array(
             $manifest_id,
@@ -54,14 +54,15 @@ $manifest = array(
             $manifest_id,
             array('name' => 'name',     'type' => 'string', 'size' => 128)
         ),
-        'moduls' => array(
+        'rewrite' => array(
             $manifest_id,
-            array('name' => 'name',     'type' => 'string', 'size' => 128),
-            array('name' => 'code',     'type' => 'string', 'size' => 128),
-            array('name' => 'icon',     'type' => 'string', 'size' => 128),
-            array('name' => 'access',   'type' => 'int', 'size' => 2),
-            array('name' => 'ver',      'type' => 'string', 'size' => 128),
-            array('name' => 'type',     'type' => 'string', 'size' => 128)
+            array('name' => 'from',     'type' => 'string', 'size' => 512),
+            array('name' => 'to',     'type' => 'string', 'size' => 512),
+            array('name' => 'code',     'type' => 'int', 'size' => 5),
+        ),
+        'history-link' => array(
+            $manifest_id,
+            array('name' => 'link',     'type' => 'string', 'size' => 1024)
         )
     ),
     'access' => array(

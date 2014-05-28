@@ -32,7 +32,7 @@ class BoardTables{
     public function getInfo($result = array()){
         $result['tableInfo'] = Fx::db()->tables_info();
         $result['tables'] = array();
-        $result['sys_tables'] = Fx::db()->find(Fx::context()->namespace['struct_db'], array(), function($item){
+        $result['sys_tables'] = Fx::db()->find(Fx::service_context()->namespace['struct_db'], array(), function($item){
             return $item['code'];
         });
 
@@ -54,8 +54,8 @@ class BoardTables{
             unset($result['tables'][$v]);
         }
 
-        foreach(Fx::context()->manifest['baseCollection'] as $k => $v){
-            $name = Fx::context()->config['db']['sys_namespace'] . $k;
+        foreach(Fx::service_context()->manifest['baseCollection'] as $k => $v){
+            $name = Fx::service_context()->config['db']['sys_namespace'] . $k;
             if(isset($result['tables'][$name])){
                 $result['sys_tables'][$name] = $result['tables'][$name];
                 unset($result['tables'][$name]);

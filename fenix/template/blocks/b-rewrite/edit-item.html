@@ -1,0 +1,18 @@
+<div class="b-rewrite__edit-item">
+    <span class="b-rewrite__remove-item">
+        <i class="icon-cancel"></i>
+    </span>
+    <input type="text" name="from" value="<%= item.from %>" class="inp w-big" isEmpty/>
+    <input type="text" name="to" value="<%= item.to %>" class="inp w-big" />
+    <select class="b-select" name="code">
+        <% fx.each(dict.statusHttp, function(item, key){ %>
+
+            <option
+                <%=
+                    (item.code && key == item.code) || (!item.code && key == '301') ? 'selected="selected"' : ''
+                %>
+                value="<%= key %>"><%= key %> - <%= item.name %></option>
+
+        <% }); %>
+    </select>
+</div>

@@ -2,6 +2,7 @@
 
 $GLOB['menu'] = array(
     'project' => $lang['menu.project'],
+    'seo&page=robots' => $lang['menu.seo'],
     'struct' => $lang['menu.struct'],
     'setting' => $lang['menu.setting']
 );

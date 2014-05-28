@@ -13,34 +13,6 @@ CKEDITOR.editorConfig = function( config ) {
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 
     window.CONFIG_CKEDITOR.push('filemanager');
-
     config.extraPlugins = window.CONFIG_CKEDITOR.join(',');
-
-        config.toolbarGroups = [
-		//{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
-        { name: 'tools' },
-        { name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
-        { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
-		{ name: 'links' },
-		{ name: 'insert' },
-		{ name: 'forms' },
-		{ name: 'others' },
-		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
-		{ name: 'styles' },
-		{ name: 'colors' },
-	];
-
-
-// Remove some buttons, provided by the standard plugins, which we don't
-	// need to have in the Standard(s) toolbar.
-	config.removeButtons = 'Underline,Subscript,Superscript';
-
     config.contentEditable = false;
-
-	// Se the most common block elements.
-	config.format_tags = 'p;h1;h2;h3;pre';
-
-	// Make dialogs simpler.
-	config.removeDialogTabs = 'image:advanced;link:advanced';
 };

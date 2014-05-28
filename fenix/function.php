@@ -106,7 +106,7 @@ function loadPath($id){
     $result = array();
     while(true){
         if($id == 0) return $result;
-        $find = Fx::db()->find(Fx::context()->namespace['construct_db'], array('id' => $id));
+        $find = Fx::db()->find(Fx::service_context()->namespace['construct_db'], array('id' => $id));
         if(!count($find)) return $result;
         $id = $find[0]['parent'];
         array_unshift($result, array('id' => $find[0]['id'], 'object' => $find[0]['object'], 'ref' => $find[0]['ref']));
@@ -116,14 +116,14 @@ function loadPath($id){
 function removeElem($id, $object = ''){
     while (true){
         if($object == ''){
-            $object = Fx::db()->find(Fx::context()->namespace['construct_db'], array('$or' => array('id' => $id, 'ref' => $id)));
+            $object = Fx::db()->find(Fx::service_context()->namespace['construct_db'], array('$or' => array('id' => $id, 'ref' => $id)));
         }
         Fx::db()->remove($object[0]['object'], array('id' => $id));
-        Fx::db()->remove(Fx::context()->namespace['construct_db'], array('id' => $id));
-        $path = root . '/' . Fx::context()->config['folder']['files'] . '/' . $id . '/';
+        Fx::db()->remove(Fx::service_context()->namespace['construct_db'], array('id' => $id));
+        $path = root . '/' . Fx::service_context()->config['folder']['files'] . '/' . $id . '/';
         Fx::io()->del($path);
         
-        $find = Fx::db()->find(Fx::context()->namespace['construct_db'], array('parent' => $id));
+        $find = Fx::db()->find(Fx::service_context()->namespace['construct_db'], array('parent' => $id));
         if(count($find)){
             foreach($find as $v){
                 removeElem($v['id'], array($v));
@@ -134,46 +134,6 @@ function removeElem($id, $object = ''){
     }
 }
 
-function copyElem($id, $parent){
-    $object = Fx::db()->find(Fx::context()->namespace['construct_db'], array('id' => $id));
-    
-    $object = $object[0];
-    unset($object['id']);
-    $object['num'] = count(Fx::db()->find(Fx::context()->namespace['construct_db'], array('parent' => $parent)));
-    $object['parent'] = $parent;
-    $object['date'] = time();
-    
-    $table = Fx::db()->find(Fx::context()->namespace['struct_db'], array('code' => $object['object']));
-    $rows = Fx::db()->find(Fx::context()->namespace['struct_td'], array('parent' => $table[0]['id']));
-    
-    Fx::db()->insert(Fx::context()->namespace['construct_db'], $object);
-    
-    $newId = Fx::db()->lastId();
-    $elem = Fx::db()->find($object['object'], array('id' => $id));
-    $elem = $elem[0];
-    $elem['id'] = $newId;
-    
-    $pathFrom = root . '/' . Fx::context()->config['folder']['files'] . '/' . $id . '/';
-    $pathTo = root . '/' . Fx::context()->config['folder']['files'] . '/' . $newId . '/';
-    if(is_dir ($pathFrom))
-        Fx::io()->copy($pathFrom, $pathTo);
-    
-    foreach($rows as $v){
-        if($v['type'] == 'file' || $v['type'] == 'image'){
-            $elemFile = explode('/', $elem[$v['code']]);
-            $elemFile = array_pop($elemFile);
-            $elem[$v['code']] = '/' . Fx::context()->config['folder']['files'] . '/' . $newId . '/' . $elemFile;
-        }
-    }
-    
-    
-    Fx::db()->insert($object['object'], $elem);
-    
-    $child = Fx::db()->find(Fx::context()->namespace['construct_db'], array('parent' => $id));
-    foreach($child as $v){
-        copyElem(Fx::context()->config, $v['id'], $newId);
-    }
-}
 
 function resize($url, $max){
     // Получить пропорциональные размеры изображения

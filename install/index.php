@@ -14,8 +14,8 @@
 
 
     if(isset($_POST['addDBConfig'])){
-        Fx::context()->config = array();
-        Fx::context()->config['db'] = $_POST['db'];
+        Fx::service_context()->config = array();
+        Fx::service_context()->config['db'] = $_POST['db'];
         if(Fx::db()->isConnect()){
             $_SESSION['dbConfig'] = $_POST['db'];
             echo 1;
@@ -33,8 +33,8 @@
             'templating' => $_POST['templating']
         );
 
-        Fx::context()->config = array_merge(Fx::context()->config, array(
-            'db' => array_merge(Fx::context()->config['db'], $_SESSION['dbConfig']),
+        Fx::service_context()->config = array_merge(Fx::service_context()->config, array(
+            'db' => array_merge(Fx::service_context()->config['db'], $_SESSION['dbConfig']),
             'project_name' => $_POST['project_name'],
             'templating' => $_POST['templating']
         ));
@@ -46,23 +46,23 @@
 
             foreach($manifest['baseCollection'] as $k => $v){
                 Fx::db()->createCollection(array(
-                    'name' => Fx::context()->namespace[$k],
+                    'name' => Fx::service_context()->namespace[$k],
                     'row' => $v
                 ));
             }
 
-            $find = Fx::db()->find(Fx::context()->namespace['user'], array('login' => $login, 'pass' => $pass));
+            $find = Fx::db()->find(Fx::service_context()->namespace['user'], array('login' => $login, 'pass' => $pass));
             if(count($find)){
-                Fx::db()->update(Fx::context()->namespace['user'], array('access' => 0), array('id' => $find[0]['id']));
+                Fx::db()->update(Fx::service_context()->namespace['user'], array('access' => 0), array('id' => $find[0]['id']));
             }else{
-                Fx::db()->insert(Fx::context()->namespace['user'], array('login' => $login, 'pass' => $pass, 'access' => 0));
+                Fx::db()->insert(Fx::service_context()->namespace['user'], array('login' => $login, 'pass' => $pass, 'access' => 0));
             }
 
             Fx::io()->create_file(root.'/config.php');
-            Fx::io()->write(root.'/config.php', '<? return $config = ' . Fx::io()->arrayToString(Fx::context()->config) .'; ?>');
+            Fx::io()->write(root.'/config.php', '<? return $config = ' . Fx::io()->arrayToString(Fx::service_context()->config) .'; ?>');
 
-            $folderFrom = root.'/install/templating/'.Fx::context()->config['templating'] . '/';
-            $folderTo = root . '/' . Fx::context()->config['folder']['template'] . '/';
+            $folderFrom = root.'/install/templating/'.Fx::service_context()->config['templating'] . '/';
+            $folderTo = root . '/' . Fx::service_context()->config['folder']['template'] . '/';
 
             if(!is_dir($folderTo))
                 Fx::io()->create_dir($folderTo);

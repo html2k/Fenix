@@ -42,10 +42,15 @@
     z-index: 2;
     padding-left: 23px;
     margin-top: 7px;
+    margin-bottom: 0;
     height: 20px;
     font-size: 13px;
     border-radius: 25px;
     opacity: 0.5;
+
+    -webkit-transition: 0;
+    -moz-transition: 0;
+    -o-transition: 0;
 }
 .header-search__input_focus,
 .header-search__input:focus{

@@ -27,13 +27,13 @@ class HeaderSearch {
         $result = array();
 
         if(is_numeric($val)){
-            Fx::db()->search(Fx::context()->namespace['construct_db'], array(
+            Fx::db()->search(Fx::service_context()->namespace['construct_db'], array(
                 'id' => (int) $val,
                 'chpu' => $val
             ));
         }
 
-        foreach(Fx::db()->find(Fx::context()->namespace['struct_db']) as $v){
+        foreach(Fx::db()->find(Fx::service_context()->namespace['struct_db']) as $v){
             $table = $v['code'];
 
             $row = Fx::db()->extract(Fx::db()->go(array(

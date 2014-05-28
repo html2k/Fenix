@@ -1,0 +1,11 @@
+<form action="" method="post">
+    <textarea name="text" class="w-full seo-height-area inp"><?=
+        (is_file(root.'/robots.txt')) ? Fx::io()->read(root.'/robots.txt') : ''
+    ?></textarea>
+
+    <button class="btn">
+        <span class="btn-in">Сохранить</span>
+    </button>
+
+    <input type="hidden" name="action" value="pushToRobotsTXT"/>
+</form>

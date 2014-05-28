@@ -1,0 +1,18 @@
+.b-rewrite{}
+
+.b-rewrite__name{
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 40px;
+}
+
+.b-rewrite__name span{
+    margin-right: 10px;
+}
+
+.b-rewrite__name span{
+    text-shadow: 1px 1px 0 #fff;
+}
+.b-rewrite__name .false-link{
+    text-shadow: none;
+}

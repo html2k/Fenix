@@ -31,7 +31,7 @@ class bFileManager {
     protected function userFileList($to = ''){
         $path = Fx::io()->path(
             root,
-            Fx::context()->config['folder']['file_manager']
+            Fx::service_context()->config['folder']['file_manager']
         );
         if(strlen($to) > 1){
 
@@ -41,7 +41,7 @@ class bFileManager {
 
             $path = Fx::io()->path(
                 root,
-                Fx::context()->config['folder']['file_manager'],
+                Fx::service_context()->config['folder']['file_manager'],
                 $to
             );
         }
@@ -74,7 +74,7 @@ class bFileManager {
 
         foreach($io['dir'] as $k => $v){
             $io['dir'][$k] = array(
-                'path' => str_replace(Fx::io()->path(root, Fx::context()->config['folder']['file_manager']), '', $v),
+                'path' => str_replace(Fx::io()->path(root, Fx::service_context()->config['folder']['file_manager']), '', $v),
                 'name' => $resultArray['name'] = basename($v)
             );
         }
@@ -87,10 +87,10 @@ class bFileManager {
 
 
         if(count($files['tmp_name'])){
-            $files_put_path = Fx::context()->config['folder']['file_manager'];
+            $files_put_path = Fx::service_context()->config['folder']['file_manager'];
 
             if(strlen($param['pathTo']) > 1){
-                $files_put_path = Fx::context()->config['folder']['file_manager'] . $param['pathTo'];
+                $files_put_path = Fx::service_context()->config['folder']['file_manager'] . $param['pathTo'];
             }
 
 
@@ -111,7 +111,7 @@ class bFileManager {
         return array(
             $_FILES['files'],
             $_FILES['files']['name'][0],
-            root . Fx::context()->config['folder']['file_manager'] . '/' . $_FILES['files']['name'][0]
+            root . Fx::service_context()->config['folder']['file_manager'] . '/' . $_FILES['files']['name'][0]
         );
     }
 
@@ -122,14 +122,14 @@ class bFileManager {
     protected function createFolder($folderName, $pathTo){
         $folder = Fx::io()->path(
             root,
-            Fx::context()->config['folder']['file_manager'],
+            Fx::service_context()->config['folder']['file_manager'],
             $folderName
         );
 
         if(strlen($pathTo) > 1){
             $folder = Fx::io()->path(
                 root,
-                Fx::context()->config['folder']['file_manager'],
+                Fx::service_context()->config['folder']['file_manager'],
                 $pathTo,
                 $folderName
             );

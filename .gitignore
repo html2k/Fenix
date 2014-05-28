@@ -24,6 +24,8 @@ user_files/*
 
 node_modules/*
 
+fenix2/*
+
 Gruntfile.js
 
 package.json

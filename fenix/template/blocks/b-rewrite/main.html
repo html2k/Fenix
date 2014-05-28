@@ -1,0 +1,61 @@
+<h1 class="page-name b-rewrite__name">
+    <span class="">Просмотр</span>
+    <span class="false-link">Редактировать</span>
+    <span class="false-link">Расшифровка http статусов</span>
+</h1>
+
+<div class="b-rewrite__block">
+    <% if(list.length){ %>
+        <table class="table">
+            <% fx.each(list, function(item){ %>
+                <tr>
+                    <th class="w-micro"><%= item.code %></th>
+                    <td><%= item.from%></td>
+                    <td><% if(item.to) { %>
+                        <%= item.to%>
+                    <% }%></td>
+                </tr>
+            <% }); %>
+        </table>
+    <% }else{ %>
+        <p>Пока не задано ни одного редиректа</p>
+    <% } %>
+</div>
+
+<div class="b-rewrite__block dn">
+    <form action="" method="post" class="b-rewrite__form">
+        <div class="b-rewrite__box">
+            <% fx.each(list, function(item){ %>
+                <%= editItem({dict: dict, item: item}) %>
+            <% }) %>
+            <%= editItem({dict: dict, item: {
+                from: '',
+                to: '',
+                code: '301'
+            }}) %>
+        </div>
+
+        <span class="btn b-rewrite__add-rule">
+            <span class="btn-in">Добавить правило</span>
+        </span>
+
+        <button type="submit" class="btn">
+            <span class="btn-in">Сохранить</span>
+        </button>
+    </form>
+
+</div>
+
+<div class="b-rewrite__block dn">
+    <table class="table">
+        <% fx.each(dict.statusHttp, function(item, key){ %>
+            <tr>
+                <th><%= key %></th>
+                <td><%= item.name %></td>
+                <td><%= item.desc %></td>
+            </tr>
+        <% }); %>
+    </table>
+</div>
+
+

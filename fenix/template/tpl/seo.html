@@ -1,0 +1,17 @@
+<div class="seo-menu">
+    <? foreach(Fx::context()->menu as $k => $v){ ?>
+        <a
+            class="<?= (isset($_GET['page']) && $_GET['page'] === $k) ? 'active' : '' ?>"
+            href="?mode=seo&page=<?= $k;?>"><?= $v; ?></a>
+    <? }?>
+</div>
+
+<div class="seo-content mt-normal">
+
+    <?=
+        Fx::context()->page ? Fx::io()->buffer(Fx::io()->path(
+            sys, 'template', 'tpl', 'seo', Fx::context()->page.'.html'
+        ), array()) : '' ;
+    ?>
+
+</div>

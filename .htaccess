@@ -18,7 +18,7 @@ Options -Indexes
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_URI} !(.*)/$
-RewriteRule ^(.*[^/])$ $1/ [L,R=301]
+#RewriteRule ^(.*[^/])$ $1/ [L,R=301]
 RewriteRule ^fenix/?$ http://%{HTTP_HOST}/fenix/index.php?%{QUERY_STRING}
 
 

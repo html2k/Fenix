@@ -1,0 +1,11 @@
+<form action="" method="post">
+    <textarea name="text" class="w-full seo-height-area inp"><?=
+        (is_file(root.'/sitemap.xml')) ? Fx::io()->read(root.'/sitemap.xml') : ''
+        ?></textarea>
+
+    <button class="btn">
+        <span class="btn-in">Сохранить</span>
+    </button>
+
+    <input type="hidden" name="action" value="pushToSiteMapXML"/>
+</form>

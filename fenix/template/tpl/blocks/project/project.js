@@ -136,17 +136,20 @@ $(function(){
             parent: GLOBAL.get('page').id,
             id: []
         };
+        if($('.project-list li.active').length){
 
-        spin('Подождите');
+            spin('Подождите');
 
-        $('.project-list li.active').each(function(){
-            data.id.push(this.getAttribute('data-id') *1);
-        });
+            $('.project-list li.active').each(function(){
+                data.id.push(this.getAttribute('data-id') *1);
+            });
 
-        $.post('', data, function(response){
-            window.location = window.location.href;
-        });
+            $.post('', data, function(response){
+                console.log(response)
+                //window.location = window.location.href;
+            });
 
+        }
 
     }).on('click', '.spin', function(){
         spin(this.getAttribute('data-spiner'));

@@ -157,11 +157,16 @@ class IO {
 
     /**
      * Запись в файл
-     * @param string $name
-     * @param string $string
+     * @param $name
+     * @param $string
+     * @param int $chmod
      * @return bool|int
      */
-    public function write($name, $string){
+    public function write($name, $string, $chmod = 0777){
+        if(!file_exists($name)){
+            $this->create_file($name);
+            chmod($name, $chmod);
+        }
         if(file_exists($name) && ($handle = fopen($name, 'w'))){
             $result = fwrite($handle, $string);
             fclose($handle);

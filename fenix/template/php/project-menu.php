@@ -1,19 +1,21 @@
 <?
     Fx::context()->path = loadPath(Fx::context()->selfId);
-    
+
+    $struct_db = Fx::db()->find(Fx::service_context()->namespace['struct_db']);
+    Fx::context()->struct_db = array();
+    foreach($struct_db as $v){
+        Fx::context()->struct_db[$v['code']] = $v;
+    }
+
+
     // Левое меню
     Fx::context()->leftMenu = '';
     // Формируем левое меню
     class Path{
         public $result = array();
-        public $struct;
 
         function __construct($path){
             $this->path = $path;
-            $t = Fx::db()->find(Fx::context()->namespace['struct_db']);
-            foreach($t as $v){
-                $this->struct[$v['code']] = $v;
-            }
 
             $this->rec(0);
 
@@ -37,11 +39,11 @@
         }
 
         private function rec($id){
-            $find = $this->perform(Fx::context()->namespace['construct_db'], array('parent' => $id));
+            $find = $this->perform(Fx::service_context()->namespace['construct_db'], array('parent' => $id));
             foreach($find as $v){
                 $active = (isset($this->path[0]) && $this->path[0]['id'] == $v['id']) ? ' class="active"' : '';
 
-                if($active == '' && $this->struct[$v['object']]['show_wood'] < 1) continue;
+                if($active == '' && Fx::context()->struct_db[$v['object']]['show_wood'] < 1) continue;
 
                 $elem = Fx::db()->find($v['object'], array('id' => $v['id']));
                 if(!isset($elem[0])){
@@ -56,7 +58,7 @@
 
                 if($active != ''){
                     $item = array_shift($this->path);
-                    if($this->struct[$item['object']]['show_wood'] > 0){
+                    if(Fx::context()->struct_db[$item['object']]['show_wood'] > 0){
                         $this->result[] = '<ul>';
                             $this->rec($item['id']);
                         $this->result[] = '</ul>';
@@ -70,13 +72,10 @@
 
     $leftMenu = new Path(Fx::context()->path);
 
-    //debug(Fx::context()->path);
-
-    $objectList = Fx::db()->find(Fx::context()->namespace['struct_db']);
     $elemId = isset($_GET['id']) ? '&parent='.$_GET['id'] : '';
 
     Fx::context()->create_element_button = Fx::io()->buffer(sys.'/template/tpl/blocks/project/create-element-button.html', array(
-        'object' => $objectList,
+        'object' => Fx::context()->struct_db,
         'elemID' => $elemId
     ));
 
